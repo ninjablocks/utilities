@@ -21,11 +21,11 @@ setgpio | Sets the GPIO on Pin 7
 --------------------------------
 * This sets pin 7 on the beagleboard to GPIO, allowing us to later reset the arduino
 
-setserial
----------
+setserial | Sets up the Serial Pins
+---------------------------------
 * This sets the mux for the UART pins on the Beagle so we can speak serial to the Arduino 
 
-color
------
+color | Sets the color of the RGB LED
+-------------------------------------
 * A tiny script that sets the color of the RGB Led on the Arduino. 
 * options are: red, orange, blue, green, and off
