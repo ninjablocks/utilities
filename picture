@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 
-result = `fswebcam -q --save /tmp/output.jpeg > /dev/null`
+result = `fswebcam -q --no-banner --save /tmp/output.jpeg > /dev/null`
 puts `base64 /tmp/output.jpeg`
