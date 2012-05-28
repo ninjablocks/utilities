@@ -8,7 +8,7 @@ require 'sinatra'
 
 
 get '/' do
-  if scanned == false
+  if @scanned == false
     @results = `iw wlan0 scan | grep -i 'ssid'`
     @scanned = true  
   else
