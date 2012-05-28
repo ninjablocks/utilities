@@ -29,3 +29,9 @@ color | Sets the color of the RGB LED
 -------------------------------------
 * A tiny script that sets the color of the RGB Led on the Arduino. 
 * options are: red, orange, blue, green, and off
+
+fswebcam | A light way webcam snapshot grabber
+----------------------------------------------
+* Requires libgd2-xpm & libgd2-xpm-dev
+* Available here: http://www.firestorm.cx/fswebcam/ 
+* Command used by picture: fswebcam -q --no-banner --save /tmp/output.jpeg 2>&1
