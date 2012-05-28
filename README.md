@@ -3,7 +3,7 @@ Utilities
 
 Utilities is a set of helper apps for Ninja Blocks.
 
-serailnumber |  Serial Number
+serialnumber |  Serial Number
 ----------------------------
 * Returns the Beaglebone's Serial Number. 
 * Serialnumber (must be run as root).
