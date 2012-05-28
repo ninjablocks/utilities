@@ -1,0 +1,11 @@
+#!/usr/bin/env ruby
+
+
+@str = `ifconfig wlan0 2>&1`
+
+if @str.include? "Device not found"
+	puts "down"
+else
+	puts "up"
+end
+
