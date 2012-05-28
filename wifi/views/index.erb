@@ -33,11 +33,11 @@
 	            <label class="control-label" for="multiSelect">Select Wi-Fi Access Point</label>
 	            <div class="controls">
 	              <select multiple="multiple" id="multiSelect" class="input-large">
-	                <option>1</option>
-	                <option>2</option>
-	                <option>3</option>
-	                <option>4</option>
-	                <option>5</option>
+					<%  x = 0 %>
+					  <% @aps.each do |ap| %>
+					  <option value="<%= x %>"><%= ap %></option>		
+					  <% x = x + 1 %>
+					<% end %>
 	              </select>
 	            </div>
 	          </div>
