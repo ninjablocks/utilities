@@ -1,4 +1,9 @@
-#!/usr/bin/env ruby
+#/usr/bin/env ruby
 
-result = `fswebcam -q --no-banner --save /tmp/output.jpeg > /dev/null`
-puts `base64 /tmp/output.jpeg`
+result = `fswebcam -q --no-banner --save /tmp/output.jpeg 2>&1`
+
+#if result.include? "Failed" or result.include? "error" or result.include? "Unable"
+#	puts "oh noes"	
+#end
+
+#puts `base64 /tmp/output.jpeg`

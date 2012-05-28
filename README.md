@@ -1,7 +1,7 @@
 Utilities
 =========
 
-Utilities is a set of helper apps for Ninja Blocks.
+The Utilities git repository  is a set of helper apps for Ninja Blocks.
 
 serialnumber |  Serial Number
 ----------------------------
