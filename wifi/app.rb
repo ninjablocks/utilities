@@ -21,3 +21,8 @@ get '/' do
   
   erb :index
 end
+
+get '/connect' do
+    
+  
+end
