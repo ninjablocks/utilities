@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<!--[if IEMobile 7]><html class="no-js iem7 oldie"><![endif]-->
+<!--[if (IE 7)&!(IEMobile)]><html class="no-js ie7 oldie" lang="en"><![endif]-->
+<!--[if (IE 8)&!(IEMobile)]><html class="no-js ie8 oldie" lang="en"><![endif]-->
+<!--[if (IE 9)&!(IEMobile)]><html class="no-js ie9" lang="en"><![endif]-->
+<!--[if (gt IE 9)|(gt IEMobile 7)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+	<title>Ninja Block Wi-Fi Setup</title>
+	<meta name="description" content="">
+	<meta name="author" content="">
+
+	<!-- http://davidbcalhoun.com/2010/viewport-metatag -->
+	<meta name="HandheldFriendly" content="True">
+	<meta name="MobileOptimized" content="320">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+	<!-- For all browsers -->
+	<link rel="stylesheet" href="css/reset.css?v=1">
+	<link rel="stylesheet" href="css/style.css?v=1">
+	<link rel="stylesheet" href="css/colors.css?v=1">
+	<link rel="stylesheet" media="print" href="css/print.css?v=1">
+	<!-- For progressively larger displays -->
+	<link rel="stylesheet" media="only all and (min-width: 480px)" href="css/480.css?v=1">
+	<link rel="stylesheet" media="only all and (min-width: 768px)" href="css/768.css?v=1">
+	<link rel="stylesheet" media="only all and (min-width: 992px)" href="css/992.css?v=1">
+	<link rel="stylesheet" media="only all and (min-width: 1200px)" href="css/1200.css?v=1">
+	<!-- For Retina displays -->
+	<link rel="stylesheet" media="only all and (-webkit-min-device-pixel-ratio: 1.5), only screen and (-o-min-device-pixel-ratio: 3/2), only screen and (min-device-pixel-ratio: 1.5)" href="css/2x.css?v=1">
+
+	<!-- Webfonts -->
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:300' rel='stylesheet' type='text/css'>
+
+	<!-- Additional styles -->
+	<link rel="stylesheet" href="css/styles/form.css?v=1">
+	<link rel="stylesheet" href="css/styles/modal.css?v=1">
+	<link rel="stylesheet" href="css/styles/progress-slider.css?v=1">
+	<link rel="stylesheet" href="css/styles/switches.css?v=1">
+	<link rel="stylesheet" href="css/styles/table.css?v=1">
+	<link rel="stylesheet" href="css/styles/files.css?v=1">
+	
+
+	<!-- Google code prettifier -->
+	<link rel="stylesheet" href="js/libs/google-code-prettify/sunburst.css?v=1">
+
+	<!-- JavaScript at bottom except for Modernizr -->
+	<script src="js/libs/modernizr.custom.js"></script>
+
+	<!-- For Modern Browsers -->
+	<link rel="shortcut icon" href="img/favicons/favicon.png">
+	<!-- For everything else -->
+	<link rel="shortcut icon" href="img/favicons/favicon.ico">
+	<!-- For retina screens -->
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="img/favicons/apple-touch-icon-retina.png">
+	<!-- For iPad 1-->
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="img/favicons/apple-touch-icon-ipad.png">
+	<!-- For iPhone 3G, iPod Touch and Android -->
+	<link rel="apple-touch-icon-precomposed" href="img/favicons/apple-touch-icon.png">
+
+	<!-- iOS web-app metas -->
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+	<!-- Startup image for web apps -->
+	<link rel="apple-touch-startup-image" href="img/splash/ipad-landscape.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:landscape)">
+	<link rel="apple-touch-startup-image" href="img/splash/ipad-portrait.png" media="screen and (min-device-width: 481px) and (max-device-width: 1024px) and (orientation:portrait)">
+	<link rel="apple-touch-startup-image" href="img/splash/iphone.png" media="screen and (max-device-width: 320px)">
+
+	<!-- Microsoft clear type rendering -->
+	<meta http-equiv="cleartype" content="on">
+</head>
+
+<body class="clearfix with-menu with-shortcuts">
+
+	<!-- Prompt IE 6 users to install Chrome Frame -->
+	<!--[if lt IE 7]><p class="message red-gradient simpler">Your browser is <em>ancient!</em> <a href="http://browsehappy.com/">Upgrade to a different browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">install Google Chrome Frame</a> to experience this site.</p><![endif]-->
+
+	<!-- Title bar -->
+	<header role="banner" id="title-bar">
+		<h2>Ninja Block Wi-Fi Setup</h2>
+	</header>
+
+	<!-- Button to open/hide menu -->
+
+	<!-- Button to open/hide shortcuts -->
+
+	<!-- Main content -->
+	<section role="main" id="main">
+
+		<noscript class="message black-gradient simpler">Your browser does not support JavaScript! Some features won't work as expected...</noscript>
+
+		<hgroup id="main-title" class="thin">
+			<h1>Find and join a Wi-Fi network</h1>
+		</hgroup>
+
+		<div class="with-padding">
+                <p>Choose the Wi-Fi network you want to join from the list below.</p>
+			<select id="base_station_list" class="select" onchange="enableButton();" style="width:90%;" multiple>
+				<%  x = 0 %>
+				  <% @aps.each do |ap| %>
+				  <option value="<%= x %>"><%= ap %></option>		
+				  <% x = x + 1 %>
+				<% end %>
+                  	</select>
+                <div style="margin-top:10px; margin-right:10%;">
+		<a id="joinbutton" style="float:right" href="javascript:openModal()" class="button blue-gradient disabled">Join</a>
+                </div>
+
+		</div>
+
+
+	</section>
+	<!-- End main content -->
+        <script>
+	function enableButton()
+	{
+		document.getElementById('joinbutton').classList.remove('disabled');
+		//document.getElementById('joinbutton').attr('href', 'javascript:openPrompt();');
+		$('.joinbutton').attr('href','openModal();');
+	}
+	
+	</script>
+
+	<!-- JavaScript at the bottom for fast page loading -->
+
+	<!-- Scripts -->
+	<script src="js/libs/jquery-1.7.2.min.js"></script>
+	<script src="js/setup.js"></script>
+
+	<!-- Template functions -->
+	<script src="js/developr.input.js"></script>
+	<script src="js/developr.message.js"></script>
+	<script src="js/developr.modal.js"></script>
+	<script src="js/developr.navigable.js"></script>
+	<script src="js/developr.notify.js"></script>
+	<script src="js/developr.scroll.js"></script>
+	<script src="js/developr.progress-slider.js"></script>
+	<script src="js/developr.tooltip.js"></script>
+	<script src="js/developr.tabs.js"></script>		<!-- Must be loaded last -->
+
+	<!-- Google code prettifier -->
+	<script src="js/libs/google-code-prettify/prettify.js?v=1"></script>
+	
+	<!-- jQuery Form Validation -->
+	<script src="js/libs/formValidator/jquery.validationEngine.js?v=1"></script>
+	<script src="js/libs/formValidator/languages/jquery.validationEngine-en.js?v=1"></script>
+
+	<script>
+
+		// Call template init (optional, but faster if called manually)
+		$.template.init();
+
+		// Code display
+		prettyPrint();
+
+		// Demo modal
+		function openModal()
+				{
+			var cancelled = false;
+
+			$.modal.prompt('Enter your Wi-Fi Network Password:', function(value)
+			{
+				value = value;
+				$.modal.alert($('#base_station_list').find("option:selected").text());
+
+				$.modal.alert('Value: <strong>'+value+'</strong>');
+
+			}, function()
+			{
+			});
+		};
+
+		
+		// Demo simple modal
+		function openSimpleModal()
+		{
+			$.modal({
+				contentBg: false,
+				contentAlign: 'center',
+				content: 'A simple modal window.',
+				resizable: false,
+				actions: {},
+				buttons: {
+
+					'Close' : {
+						classes :	'green-gradient',
+						click :		function(modal) { modal.closeModal(); }
+					}
+
+				},
+				buttonsAlign: 'center'
+			});
+		};
+
+		// Demo loading modal
+		function openLoadingModal()
+		{
+			var timeout;
+
+			$.modal({
+				contentAlign: 'center',
+				width: 240,
+				title: 'Loading',
+				content: '<div style="line-height: 25px; padding: 0 0 10px"><span id="modal-status">Contacting server...</span><br><span id="modal-progress">0%</span></div>',
+				buttons: {},
+				scrolling: false,
+				actions: {
+					'Cancel': {
+						color:	'red',
+						click:	function(win) { win.closeModal(); }
+					}
+				},
+				onOpen: function()
+				{
+						// Progress bar
+					var progress = $('#modal-progress').progress(100, {
+							size: 200,
+							style: 'large',
+							barClasses: ['anthracite-gradient', 'glossy'],
+							stripes: true,
+							darkStripes: false,
+							showValue: false
+						}),
+
+						// Loading state
+						loaded = 0,
+
+						// Window
+						win = $(this),
+
+						// Status text
+						status = $('#modal-status'),
+
+						// Function to simulate loading
+						simulateLoading = function()
+						{
+							++loaded;
+							progress.setProgressValue(loaded+'%', true);
+							if (loaded === 100)
+							{
+								progress.hideProgressStripes().changeProgressBarColor('green-gradient');
+								status.text('Done!');
+								/*win.getModalContentBlock().message('Content loaded!', {
+									classes: ['green-gradient', 'align-center'],
+									arrow: 'bottom'
+								});*/
+								setTimeout(function() { win.closeModal(); }, 1500);
+							}
+							else
+							{
+								if (loaded === 1)
+								{
+									status.text('Loading data...');
+									progress.changeProgressBarColor('blue-gradient');
+								}
+								else if (loaded === 25)
+								{
+									status.text('Loading assets (1/3)...');
+								}
+								else if (loaded === 45)
+								{
+									status.text('Loading assets (2/3)...');
+								}
+								else if (loaded === 85)
+								{
+									status.text('Loading assets (3/3)...');
+								}
+								else if (loaded === 92)
+								{
+									status.text('Initializing...');
+								}
+								timeout = setTimeout(simulateLoading, 50);
+							}
+						};
+
+					// Start
+					timeout = setTimeout(simulateLoading, 2000);
+				},
+				onClose: function()
+				{
+					// Stop simulated loading if needed
+					clearTimeout(timeout);
+				}
+			});
+		};
+
+		// Demo alert
+		function openAlert()
+		{
+			$.modal.alert('This is an alert message');
+		};
+
+		// Demo confirm
+		function openConfirm()
+		{
+			$.modal.confirm('Challenge accepted?', function()
+			{
+				$.modal.alert('Me gusta!');
+
+			}, function()
+			{
+				$.modal.alert('Meh.');
+			});
+		};
+
+		// Demo prompt
+		function openPrompt()
+		{
+			var cancelled = false;
+
+			$.modal.prompt('Please enter a value between 5 and 10s:', function(value)
+			{
+				value = parseInt(value);
+				if (isNaN(value) || value < 5 || value > 10)
+				{
+					$(this).getModalContentBlock().message('Please enter a correct value', { append: false, classes: ['red-gradient'] });
+					return false;
+				}
+
+				$.modal.alert('Value: <strong>'+value+'</strong>');
+
+			}, function()
+			{
+				if (!cancelled)
+				{
+					$.modal.alert('Oh, come on....');
+					cancelled = true;
+					return false;
+				}
+			});
+		};
+
+		// Demo AJAX loading
+		function openAjax()
+		{
+			$.modal({
+				title: 'Ajax content',
+				url: 'ajax-demo/auto-setup.html',
+				width: 300
+			});
+		};
+
+		// Demo Iframe loading
+		function openIframe()
+		{
+			$.modal({
+				title: 'Wi-Fi Networks',
+				url: 'http://www.envato.com',
+				useIframe: true,
+				width: 600,
+				height: 400
+			});
+		}
+
+	</script>
+</body>
+</html>
