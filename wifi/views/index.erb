@@ -28,11 +28,11 @@
     <div class="container">
 <h1>Connect to Wi-Fi</h1>
 <br />
-<form class="well form-inline">
+<form class="well form-inline" action="/connect" method="post">
 	<div class="control-group">
 	            <label class="control-label" for="multiSelect">Select Wi-Fi Access Point</label>
 	            <div class="controls">
-	              <select multiple="multiple" id="multiSelect" class="input-large">
+	              <select multiple="multiple" id="basestation" name="basestation"  class="input-large">
 					<%  x = 0 %>
 					  <% @aps.each do |ap| %>
 					  <option value="<%= x %>"><%= ap %></option>		
@@ -42,7 +42,7 @@
 	            </div>
 	          </div>
   <!-- <input type="text" class="input-large" placeholder="Wifi Basestation Name"> -->
-  <input type="password" class="input-large" placeholder="Password">
+  <input type="password" class="input-large" name="password" placeholder="Password">
 
   <button type="submit" class="btn">Connect</button>
 </form>

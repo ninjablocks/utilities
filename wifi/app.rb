@@ -22,7 +22,8 @@ get '/' do
   erb :index
 end
 
-get '/connect' do
-    
+post '/connect' do
+  puts params.inspect    
   
+  redirect '/'
 end
