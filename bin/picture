@@ -1,0 +1,10 @@
+#!/usr/bin/env ruby
+
+
+result = `fswebcam -q --no-banner --save /tmp/output.jpeg 2>&1`
+
+if result.include? "Failed" or result.include? "error" or result.include? "Unable"
+	raise IOError, "Error with Camera"	
+end
+
+puts `base64 /tmp/output.jpeg`
