@@ -1,4 +1,15 @@
 ===================================
+|         Ubuntu Config            |
+===================================
+
+Distributor ID:	Ubuntu
+Description:	Ubuntu 12.04 LTS
+Release:	12.04
+Codename:	precise
+
+Linux omap 3.2.0-psp7 #1 Fri Apr 13 04:55:05 UTC 2012 armv7l armv7l armv7l GNU/Linux
+
+===================================
 |       Installed Packages        |
 ===================================
 

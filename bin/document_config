@@ -1,6 +1,14 @@
 #!/bin/bash
 
 echo "===================================";
+echo "|         Ubuntu Config            |";
+echo "===================================";
+echo "";
+lsb_release -a;
+echo "";
+uname -a;
+echo "";
+echo "===================================";
 echo "|       Installed Packages        |";
 echo "===================================";
 echo "";
