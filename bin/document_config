@@ -1,0 +1,14 @@
+#!/bin/bash
+
+echo "===================================";
+echo "|       Installed Packages        |";
+echo "===================================";
+echo "";
+dpkg --get-selections;
+echo "";
+echo "===================================";
+echo "|      Installed Gems             |";
+echo "===================================";
+echo "";
+gem list;
+echo "";
