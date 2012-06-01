@@ -1,6 +1,0 @@
-#!/usr/bin/python
-
-import time
- 
-# put Port 8 Pin 3 into mode 7 (GPIO)
-open('/sys/kernel/debug/omap_mux/gpmc_ad6', 'wb').write("%X" % 7)
