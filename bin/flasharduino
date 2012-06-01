@@ -1,0 +1,13 @@
+#!/usr/bin/bash
+
+`/utilities/bin/setgpio;`
+`sleep 2;`
+`/utilities/bin/setserial;`
+`sleep 2;`
+`echo "38" > /sys/class/gpio/export;`
+`sleep 2;`
+`echo "out" > /sys/class/gpio/gpio38/direction;`
+`sleep 2;`
+`sudo echo "1" > /sys/class/gpio/gpio38/value;`
+`sleep 2;`
+`sudo echo "0" > /sys/class/gpio/gpio38/value; sudo echo "1" > /sys/class/gpio/gpio38/value; avrdude -C /etc/ninjablocks/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$1:i;`
