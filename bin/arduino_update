@@ -2,7 +2,7 @@
 
 
 cd /utilities/tmp;
-gist_pull 2850770;
+#gist_pull 2850770;
 
 /utilities/bin/setgpio;
 sleep 2;

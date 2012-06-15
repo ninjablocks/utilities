@@ -1,5 +1,10 @@
 #!/bin/bash
 
+cd /utilities ;
+
+git pull;
+
+
 for SCRIPT in /utilities/update_scripts/*
 do
   if [ -f $SCRIPT -a -x $SCRIPT ]
