@@ -3,6 +3,6 @@
 
 serial = `sudo xxd -g 2 -a -l 16 -seek 16 /sys/bus/i2c//devices/1-0050/eeprom | sed 's/^.* //' | sed -e 's/[.]//g'`
 
-File.open('/utilities/etc/serial.conf', 'w') {|f| f.write(serial) }
+File.open('/opt/utilities/etc/serial.conf', 'w') {|f| f.write(serial) }
 
 puts serial

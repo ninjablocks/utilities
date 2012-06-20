@@ -1,11 +1,11 @@
 #!/bin/bash
 
-cd /utilities ;
+cd /opt/utilities ;
 
 git pull;
 
 
-for SCRIPT in /utilities/update_scripts/*
+for SCRIPT in /opt/utilities/update_scripts/*
 do
   if [ -f $SCRIPT -a -x $SCRIPT ]
   then

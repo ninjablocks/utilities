@@ -1,12 +1,12 @@
 #!/bin/bash
 
 
-cd /utilities/tmp;
+cd /opt/utilities/tmp;
 #gist_pull 2850770;
 
-/utilities/bin/setgpio;
+/opt/utilities/bin/setgpio;
 sleep 2;
-/utilities/bin/setserial;
+/opt/utilities/bin/setserial;
 sleep 2;
 echo "38" > /sys/class/gpio/export;
 sleep 2;
@@ -16,4 +16,4 @@ sudo echo "1" > /sys/class/gpio/gpio38/value;
 sleep 2;
 sudo echo "0" > /sys/class/gpio/gpio38/value; 
 sudo echo "1" > /sys/class/gpio/gpio38/value; 
-avrdude -C /utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:/utilities/tmp/arduino.hex:i;
+avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:/opt/utilities/tmp/arduino.hex:i;
