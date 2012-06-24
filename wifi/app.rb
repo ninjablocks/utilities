@@ -36,6 +36,7 @@ end
 
 get '/status' do
   erb :interface_status
+  system('reboot');
 end
 
 post '/connect' do
@@ -61,5 +62,4 @@ post '/connect' do
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
 
   redirect '/status'
-  `sudo reboot`
 end
