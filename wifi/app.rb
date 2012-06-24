@@ -8,8 +8,9 @@ require 'system/getifaddrs'
 @results = ""
 
 get '/' do
-
-  if System.get_ifaddrs.include? :wlan0
+	
+  ifstatus = `ifconfig wlan0`
+  unless ifstatus.include? 'Device not found'
   	@results = `iwlist wlan0 scan | grep -i 'ssid'` 
   	@aps = @results.split("\n");
   	@aps.map! {|x| x.gsub('"','').gsub('ESSID:','').strip }
@@ -22,6 +23,15 @@ end
 
 get '/plug_it_in' do
 	"Plug in the wifi adaptor buster!"
+end
+
+get '/interface_status' do
+  
+  if System.get_ifaddrs.include? :wlan0
+	"the interface is up"
+  else
+	"the interface is down"
+  end
 end
 
 post '/connect' do
