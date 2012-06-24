@@ -43,8 +43,6 @@ post '/connect' do
   basestation = params['basestation']
   password = params['password']
     
-  "/connect"
-
   doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
   "ctrl_interface_group=0\n"+
   "eapol_version=1\n"+
@@ -62,5 +60,5 @@ post '/connect' do
 
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
 
-  #redirect '/'
+  redirect '/status'
 end
