@@ -36,6 +36,7 @@ end
 
 get '/status' do
   erb :interface_status
+  sleep(4)
   system('reboot');
 end
 
