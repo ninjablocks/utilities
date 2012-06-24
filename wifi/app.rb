@@ -34,6 +34,10 @@ get '/interface_status' do
   end
 end
 
+get '/status' do
+  erb :interface_status
+end
+
 post '/connect' do
   puts params.inspect    
   basestation = params['basestation']
