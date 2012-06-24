@@ -10,16 +10,16 @@ get '/' do
 
 
   if @@scanned == false
-    @results = `iw wlan0 scan | grep -i 'ssid'`
+    @results = `iwlist wlan0 scan | grep -i 'ssid'`
     @@scanned = true
     puts "\n\n----> Using fresh results\n\n"
   else
-    @results = `iw wlan0 scan dump | grep -i 'ssid'`
+    @results = `iwlist wlan0 scan | grep -i 'ssid'`
     puts "\n\n----> Using cached results\n\n"
   end
   
   @aps = @results.split("\n");
-  @aps.map! {|x| x.gsub('SSID: ','').strip }
+  @aps.map! {|x| x.gsub('"','').gsub('ESSID:','').strip }
   puts @aps.inspect
   
   erb :index
@@ -31,22 +31,23 @@ post '/connect' do
   password = params['password']
     
   "/connect"
-  doc = "auto lo\n"+
-  "iface lo inet loopback\n"+
-  "\n"+
-  "# The primary network interface\n"+
-  "auto eth0\n"+
-  "iface eth0 inet dhcp\n"+
-  "# Example to keep MAC address between reboots\n"+
-  "#hwaddress ether DE:AD:BE:EF:CA:FE\n"+
-  "\n"+
-  "# WiFi Example\n"+
-  "auto wlan0\n"+
-  "iface wlan0 inet dhcp\n"+
-  "    wpa-ssid \"#{basestation}\"\n"+
-  "    wpa-psk  \"#{password}\"\n"
 
-  File.open('/etc/network/interfaces', 'w') {|f| f.write(doc) }
+  doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
+  "ctrl_interface_group=0\n"+
+  "eapol_version=1\n"+
+  "ap_scan=1\n"+
+  "fast_reauth=1\n"+
+  "\n"+
+  "network={\n"+
+  "        ssid=\"#{basestation}\"\n"+
+  "        proto=WPA\n"+
+  "        key_mgmt=WPA-PSK\n"+
+  "        pairwise=TKIP\n"+
+  "        group=TKIP\n"+
+  "        psk=\"#{password}\"\n"+
+  "}\n"
+
+  File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
 
   #redirect '/'
 end
