@@ -2,27 +2,26 @@
 
 require 'rubygems'
 require 'sinatra'
+require 'system/getifaddrs'
 
 @@scanned = false
 @results = ""
 
 get '/' do
 
-
-  if @@scanned == false
-    @results = `iwlist wlan0 scan | grep -i 'ssid'`
-    @@scanned = true
-    puts "\n\n----> Using fresh results\n\n"
-  else
-    @results = `iwlist wlan0 scan | grep -i 'ssid'`
-    puts "\n\n----> Using cached results\n\n"
+  if System.get_ifaddrs.include? :wlan0
+  	@results = `iwlist wlan0 scan | grep -i 'ssid'` 
+  	@aps = @results.split("\n");
+  	@aps.map! {|x| x.gsub('"','').gsub('ESSID:','').strip }
+  	puts @aps.inspect
+  	erb :index
+  else 	
+     redirect "/plug_it_in"
   end
-  
-  @aps = @results.split("\n");
-  @aps.map! {|x| x.gsub('"','').gsub('ESSID:','').strip }
-  puts @aps.inspect
-  
-  erb :index
+end
+
+get '/plug_it_in' do
+	"Plug in the wifi adaptor buster!"
 end
 
 post '/connect' do
