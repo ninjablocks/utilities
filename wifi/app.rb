@@ -61,4 +61,5 @@ post '/connect' do
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
 
   redirect '/status'
+  `sudo reboot`
 end
