@@ -8,8 +8,9 @@ require 'system/getifaddrs'
 @results = ""
 
 get '/' do
-	
+  `ifconfig wlan0 up`
   ifstatus = `ifconfig wlan0`
+  `ifconfig wlan0 down`
   unless ifstatus.include? 'Device not found'
   	@results = `iwlist wlan0 scan | grep -i 'ssid'` 
   	@aps = @results.split("\n");
