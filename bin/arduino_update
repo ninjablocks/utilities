@@ -2,7 +2,7 @@
 
 service ninjablock stop;
 cd /opt/utilities/tmp;
-#gist_pull 2850770;
+wget https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
 
 /opt/utilities/bin/setgpio;
 sleep 2;
