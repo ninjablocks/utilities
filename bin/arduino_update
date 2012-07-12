@@ -3,7 +3,7 @@
 service ninjablock stop;
 cd /opt/utilities/tmp;
 # Now pulling from stable
-wget https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
+wget -O arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
 
 /opt/utilities/bin/setgpio;
 sleep 2;
