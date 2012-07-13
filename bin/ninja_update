@@ -1,16 +1,42 @@
 #!/bin/bash
-
-cd /opt/utilities ;
-
-git pull;
-
-
-for SCRIPT in /opt/utilities/update_scripts/*
-do
-  if [ -f $SCRIPT -a -x $SCRIPT ]
-  then
-    $SCRIPT
-  fi
-done
-
-
+# Define directories
+code_dir=/opt/ninja
+util_dir=/opt/utilities
+tmp_dir=$util_dir/tmp
+if [ -f $tmp_dir/has_updated ]; then
+	exit 0
+fi
+# Ensure we have the correct permissions
+chown ubuntu $tmp_dir
+chown ubuntu /dev/watchdog
+# Stop the node.js service
+service ninjablock stop;
+# Pull new arduino code
+wget -O $tmp_dir/arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
+# Update arduino
+/opt/utilities/bin/setgpio;
+sleep 2;
+/opt/utilities/bin/setserial;
+sleep 2;
+echo "38" > /sys/class/gpio/export;
+sleep 2;
+echo "out" > /sys/class/gpio/gpio38/direction;
+sleep 2;
+sudo echo "1" > /sys/class/gpio/gpio38/value;
+sleep 2;
+sudo echo "0" > /sys/class/gpio/gpio38/value; 
+sudo echo "1" > /sys/class/gpio/gpio38/value; 
+avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:/opt/utilities/tmp/arduino.hex:i;
+# Pull new code from repo
+cd $code_dir
+git pull origin master
+touch $tmp_dir/has_updated
+# Cleanup the log
+tail -n 100 /var/log/ninjablock.log > $tmp_dir/new.log
+rm /var/log/ninjablock.log
+mv $tmp_dir/new.log /var/log/ninjablock.log
+# Start the node.js service
+sudo service ninjablock start
+# Update the utilities
+cd $util_dir
+git pull
