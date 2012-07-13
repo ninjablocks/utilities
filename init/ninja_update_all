@@ -1,0 +1,11 @@
+description "Ninja Update Service"
+author      "http://www.ninjablocks.com"
+
+start on started mountall
+stop on shutdown
+
+script
+    export HOME="/root";
+    sleep 5
+    exec /opt/utilities/bin/update_all
+end script
