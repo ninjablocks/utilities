@@ -5,6 +5,8 @@ code_dir=/opt/ninja
 if [ -f $tmp_dir/has_updated ]; then
 	exit 0
 fi
+# Ensure we have the correct permissions on this directory
+chown ubuntu $tmp_dir
 # Stop the node.js service
 service ninjablock stop;
 # Pull new arduino code
@@ -27,6 +29,5 @@ avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/tty
 cd $code_dir
 git pull origin master
 touch $tmp_dir/has_updated
-chown ubuntu $tmp_dir/has_updated
 # Start the node.js service
 sudo service ninjablock start
