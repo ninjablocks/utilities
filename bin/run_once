@@ -1,0 +1,32 @@
+#!/bin/bash
+# Define directories
+tmp_dir=/opt/utilities/tmp
+code_dir=/opt/ninja
+if [ -f $tmp_dir/has_updated ]; then
+	exit 0
+fi
+# Stop the node.js service
+service ninjablock stop;
+# Pull new arduino code
+wget -O $tmp_dir/arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
+# Update arduino
+/opt/utilities/bin/setgpio;
+sleep 2;
+/opt/utilities/bin/setserial;
+sleep 2;
+echo "38" > /sys/class/gpio/export;
+sleep 2;
+echo "out" > /sys/class/gpio/gpio38/direction;
+sleep 2;
+sudo echo "1" > /sys/class/gpio/gpio38/value;
+sleep 2;
+sudo echo "0" > /sys/class/gpio/gpio38/value; 
+sudo echo "1" > /sys/class/gpio/gpio38/value; 
+avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:/opt/utilities/tmp/arduino.hex:i;
+# Pull new code from repo
+cd $code_dir
+git pull origin master
+touch $tmp_dir/has_updated
+chown ubuntu $tmp_dir/has_updated
+# Start the node.js service
+sudo service ninjablock start
