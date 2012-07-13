@@ -29,5 +29,9 @@ avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/tty
 cd $code_dir
 git pull origin master
 touch $tmp_dir/has_updated
+# Cleanup the log
+tail -n 100 /var/log/ninjablock.log > $tmp_dir/new.log
+rm /var/log/ninjablock.log
+mv $tmp_dir/new.log /var/log/ninjablock.log
 # Start the node.js service
 sudo service ninjablock start
