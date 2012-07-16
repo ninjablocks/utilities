@@ -18,7 +18,7 @@ get '/' do
   		result = scan_results.split(",")
   		basestation = {}
   		basestation["name"]       = result[1].gsub('"','').strip
- 		basestation["key"]        = result[4].gsub('"','').strip
+ 		  basestation["key"]        = result[4].gsub('"','').strip
   		basestation["encryption"] = result[5].gsub('"','').strip
   		@access_points << basestation
 	end
@@ -53,24 +53,40 @@ get '/reboot' do
 end
 
 post '/connect' do
-  puts params.inspect    
-  basestation = params['basestation']
+  basestation = params['basestation'].split(',')
   password = params['password']
+  
+    if basestation[1] == "on"
+       puts "key on"
+      if basestation[2].include? "WPA"
+        doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
+        "network={\n"+
+        "        ssid=\"#{basestation[0]}\"\n"+
+        "        psk=\"#{password}\"\n"+
+        "}\n"
+        puts doc
+      else
+        puts "WEP on"
+        doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
+        "network={\n"+
+        "        ssid=\"#{basestation[0]}\"\n"+
+        "        key_mgmt=NONE\n"+
+        "        wep_key0=\"#{password}\"\n"+
+        "        wep_tx_keyidx=0\n"+
+        "}\n"
+        puts doc
+      end
+    else
+      puts "key off"
+      doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
+      "network={\n"+
+      "        ssid=\"#{basestation[0]}\"\n"+
+      "        key_mgmt=NONE\n"+
+      "}\n"
+      puts doc
+    end
     
-  doc = "ctrl_interface=/var/run/wpa_supplicant\n"+
-  "ctrl_interface_group=0\n"+
-  "eapol_version=1\n"+
-  "ap_scan=1\n"+
-  "fast_reauth=1\n"+
-  "\n"+
-  "network={\n"+
-  "        ssid=\"#{basestation}\"\n"+
-  "        proto=WPA\n"+
-  "        key_mgmt=WPA-PSK\n"+
-  "        pairwise=TKIP\n"+
-  "        group=TKIP\n"+
-  "        psk=\"#{password}\"\n"+
-  "}\n"
+
 
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
 
