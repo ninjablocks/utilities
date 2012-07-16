@@ -100,7 +100,7 @@ post '/connect' do
   sleep 5
   system('sudo ifconfig wlan0 up')
   puts "bring up wlan0"
-  system('sudo dhclient wlan0')
+  #system('sudo dhclient wlan0')
   puts "trying to get IP for wlan0"
   
   redirect '/status'
