@@ -94,6 +94,7 @@ post '/connect' do
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
   puts "done writing file"
   system('sudo ifconfig wlan0 down')
+  system('killall -q wpa_supplicant')
   puts "putting wlan0 down"
   system('sudo dhclient -r')
   puts "releasing dhclient"
