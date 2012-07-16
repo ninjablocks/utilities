@@ -1,17 +1,25 @@
-<html>
-<head>
-    <title>BargePoller</title>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <title>Ninja Blocks Wi-Fi Setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="/css/bootstrap.css" rel="stylesheet">
+    <link href="/css/bootstrap-responsive.css" rel="stylesheet">
+    <link href="/css/docs.css" rel="stylesheet">
+    <link href="/js/google-code-prettify/prettify.css" rel="stylesheet">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.2.6/jquery.min.js" type="text/javascript" charset="utf-8"></script>
-
-    <style type="text/css" media="screen">
-      body{ background:#000;color:#fff;font-size:.9em; }
-      .msg{ background:#aaa;padding:.2em; border-bottom:1px #000 solid}
-      .old{ background-color:#246499;}
-      .new{ background-color:#3B9957;}
-    .error{ background-color:#992E36;}
-    </style>
-
     <script type="text/javascript" charset="utf-8">
+    // I've really got to change this script before a real coder kills me.
+
+    var broken = 0;
+    var width  = 0;
+
     function addmsg(type, msg){
         /* Simple helper to add a div.
         type is the name of a CSS class (old/new/error).
@@ -30,20 +38,30 @@
 
             async: true, /* If set to non-async, browser shows page as "Loading.."*/
             cache: false,
-            timeout:50000, /* Timeout in ms */
+            timeout:2000, /* Timeout in ms */
 
             success: function(data){ /* called when request to barge.php completes */
-                addmsg("new", data); /* Add response to a .msg div (with the "new" class)*/
+                //addmsg("new", data); /* Add response to a .msg div (with the "new" class)*/
+                if(broken == 1){
+                   $("#connection-progress").width(100);
+                   setTimeout(function () { window.location = "/connected"; }, "1000"); 
+                }
+                width = width + 4;
+                $("#connection-progress").width(width);
                 setTimeout(
                     'waitForMsg()', /* Request next message */
                     1000 /* ..after 1 seconds */
                 );
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
-                addmsg("error", textStatus + " (" + errorThrown + ")");
+                //addmsg("error", textStatus + " (" + errorThrown + ")");
+                broken = 1;
+                width = width + 4;
+                $("#connection-progress").width(width);
+
                 setTimeout(
                     'waitForMsg()', /* Try again after.. */
-                    "15000"); /* milliseconds (15seconds) */
+                    "2000"); /* milliseconds (15seconds) */
             }
         });
     };
@@ -52,16 +70,56 @@
         waitForMsg(); /* Start the inital request */
     });
     </script>
-</head>
-<body>
-    <div id="messages">
-        <div class="msg old">
-            BargePoll message requester!
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+
+  <body data-spy="scroll" data-target=".subnav" data-offset="50">
+
+
+  <!-- Navbar
+    ================================================== -->
+   
+    <div class="container">
+
+      <div class="span4">
+        <h3>Connecting</h3>
+        <p>Connecting to your wireless base station.</p>
+        <div class="progress progress-striped active">
+          <div class="bar" id="connection-progress" style="width: 0%"></div>
         </div>
-    </div>
-</body>
-<script>
-$.get('/reboot', function(data) {
-});
-</script>
+      </div>
+
+
+    </div><!-- /container -->
+
+
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+    <script src="assets/js/jquery.js"></script>
+    <script src="assets/js/google-code-prettify/prettify.js"></script>
+    <script src="assets/js/bootstrap-transition.js"></script>
+    <script src="assets/js/bootstrap-alert.js"></script>
+    <script src="assets/js/bootstrap-modal.js"></script>
+    <script src="assets/js/bootstrap-dropdown.js"></script>
+    <script src="assets/js/bootstrap-scrollspy.js"></script>
+    <script src="assets/js/bootstrap-tab.js"></script>
+    <script src="assets/js/bootstrap-tooltip.js"></script>
+    <script src="assets/js/bootstrap-popover.js"></script>
+    <script src="assets/js/bootstrap-button.js"></script>
+    <script src="assets/js/bootstrap-collapse.js"></script>
+    <script src="assets/js/bootstrap-carousel.js"></script>
+    <script src="assets/js/bootstrap-typeahead.js"></script>
+    <script src="assets/js/application.js"></script>
+    <script>
+     $.get('/reboot', function(data) { });
+   </script>
+
+  </body>
 </html>
