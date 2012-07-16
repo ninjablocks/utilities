@@ -92,6 +92,8 @@ post '/connect' do
 
 
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
-
+  system('ifconfig wlan0 down')
+  sleep 5
+  system('ifconfig wlan0 up')
   redirect '/status'
 end
