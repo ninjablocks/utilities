@@ -92,8 +92,11 @@ post '/connect' do
 
 
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
-  system('ifconfig wlan0 down')
+  system('sudo ifconfig wlan0 down')
+  system('sudo dhclient -r')
   sleep 5
-  system('ifconfig wlan0 up')
+  system('sudo ifconfig wlan0 up')
+  system('sudo dhclient wlan0')
+  
   redirect '/status'
 end
