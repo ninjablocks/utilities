@@ -1,4 +1,4 @@
 wifi
 ====
 
-This is a Node and Express JS based frontend for configuring wifi on ubuntu. 
+A Ruby + Sinatra based front end for setting up Wifi on the Ninja Block.
