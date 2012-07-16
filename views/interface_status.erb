@@ -42,6 +42,7 @@
 
             success: function(data){ /* called when request to barge.php completes */
                 //addmsg("new", data); /* Add response to a .msg div (with the "new" class)*/
+                console.log(data);
                 if(broken == 1){
                    $("#connection-progress").width(100);
                    setTimeout(function () { window.location = "/connected"; }, "1000"); 
@@ -55,8 +56,8 @@
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
                 //addmsg("error", textStatus + " (" + errorThrown + ")");
-                broken = 1;
-                width = width + 4;
+                //broken = 1;
+                //width = width + 4;
                 $("#connection-progress").width(width);
 
                 setTimeout(
