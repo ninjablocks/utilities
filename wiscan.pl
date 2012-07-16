@@ -28,41 +28,39 @@ foreach (@myLines)
 {
     if ($_ =~ "Cell [0-9][0-9]")
     {
-	if ($currNum > 0)
-	{
-	    printFin($currNum, $name, $quality, $sigLvl, $enc, $encType,
-		$authType);
-
-	    varInit();
-	}
-	$currNum++;
+	    if ($currNum > 0)
+	        {
+	            printFin($currNum, $name, $quality, $sigLvl, $enc, $encType,$authType);
+	            varInit();
+	        }
+	    $currNum++;
     }
 
     $cellArr[$currNum] = $cellArr[$currNum]."$_"."\n";
 
     if ($_ =~ "ESSID")
     {
-	handleName($_);
+	    handleName($_);
     }
     elsif($_ =~ "Encryption key")
     {
-	handleKey($_);
+	    handleKey($_);
     }
     elsif($_ =~ "Quality=[0-9]+/[0-9]+")
     {
-	handleQuality($_);
+	    handleQuality($_);
     }
     elsif($_ =~ "IE: WPA .+ [0-9]")
     {
-	handleEncType($_);
+	    handleEncType($_);
     }
     elsif($_ =~ "IE: IEEE 802.11i/WPA.+[0-9]")
     {
-	handleEncType2($_);
+	    handleEncType2($_);
     }
     elsif($_ =~ "Authentication Suites")
     {
-	handleAuthType($_);
+	    handleAuthType($_);
     }
     
 }
@@ -180,5 +178,6 @@ sub handleAuthType ()
 {
     $authType = (split(" ", $_[0]))[4];
 }
+
 
 
