@@ -49,7 +49,10 @@ end
 
 get '/reboot' do
   "rebooting"
-  system('reboot');
+  system('ifconfig wlan0 down')
+  sleep 5
+  system('ifconfig wlan0 up')
+  
 end
 
 post '/connect' do
