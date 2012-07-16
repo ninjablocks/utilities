@@ -93,16 +93,9 @@ post '/connect' do
   puts "writing file"
   File.open('/etc/wpa_supplicant.conf', 'w') {|f| f.write(doc) }
   puts "done writing file"
-  system('sudo ifconfig wlan0 down')
+  system('sudo ifdown wlan0')
   system('killall -q wpa_supplicant')
-  puts "putting wlan0 down"
-  system('sudo dhclient -r')
-  puts "releasing dhclient"
-  sleep 5
-  system('sudo ifconfig wlan0 up')
-  puts "bring up wlan0"
-  #system('sudo dhclient wlan0')
-  puts "trying to get IP for wlan0"
+  system('sudo ifup wlan0')
   
   redirect '/status'
 end
