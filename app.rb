@@ -47,14 +47,6 @@ get '/status' do
   #system('reboot');
 end
 
-get '/reboot' do
-  "rebooting"
-  system('ifconfig wlan0 down')
-  sleep 5
-  system('ifconfig wlan0 up')
-  
-end
-
 post '/connect' do
   basestation = params['basestation'].split(',')
   password = params['password']
