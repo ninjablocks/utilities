@@ -19,6 +19,7 @@
 
     var broken = 0;
     var width  = 0;
+    var x = 0;
 
     function addmsg(type, msg){
         /* Simple helper to add a div.
@@ -32,7 +33,6 @@
     function waitForMsg(){
         /* This requests the url "msgsrv.php"
         When it complete (or errors)*/
-        var x = 0;
         $.ajax({
             type: "GET",
             url: "/interface_status",
@@ -47,7 +47,9 @@
                if(data == "up"){
                  console.log("up bitches");
                  x = x + 1;
-                 if(x == 5){
+                 console.log(x);
+                 
+                 if(x > 4){
                    $("#connection-progress").width(100);
                    setTimeout(function () { window.location = "/connected"; }, "1000"); 
                  }
