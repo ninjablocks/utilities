@@ -43,9 +43,9 @@
 
             success: function(data){ /* called when request to barge.php completes */
                 //addmsg("new", data); /* Add response to a .msg div (with the "new" class)*/
-              
+              console.log(data);
                if(data == "up"){
-                 x = x + 1
+                 x = x + 1;
                  if(x == 5){
                    $("#connection-progress").width(100);
                    setTimeout(function () { window.location = "/connected"; }, "1000"); 
