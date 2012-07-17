@@ -47,6 +47,11 @@ get '/status' do
   #system('reboot');
 end
 
+get '/connected' do
+  erb :connected
+  
+end
+
 post '/connect' do
   basestation = params['basestation'].split(',')
   password = params['password']
