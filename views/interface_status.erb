@@ -32,6 +32,7 @@
     function waitForMsg(){
         /* This requests the url "msgsrv.php"
         When it complete (or errors)*/
+        var x = 0;
         $.ajax({
             type: "GET",
             url: "/interface_status",
@@ -42,11 +43,15 @@
 
             success: function(data){ /* called when request to barge.php completes */
                 //addmsg("new", data); /* Add response to a .msg div (with the "new" class)*/
-                console.log(data);
-                if(broken == 1){
+              
+               if(data == "up"){
+                 x = x + 1
+                 if(x == 5){
                    $("#connection-progress").width(100);
                    setTimeout(function () { window.location = "/connected"; }, "1000"); 
-                }
+                 }
+               }
+                
                 width = width + 4;
                 $("#connection-progress").width(width);
                 setTimeout(
@@ -55,9 +60,7 @@
                 );
             },
             error: function(XMLHttpRequest, textStatus, errorThrown){
-                //addmsg("error", textStatus + " (" + errorThrown + ")");
-                //broken = 1;
-                //width = width + 4;
+                
                 $("#connection-progress").width(width);
 
                 setTimeout(

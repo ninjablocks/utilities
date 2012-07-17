@@ -35,9 +35,9 @@ end
 get '/interface_status' do
   
   if System.get_ifaddrs.include? :wlan0
-	"the interface is up"
+	"up"
   else
-	"the interface is down"
+	"down"
   end
 end
 
