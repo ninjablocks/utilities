@@ -4,9 +4,6 @@ require 'rubygems'
 require 'sinatra'
 require 'system/getifaddrs'
 
-@@scanned = false
-@results = ""
-
 get '/' do
   `ifconfig wlan0 down`
   `ifconfig wlan0 up`
@@ -43,13 +40,10 @@ end
 
 get '/status' do
   erb :interface_status
-  #sleep(4)
-  #system('reboot');
 end
 
 get '/connected' do
   erb :connected
-  
 end
 
 post '/connect' do
