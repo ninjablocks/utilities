@@ -1,0 +1,17 @@
+#!/bin/bash
+# Define directories
+code_dir=/opt/ninja
+util_dir=/opt/utilities
+tmp_dir=$util_dir/tmp
+if [ -f $tmp_dir/has_updated_node ]; then
+	exit 1
+fi
+# Pull new code from repo
+cd $code_dir
+git pull origin master
+touch $tmp_dir/has_updated_node
+# Cleanup the log
+tail -n 100 /var/log/ninjablock.log > $tmp_dir/new.log
+cat $tmp_dir/new.log>/var/log/ninjablock.log
+rm $tmp_dir/new.log
+exit 0

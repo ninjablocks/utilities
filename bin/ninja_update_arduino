@@ -1,13 +1,13 @@
 #!/bin/bash
-
+util_dir=/opt/utilities
+tmp_dir=$util_dir/tmp
 service ninjablock stop;
-cd /opt/utilities/tmp;
+cd $tmp_dir;
 # Now pulling from stable
 wget -O arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
-
-/opt/utilities/bin/setgpio;
+$util_dir/bin/setgpio;
 sleep 2;
-/opt/utilities/bin/setserial;
+$util_dir/bin/setserial;
 sleep 2;
 echo "38" > /sys/class/gpio/export;
 sleep 2;
@@ -17,6 +17,4 @@ sudo echo "1" > /sys/class/gpio/gpio38/value;
 sleep 2;
 sudo echo "0" > /sys/class/gpio/gpio38/value; 
 sudo echo "1" > /sys/class/gpio/gpio38/value; 
-avrdude -C /opt/utilities/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:/opt/utilities/tmp/arduino.hex:i;
-
-service ninjablock start;
+avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;

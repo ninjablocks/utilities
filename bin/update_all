@@ -33,10 +33,10 @@ git pull origin master
 touch $tmp_dir/has_updated
 # Cleanup the log
 tail -n 100 /var/log/ninjablock.log > $tmp_dir/new.log
-rm /var/log/ninjablock.log
-mv $tmp_dir/new.log /var/log/ninjablock.log
-# Start the node.js service
-sudo service ninjablock start
+cat $tmp_dir/new.log>/var/log/ninjablock.log
+rm $tmp_dir/new.log
 # Update the utilities
 cd $util_dir
 git pull
+# Start the node.js service
+sudo service ninjablock start
