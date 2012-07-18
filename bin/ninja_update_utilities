@@ -3,9 +3,6 @@
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
-if [ -f $tmp_dir/has_updated_node ]; then
-	exit 0
-fi
 cd $util_dir
 git pull
 cp -Rf $util_dir/init/* /etc/init/
