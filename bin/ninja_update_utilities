@@ -9,3 +9,4 @@ fi
 cd $util_dir
 git pull
 cp -Rf $util_dir/init/* /etc/init/
+chmod ubuntu:ubuntu $util_dir/bin/ninja_update_node
