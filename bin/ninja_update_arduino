@@ -1,7 +1,6 @@
 #!/bin/bash
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
-service ninjablock stop;
 cd $tmp_dir;
 # Now pulling from stable
 wget -O arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
