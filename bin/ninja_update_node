@@ -9,19 +9,19 @@ fi
 touch $tmp_dir/.has_updated_node
 # Pull new code from repo
 cd $tmp_dir
-wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/node.stable.tar.gz
-remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/node.stable.checksum -q -O - | awk '{ print $1 }')
-local_checksum=$(md5sum node.stable.tar.gz | awk '{ print $1 }')
+wget https://s3.amazonaws.com/ninjablocks/code/beagle/node/$NINJA_ENV.tar.gz
+remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks/code/beagle/node/$NINJA_ENV.checksum -q -O - | awk '{ print $1 }')
+local_checksum=$(md5sum $NINJA_ENV.tar.gz | awk '{ print $1 }')
 if [ "$remote_checksum"="$local_checksum" ]; then
 	echo "Updating"
-	tar -zxf node.stable.tar.gz
+	tar -zxf $NINJA_ENV.tar.gz
 	rm -rf $code_dir/*
 	mv -f ninja/* $code_dir/
-	rm node.stable.tar.gz
+	rm $NINJA_ENV.tar.gz
 	rm -rf ninja
 	exit 0
 else
 	echo "Invalid Checksum"
-	rm stable.tar.gz
+	rm $NINJA_ENV.tar.gz
 	exit 1
 fi
