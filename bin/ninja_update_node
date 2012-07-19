@@ -8,9 +8,20 @@ if [ -f $tmp_dir/.has_updated_node ]; then
 fi
 touch $tmp_dir/.has_updated_node
 # Pull new code from repo
-cd $code_dir
-git checkout master
-git pull origin master
-# Cleanup the log
-
-exit 0
+cd $tmp_dir
+wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/stable.tar.gz
+remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/stable.checksum -q -O - | awk '{ print $1 }')
+local_checksum=$(md5sum stable.tar.gz | awk '{ print $1 }')
+if [ "$remote_checksum"="$local_checksum" ]; then
+	echo "Updating"
+	tar -zxf stable.tar.gz
+	rm -rf $code_dir/*
+	mv -f ninja/* $code_dir/
+	rm stable.tar.gz
+	rm -rf ninja
+	exit 0
+else
+	echo "Invalid Checksum"
+	rm stable.tar.gz
+	exit 1
+fi
