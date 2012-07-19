@@ -149,6 +149,11 @@ sudo chown ubuntu /opt/utilities;
 echo -e "\n→ ${bold}Fetching the Utilities Repo from Github${normal}\n";
 git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
 
+# Clone the Wifi Setup into /opt/wifi
+sudo mkdir -p  /opt/wifi;
+echo -e "\n→ ${bold}Fetching the Wifi Repo from Github${normal}\n";
+git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
+
 # Copy /etc/init scripts into place
 echo -e "\n→ ${bold}Copy /etc/init scripts into place${normal}\n";
 sudo cp /opt/utilities/init/* /etc/init/
