@@ -9,15 +9,15 @@ fi
 touch $tmp_dir/.has_updated_node
 # Pull new code from repo
 cd $tmp_dir
-wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/stable.tar.gz
-remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/stable.checksum -q -O - | awk '{ print $1 }')
-local_checksum=$(md5sum stable.tar.gz | awk '{ print $1 }')
+wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/node.stable.tar.gz
+remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks-assets/beagle/releases/node.stable.checksum -q -O - | awk '{ print $1 }')
+local_checksum=$(md5sum node.stable.tar.gz | awk '{ print $1 }')
 if [ "$remote_checksum"="$local_checksum" ]; then
 	echo "Updating"
-	tar -zxf stable.tar.gz
+	tar -zxf node.stable.tar.gz
 	rm -rf $code_dir/*
 	mv -f ninja/* $code_dir/
-	rm stable.tar.gz
+	rm node.stable.tar.gz
 	rm -rf ninja
 	exit 0
 else
