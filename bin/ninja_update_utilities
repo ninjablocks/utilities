@@ -4,7 +4,7 @@ code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
 cd $tmp_dir
-wget -O utilities.tar.gz https://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.tar.gz
+wget -O --read-timeout=120 utilities.tar.gz https://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.tar.gz
 remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.checksum -q -O -)
 local_checksum=$(sha1sum utilities.tar.gz | awk '{ print $1 }')
 if [ "$remote_checksum"="$local_checksum" ]; then
@@ -18,6 +18,6 @@ if [ "$remote_checksum"="$local_checksum" ]; then
 	exit 0
 else
 	echo "[System] Invalid Utilities Checksum" >> /var/log/ninjablock.log
-	rm $NINJA_ENV.tar.gz
+	rm utilities.tar.gz
 	exit 1
 fi
