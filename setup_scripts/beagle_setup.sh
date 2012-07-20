@@ -61,6 +61,9 @@ sudo apt-get -f -y --force-yes install imagemagick;
 echo -e "\n→ ${bold}Installing psmisc${normal}\n"; 
 sudo apt-get -f -y --force-yes install psmisc;
 
+echo -e "\n→ ${bold}Installing curl${normal}\n"; 
+sudo apt-get -f -y --force-yes install curl;
+
 # Switching to /home/ubuntu
 echo -e "\n→ ${bold}Switching to /home/ubuntu${normal}\n"; 
 cd /home/ubuntu/;

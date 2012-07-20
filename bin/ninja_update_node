@@ -3,14 +3,14 @@
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
-if [ -f $tmp_dir/.has_updated_node ]; then
+if [ -f /etc/opt/ninja/.has_updated_node ]; then
 	exit 1
 fi
-touch $tmp_dir/.has_updated_node
+touch /etc/opt/ninja/.has_updated_node
 # Pull new code from repo
 cd $tmp_dir
-wget -T 120 -O node.tar.gz https://s3.amazonaws.com/ninjablocks/code/beagle/node/${NINJA_ENV:-"stable"}.tar.gz
-remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks/code/beagle/node/${NINJA_ENV:-"stable"}.checksum -q -O - | awk '{ print $1 }')
+curl --output node.tar.gz https://s3.amazonaws.com/ninjablocks/code/beagle/node/${NINJA_ENV:-"stable"}.tar.gz
+remote_checksum=$(curl https://s3.amazonaws.com/ninjablocks/code/beagle/node/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum node.tar.gz | awk '{ print $1 }')
 if [ "$remote_checksum"="$local_checksum" ]; then
 	echo "[System] Updating Node" >> /var/log/ninjablock.log

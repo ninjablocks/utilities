@@ -5,8 +5,8 @@ util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
 # Pull new code from repo
 cd $tmp_dir
-wget -T 120 -O arduino.hex https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.hex
-remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.checksum -q -O - | awk '{ print $1 }')
+curl --output arduino.hex https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.hex
+remote_checksum=$(curl https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
 if [ "$remote_checksum"="$local_checksum" ]; then
 	echo "[System] Updating Arduino" >> /var/log/ninjablock.log
