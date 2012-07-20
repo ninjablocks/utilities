@@ -1,19 +1,32 @@
 #!/bin/bash
+# Define directories
+code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
-cd $tmp_dir;
-# Now pulling from stable
-wget -O arduino.hex https://raw.github.com/ninjablocks/arduino/master/hex/stable.hex;
-$util_dir/bin/setgpio;
-sleep 2;
-$util_dir/bin/setserial;
-sleep 2;
-echo "38" > /sys/class/gpio/export;
-sleep 2;
-echo "out" > /sys/class/gpio/gpio38/direction;
-sleep 2;
-sudo echo "1" > /sys/class/gpio/gpio38/value;
-sleep 2;
-sudo echo "0" > /sys/class/gpio/gpio38/value; 
-sudo echo "1" > /sys/class/gpio/gpio38/value; 
-avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
+# Pull new code from repo
+cd $tmp_dir
+wget -O arduino.hex https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.hex
+remote_checksum=$(wget https://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.checksum -q -O - | awk '{ print $1 }')
+local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
+if [ "$remote_checksum"="$local_checksum" ]; then
+	echo "[System] Updating Arduino" >> /var/log/ninjablock.log
+	$util_dir/bin/setgpio;
+	sleep 2;
+	$util_dir/bin/setserial;
+	sleep 2;
+	echo "38" > /sys/class/gpio/export;
+	sleep 2;
+	echo "out" > /sys/class/gpio/gpio38/direction;
+	sleep 2;
+	sudo echo "1" > /sys/class/gpio/gpio38/value;
+	sleep 2;
+	sudo echo "0" > /sys/class/gpio/gpio38/value; 
+	sudo echo "1" > /sys/class/gpio/gpio38/value; 
+	avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
+	rm arduino.hex
+	exit 0
+else
+	echo "[System] Invalid Arduino Checksum" >> /var/log/ninjablock.log
+	rm arduino.hex
+	exit 1
+fi
