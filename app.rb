@@ -5,6 +5,11 @@ require 'sinatra'
 require 'system/getifaddrs'
 
 get '/' do
+
+  unless `lsusb`.include? "WLAN"
+    redirect "/plug_it_in"
+  end
+  
   `ifconfig wlan0 down`
   `ifconfig wlan0 up`
   ifstatus = `ifconfig wlan0`
