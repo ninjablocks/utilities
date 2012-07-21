@@ -31,7 +31,7 @@ get '/' do
 end
 
 get '/plug_it_in' do
-	"Plug in the wifi adaptor buster!"
+	"Please plug in the wifi adaptor and restart your Ninja Block."
 end
 
 get '/interface_status' do
