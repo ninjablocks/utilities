@@ -153,9 +153,9 @@ echo -e "\n→ ${bold}Fetching the Utilities Repo from Github${normal}\n";
 git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
 
 # Clone the Wifi Setup into /opt/wifi
-sudo mkdir -p  /opt/wifi;
-echo -e "\n→ ${bold}Fetching the Wifi Repo from Github${normal}\n";
-git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
+#sudo mkdir -p  /opt/wifi;
+#echo -e "\n→ ${bold}Fetching the Wifi Repo from Github${normal}\n";
+#git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
 
 # Copy /etc/init scripts into place
 echo -e "\n→ ${bold}Copy /etc/init scripts into place${normal}\n";
@@ -199,9 +199,13 @@ echo 'export PATH=/opt/utilities/bin:$PATH' >> /root/.bashrc;
 echo -e "\n→ ${bold}Adding /opt/utilities/bin to ubuntu's path${normal}\n";
 echo 'export PATH=/opt/utilities/bin:$PATH' >> /home/ubuntu/.bashrc;
 
+# Set the beagle's environment
+echo -e "\n→ ${bold}Setting the beagle's environment to stable${normal}\n";
+echo 'export NINJA_ENV="stable"' >> /home/ubuntu/.bashrc;
+
 # Add ninja_update to the hourly cron
-echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
-ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
+#echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
+#ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
 
 # Run the setserial command so we can flash the Arduino later
 echo -e "\n→ ${bold}Running setserial${normal}\n";
