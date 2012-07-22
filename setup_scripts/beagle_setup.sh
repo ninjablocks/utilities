@@ -161,6 +161,10 @@ git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
 echo -e "\n→ ${bold}Copy /etc/init scripts into place${normal}\n";
 sudo cp /opt/utilities/init/* /etc/init/
 
+# Copy /etc/udev/rules.d/ scripts into place
+echo -e "\n→ ${bold}Copy /etc/udev/rules.d/ scripts into place${normal}\n";
+sudo cp /opt/utilities/udev/* /etc/udev/rules.d/;
+
 # Set the correct owner and permissions on the files
 echo -e "\n→ ${bold}Set the correct owner and permissions on the init files${normal}\n";
 sudo chown root:root /etc/init/*;

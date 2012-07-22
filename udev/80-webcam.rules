@@ -1,0 +1,2 @@
+ACTION=="add", SUBSYSTEM=="video4linux", RUN+="/opt/utilities/bin/mjpg_start.sh"
+ACTION=="remove", SUBSYSTEM=="video4linux", RUN+="/opt/utilities/bin/mjpg_stop.sh"
