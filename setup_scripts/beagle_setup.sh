@@ -201,7 +201,7 @@ echo 'export PATH=/opt/utilities/bin:$PATH' >> /home/ubuntu/.bashrc;
 
 # Set the beagle's environment
 echo -e "\n→ ${bold}Setting the beagle's environment to stable${normal}\n";
-echo 'export NINJA_ENV="stable"' >> /home/ubuntu/.bashrc;
+echo 'export NINJA_ENV=stable' >> /home/ubuntu/.bashrc;
 
 # Add ninja_update to the hourly cron
 #echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
@@ -217,13 +217,10 @@ sudo /opt/utilities/bin/setgpio;
 
 # Remove old Arduino hex files;
 sudo rm /opt/utilities/tmp/*;
-cd /opt/utilities/tmp/;
-sudo wget https://raw.github.com/ninjablocks/arduino/master/hex/036.hex;
-sudo mv /opt/utilities/tmp/036.hex /opt/utilities/tmp/arduino.hex;
 
 # Run Arduino Update
 echo -e "\n→ ${bold}Updating the Arduino${normal}\n";
-sudo /opt/utilities/bin/arduino_update;
+sudo /opt/utilities/bin/ninja_update_arduino;
 
 echo -e "\n→ ${bold}Guess what? We're done!!!${normal}\n";
 
