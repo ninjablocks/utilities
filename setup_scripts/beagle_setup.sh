@@ -161,14 +161,20 @@ git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
 echo -e "\n→ ${bold}Copy /etc/init scripts into place${normal}\n";
 sudo cp /opt/utilities/init/* /etc/init/
 
-# Copy /etc/udev/rules.d/ scripts into place
-echo -e "\n→ ${bold}Copy /etc/udev/rules.d/ scripts into place${normal}\n";
-sudo cp /opt/utilities/udev/* /etc/udev/rules.d/;
-
 # Set the correct owner and permissions on the files
 echo -e "\n→ ${bold}Set the correct owner and permissions on the init files${normal}\n";
 sudo chown root:root /etc/init/*;
 sudo chmod 644 /etc/init/*;
+
+# Turn off SSH Password Authentication
+echo -e "\n→ ${bold}Turning of SSH Password Authentication${normal}\n";
+#sudo perl -pi -e 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config;
+#sudo perl -pi -e 's/\#PasswordAuthentication yes/PasswordAuthentication no/g' /etc/ssh/sshd_config;
+
+# Copy /etc/udev/rules.d/ scripts into place
+echo -e "\n→ ${bold}Copy /etc/udev/rules.d/ scripts into place${normal}\n";
+sudo cp /opt/utilities/udev/* /etc/udev/rules.d/;
+
 
 # Create Ninja Directory (-p to preserve if already exists).
 echo -e "\n→ ${bold}Create the Ninja Directory${normal}\n";
