@@ -15,6 +15,7 @@ if [ "$remote_checksum"="$local_checksum" ]; then
 	chown ubuntu:ubuntu $util_dir/bin/ninja_update_node
 	rm utilities.tar.gz
 	rm -rf utilities
+	touch /etc/opt/ninja/.has_updated_utilities
 	exit 0
 else
 	echo "[System] Invalid Utilities Checksum" >> /var/log/ninjablock.log

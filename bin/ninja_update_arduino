@@ -24,6 +24,7 @@ if [ "$remote_checksum"="$local_checksum" ]; then
 	sudo echo "1" > /sys/class/gpio/gpio38/value; 
 	avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
 	rm arduino.hex
+	touch /etc/opt/ninja/.has_updated_arduino
 	exit 0
 else
 	echo "[System] Invalid Arduino Checksum" >> /var/log/ninjablock.log
