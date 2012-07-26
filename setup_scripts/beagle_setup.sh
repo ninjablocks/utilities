@@ -2,7 +2,7 @@
 
 # Run this script as root ie:
 # sudo -s
-# bash <(wget -q -O - https://raw.github.com/gist/2958054)
+# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/beagle_setup.sh)
 
 bold=`tput bold`;
 normal=`tput sgr0`;
@@ -20,7 +20,7 @@ sudo echo "ntpdate ntp.ubuntu.com" > /etc/cron.daily/ntpdate;
 echo -e "\n→ ${bold}Making ntpdate executable${normal}\n";
 sudo chmod 755 /etc/cron.daily/ntpdate;
 
-# Update the time
+# Update the timedate
 echo -e "\n→ ${bold}Updating the time${normal}\n";
 sudo ntpdate ntp.ubuntu.com pool.ntp.org;
 
