@@ -12,9 +12,12 @@ echo -e "\n→ ${bold}Setting up Sydney as the default timezone.${normal}\n";
 sudo echo "Australia/Sydney" | sudo tee /etc/timezone;
 sudo dpkg-reconfigure --frontend noninteractive tzdata;
 
-# Add NTP Update a daily cron job
+# Add NTP Update as a daily cron job
+echo -e "\n→ ${bold}Create the ntpdate file${normal}\n";
 sudo touch /etc/cron.daily/ntpdate;
+echo -e "\n→ ${bold}Add ntpdate ntp.ubuntu.com${normal}\n";
 sudo echo "ntpdate ntp.ubuntu.com" > /etc/cron.daily/ntpdate;
+echo -e "\n→ ${bold}Making ntpdate executable${normal}\n";
 sudo chmod 755 /etc/cron.daily/ntpdate;
 
 # Update the time
