@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby
+#/usr/bin/env ruby
 
 require 'rubygems'
 require 'sinatra'
@@ -31,7 +31,7 @@ get '/' do
 end
 
 get '/plug_it_in' do
-	"Plug in the wifi adaptor buster!"
+	erb :plug_it_in
 end
 
 get '/interface_status' do
