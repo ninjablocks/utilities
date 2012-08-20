@@ -139,7 +139,7 @@ echo -e "\n→ ${bold} Make /etc/network/interfaces use wpa_supplicant for wlan0
 
 sudo echo "auto wlan0" >> /etc/network/interfaces;
 sudo echo "iface wlan0 inet dhcp" >> /etc/network/interfaces;
-sudo echo "pre-up wpa_supplicant -B -D wext -i wlan0 -c /etc/wpa_supplicant.conf" >> /etc/network/interfaces;
+sudo echo "pre-up wpa_supplicant -f /var/log/wpa_supplicant.conf -B -D wext -i wlan0 -c /etc/wpa_supplicant.conf" >> /etc/network/interfaces;
 sudo echo "post-down killall -q wpa_supplicant" >> /etc/network/interfaces;
 
 # Install our rtl8192cu driver
