@@ -1,5 +1,8 @@
 #!/bin/bash
 # Define directories
+if [ -f /etc/environment.local ]; then
+    . /etc/environment.local
+fi
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
