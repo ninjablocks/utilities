@@ -14,7 +14,9 @@ local_checksum=$(sha1sum node.tar.gz | awk '{ print $1 }')
 if [ -e node.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$local_checksum" ]; then
 	echo "[System] Updating Node (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 	tar -zxf node.tar.gz
-	mv --backup=numbered -f ninja /opt
+	rm -rf /opt/ninja/*
+	mv -f ninja/* /opt/ninja
+	rm -rf ninja
 	rm node.tar.gz
 	exit 0
 else
