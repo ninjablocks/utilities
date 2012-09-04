@@ -1,0 +1,22 @@
+#!/bin/bash
+
+echo "===================================";
+echo "|         Ubuntu Config            |";
+echo "===================================";
+echo "";
+uname -a;
+echo "";
+lsb_release -a;
+echo "";
+echo "===================================";
+echo "|       Installed Packages        |";
+echo "===================================";
+echo "";
+dpkg --get-selections;
+echo "";
+echo "===================================";
+echo "|      Installed Ruby Gems         |";
+echo "===================================";
+echo "";
+gem list;
+echo "";
