@@ -1,0 +1,53 @@
+#!/bin/bash
+# Define directories
+code_dir=/opt/ninja
+util_dir=/opt/utilities
+tmp_dir=$util_dir/tmp
+# Pull new code from repo
+cd $tmp_dir
+# Robustness hack
+sleep 2
+# Fetch the latest stable arduino hex
+curl --output arduino.hex http://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.hex
+# Fetch the remote checksum
+remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/beagle/arduino/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
+# Calculate the local checksum
+local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
+# If we have a file, have fetched the remote checksum, and it is the same as the local checksum
+if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$local_checksum" ]; then
+	echo "[System] Updating Arduino" >> /var/log/ninjablock.log
+	$util_dir/bin/setgpio;
+	#sleep 1;
+	$util_dir/bin/setserial;
+	#sleep 1;
+	echo "38" > /sys/class/gpio/export;
+	#sleep 1;
+	echo "out" > /sys/class/gpio/gpio38/direction;
+	#sleep 1;
+	for i in 1 2 3
+	do
+		echo "[System] `date` Flashing Arduino...Pass $i." >> /var/log/ninjablock.log;
+		sudo echo "1" > /sys/class/gpio/gpio38/value;
+		sleep 1;
+		sudo echo "0" > /sys/class/gpio/gpio38/value; 
+		#sleep 1;
+		#sudo echo "1" > /sys/class/gpio/gpio38/value; 
+		#sleep 1;
+		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
+		if [ "$?" = "0" ]; then
+			sudo echo "1" > /sys/class/gpio/gpio38/value;
+			echo "[System] `date` Successfully flashing Arduino in pass $i." >> /var/log/ninjablock.log;
+			rm arduino.hex
+			touch /etc/opt/ninja/.has_updated_arduino
+			exit 0
+		fi
+		echo "[System] `date` Flashing Arduino...Pass $i Failed!!!"
+	done
+	echo "[System] `date` Critical error! Failed flashing Arduino in 3 passes." >> /var/log/ninjablock.log
+else
+	echo "[System] `date` Could not retrieve valid arduino update binary." >> /var/log/ninjablock.log
+fi
+if [ -e arduino.hex ]; then
+	rm arduino.hex
+fi
+exit 1

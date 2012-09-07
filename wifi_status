@@ -1,0 +1,15 @@
+#!/usr/bin/env ruby
+
+
+@str = `ifconfig wlan0 2>&1`
+
+if @str.include? "Device not found"
+	puts "down"
+else
+	if @str.include? "inet addr"
+	  puts "up"
+        else
+	  puts "down"
+	end
+end
+

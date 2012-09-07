@@ -1,0 +1,2 @@
+sudo apt-get install unattended-upgrades
+touch /etc/opt/ninja/.has_updated_system

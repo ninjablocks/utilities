@@ -1,0 +1,24 @@
+#!/usr/bin/env ruby
+
+color = ARGV[0]
+
+case color
+  when "blue"
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,"DATA": "0014cc"}]}' > /dev/ttyO1`
+  when "green"
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,
+"DATA": "00cc00"}]}' > /dev/ttyO1`
+  when "orange"
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,
+"DATA": "ff8100"}]}' > /dev/ttyO1`
+  when "red"
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,
+"DATA": "ff0000"}]}' > /dev/ttyO1`
+  when "off"
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,
+"DATA": "000000"}]}' > /dev/ttyO1`
+  else
+    `echo '{"DEVICE": [{"GUID": "FBA5137E-FAC9-411E-8E65-EF","VID": 0,"DID": 10,
+"DATA": "000000"}]}' > /dev/ttyO1`
+end
+
