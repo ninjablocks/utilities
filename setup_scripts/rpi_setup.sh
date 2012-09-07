@@ -226,8 +226,6 @@ sudo rm /opt/utilities/tmp/*;
 echo -e "\n→ ${bold}Updating the Arduino${normal}\n";
 sudo /opt/utilities/bin/ninja_update_arduino;
 
-<<<<<<< HEAD
-
 #Start Ninja on boot
 echo "#!/bin/sh -e" > /etc/rc.local
 echo "sudo initctl start ninjablock" >> /etc/rc.local
@@ -235,8 +233,6 @@ echo "exit 0" >> /etc/rc.local
 
 
 
-=======
->>>>>>> 06d92fde09f0e2c50593529c8c0cc02d665877b4
 echo -e "\n→ ${bold}Guess what? We're done!!!${normal}\n";
 
 echo -e "Before you reboot, write down this serial-- this is what you will need to activate your new Pi!"
