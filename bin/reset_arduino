@@ -1,8 +1,4 @@
 #!/bin/bash
-
-/opt/utilities/bin/setgpio;
+echo "1" > /sys/class/gpio/gpio38/value;
 sleep 1;
-sudo echo "1" > /sys/class/gpio/gpio38/value;
-sleep 2;
-sudo echo "0" > /sys/class/gpio/gpio38/value; 
-sudo echo "1" > /sys/class/gpio/gpio38/value;
+echo "0" > /sys/class/gpio/gpio38/value;
