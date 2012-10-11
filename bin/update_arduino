@@ -21,6 +21,7 @@ do
 		echo "[System] `date` Successfully flashing Arduino in pass $i." >> /var/log/ninjablock.log;
 		rm arduino.hex
 		touch /etc/opt/ninja/.has_updated_arduino
+		sync
 		exit 0
 	fi
 	echo "[System] `date` Flashing Arduino...Pass $i Failed!!!"

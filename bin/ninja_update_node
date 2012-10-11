@@ -18,9 +18,11 @@ if [ -e node.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$loc
 	mv -f ninja/* /opt/ninja
 	rm -rf ninja
 	rm node.tar.gz
+	sync
 	exit 0
 else
 	echo "[System] Invalid Node Checksum" >> /var/log/ninjablock.log
 	rm node.tar.gz
+	sync
 	exit 1
 fi

@@ -89,6 +89,7 @@ if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$loc
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
 			rm arduino.hex
 			touch /etc/opt/ninja/.has_updated_arduino
+			sync
 			exit 0
 		fi
 		echo "[System] `date` Flashing Arduino...Pass $i Failed!"
@@ -100,4 +101,5 @@ fi
 if [ -e arduino.hex ]; then
 	rm arduino.hex
 fi
+sync
 exit 1
