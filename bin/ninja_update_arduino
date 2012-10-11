@@ -42,7 +42,6 @@ then
 		url="$uri/${arduino_model}/stable.hex"
 		checksum="$uri/${arduino_model}/stable.checksum"
 	fi
-	
 else 
 	# Handle all the older arduino models not yet reporting version in new method
 	echo "[System] `date` Arduino Update: falling back to V11 stable" >> /var/log/ninjablock.log
@@ -50,7 +49,6 @@ else
 	checksum="$uri/V11/stable.checksum"
 fi
 echo "[System] `date` Arduino Update Configured. Download starting." >> /var/log/ninjablock.log
-# edge case 1: no arduino
 
 # Fetch the arduino hex
 # Do a lookup to ensure the file exists first
