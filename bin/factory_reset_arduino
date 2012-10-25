@@ -1,0 +1,40 @@
+#!/bin/bash
+util_dir=/opt/utilities
+factorylog=/var/log/ninjablockfactory.log
+factoryimage=/opt/utilities/bin/factory_arduino_firmware.hex
+factory_updated=/etc/opt/ninja/.factory_updated_arduino
+
+if [ ! -e $factory_updated ]  || [ "$1" == "-force" ]; then
+	if [ -e $factoryimage ]; then
+		echo "[System] `date` Factory Arduino Flashing Started" >> $factorylog
+		$util_dir/bin/setgpio;
+		$util_dir/bin/setserial;
+		echo "38" > /sys/class/gpio/export;
+		echo "out" > /sys/class/gpio/gpio38/direction;
+		for i in 1 2 3
+		do
+			echo "[System] `date` Flashing Arduino...Pass $i." >> $factorylog
+			sudo echo "1" > /sys/class/gpio/gpio38/value;
+			sleep 1;
+			sudo echo "0" > /sys/class/gpio/gpio38/value; 
+			avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$factoryimage:i;
+			if [ "$?" = "0" ]; then
+				sudo echo "1" > /sys/class/gpio/gpio38/value;
+				echo "[System] `date` Successfully flashed Arduino in pass $i." >> $factorylog;
+				touch $factory_updated
+				stty -F /dev/ttyO1 raw ispeed 9600 ospeed 9600 -ignpar cs8 -cstopb
+				sync
+				echo '{"DEVICE": [{"G": "0","V": 0,"D": 1000,"DA": "00FF00"}]}' > /dev/ttyO1
+				exit 0
+			fi
+			echo "[System] `date` Flashing Arduino...Pass $i Failed!"  >> $factorylog
+		done
+		echo "[System] `date` Critical error! Failed flashing Arduino in 3 passes." >> $factorylog
+	else
+		echo "[System] `date` Critical error! Could not find $factoryimage!! File should be in /opt/utilities/bin" >> $factorylog
+	fi
+	sync
+	exit 1
+else
+	echo "Arduino has been updated during factory setup.  To reset Arduino firmware to factory default, run this program with -force option."
+fi
