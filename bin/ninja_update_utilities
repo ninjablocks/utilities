@@ -3,6 +3,7 @@
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
+echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
