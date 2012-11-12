@@ -1,0 +1,73 @@
+<html>
+	<head>
+			<title>Ninja Blocks WiFi Setup</title>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0">
+			<script src="/js/jquery-1.8.2.min.js" type="text/javascript"></script>
+			<script src="/js/index.js" type="text/javascript"></script>
+			<link rel="stylesheet" href="/css/bootstrap.css" type="text/css" />
+			<link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css" />			
+	</head>
+
+	<body>
+		<div class="container">
+
+			<div class="hero-unit">
+
+				<h1>Select your WiFi network from the list below.</h1>
+				<p></p>
+
+				<form class="form-horizontal">
+
+					<legend>Nearby WiFi Networks</legend>
+					
+					<div class="row">
+						<div class="alert alert-info hidden">
+
+							<span>Scanning for WiFi networks...</span>
+						</div>
+
+						<div class="alert alert-info hidden">
+
+							<span>No networks detected.</span>
+						</div>
+
+
+						<div class="alert alert-error hidden">
+
+							<span>An error occurred while scanning for networks.</span>
+						</div>
+					</div>
+
+					<div class="control-group hidden">
+
+						<label class="control-label">Network Name (SSID)</label>
+						<div class="controls">
+
+							<select id="networks" class="input-large" name="network">
+
+							</select>
+						</div>
+					</div>
+
+					<div id="password-group" class="control-group hidden">
+
+						<label class="control-label">Password</label>
+						<div class="controls">
+
+							<input id="password" type="text" class="input-large" name="password"></input>
+						</div>
+					</div>
+
+					<div class="control-group">
+
+						<div class="controls">
+
+							<button id="connect" disabled="disabled" class="btn btn-primary btn-large disabled">Connect</button>
+							<button id="rescan" class="btn btn-large">Scan Again</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</body>
+</html>

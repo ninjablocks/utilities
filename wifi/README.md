@@ -1,4 +1,2 @@
-wifi
-====
-
-A Ruby + Sinatra based front end for setting up Wifi on the Ninja Block.
+# Ninja Blocks WiFi Utility
+__no description yet__

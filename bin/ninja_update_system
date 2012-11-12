@@ -1,4 +1,3 @@
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
-sudo apt-get install unattended-upgrades
 touch /etc/opt/ninja/.has_updated_system
 sync
