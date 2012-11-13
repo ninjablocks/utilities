@@ -1,3 +1,4 @@
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
+echo '0.5' > /opt/utilities/sys_version
 touch /etc/opt/ninja/.has_updated_system
 sync
