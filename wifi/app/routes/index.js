@@ -6,7 +6,6 @@
 			connected : require('./get-connected')
 			, networks : require('./xhr-networks')
 			, connect : require('./post-connect')
-			, restart : require('./xhr-restart')
 			, device : require('./xhr-device')
 			, status : require('./get-status')
 			, plugin : require('./get-plugin')
