@@ -4,7 +4,7 @@ cp /opt/utilities/etc/motd.tail /etc/
 cp /opt/utilities/init/dmesg.conf /etc/init/
 cp /opt/utilities/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/
 cp /opt/utilities/etc/update-motd.d/10-help-text /etc/update-motd.d/
-
+cp /opt/utilities/etc/logrotate.d/ninjablock /etc/logrotate.d/
 echo '0.5' > /opt/utilities/sys_version
 touch /etc/opt/ninja/.has_updated_system
 sync

@@ -1,0 +1,7 @@
+/var/log/ninjablock.log {
+        rotate 2
+        weekly
+	copytruncate
+        compress
+        missingok
+}
