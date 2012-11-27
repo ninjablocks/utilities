@@ -6,11 +6,15 @@ cp ${utilsDir}/etc/motd.tail /etc/
 cp ${utilsDir}/etc/hostname /etc/
 cp ${utilsDir}/etc/hosts /etc/
 
-cp ${utilsDir}/init/dmesg.conf /etc/init/
 cp ${utilsDir}/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/
-cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/logrotate.d/ninjablock /etc/logrotate.d/
+cp ${utilsDir}/etc/logrotate.d/rsyslog /etc/logrotate.d/
+
+
+cp ${utilsDir}/init/dmesg.conf /etc/init/
+cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
+
 
 if [ -f /etc/cron.daily/logrotate ]
 then

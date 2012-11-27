@@ -1,0 +1,30 @@
+/var/log/syslog
+{
+	rotate 2
+	size 1M
+	missingok
+	notifempty
+	delaycompress
+	compress
+	postrotate
+		reload rsyslog >/dev/null 2>&1 || true
+	endscript
+}
+
+/var/log/kern.log
+/var/log/auth.log
+/var/log/cron.log
+/var/log/debug
+/var/log/messages
+{
+	rotate 2
+	size 1M
+	missingok
+	notifempty
+	compress
+	delaycompress
+	sharedscripts
+	postrotate
+		reload rsyslog >/dev/null 2>&1 || true
+	endscript
+}
