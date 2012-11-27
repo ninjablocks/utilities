@@ -20,7 +20,6 @@ var
 
 			setInterval(actions.deviceCheck, 10000);
 			setInterval(actions.ifaceCheck, 10000);
-			setInterval(actions.wifiScan, 10000);
 		}
 	}
 ;

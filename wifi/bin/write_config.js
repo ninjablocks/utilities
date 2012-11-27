@@ -35,8 +35,6 @@ var
 
 					"WPA2" : "WPA"
 				));
-				write.push("\tpairwise=TKIP");
-				write.push("\tgroup=TKIP");
 				write.push(util.format("\tpsk=\"%s\"", conf.password));
 			}
 		}

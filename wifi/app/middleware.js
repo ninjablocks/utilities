@@ -70,6 +70,15 @@ module.exports = function(app) {
 	});
 
 	/**
+	 * Scan for networks when the iface 
+	 * comes up. 
+	 */
+	 app.on('ifaceUp', function(dat) {
+
+ 		app.send('wifiScan', true);
+	 });
+	 
+	/**
 	 * Clear the cycle state if applicable
 	 */
 	app.on('ifaceUp', function(dat) {
