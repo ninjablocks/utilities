@@ -1,7 +1,8 @@
+/var/log/wifisetup.log
 /var/log/ninjablock.log {
         rotate 2
-        weekly
-	copytruncate
+        size 1M
         compress
         missingok
 }
+
