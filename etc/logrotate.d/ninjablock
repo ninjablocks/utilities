@@ -1,0 +1,8 @@
+/var/log/wifisetup.log
+/var/log/ninjablock.log {
+        rotate 2
+        size 1M
+        compress
+        missingok
+}
+

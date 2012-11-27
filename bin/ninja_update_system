@@ -1,6 +1,37 @@
+utilsDir = "/opt/utilities"
+
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
-cp /opt/utilities/etc/fstab /etc/
-cp /opt/utilities/etc/sysctl.conf /etc/
-echo '0.5' > /opt/utilities/sys_version
+cp ${utilsDir}/etc/fstab /etc/
+cp ${utilsDir}/etc/motd.tail /etc/
+cp ${utilsDir}/etc/hostname /etc/
+cp ${utilsDir}/etc/hosts /etc/
+
+cp ${utilsDir}/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/
+cp ${utilsDir}/etc/logrotate.d/ninjablock /etc/logrotate.d/
+cp ${utilsDir}/etc/logrotate.d/rsyslog /etc/logrotate.d/
+
+
+cp ${utilsDir}/init/dmesg.conf /etc/init/
+cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
+cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
+
+
+if [ -f /etc/cron.daily/logrotate ]
+then
+    mv /etc/cron.daily/logrotate /etc/cron.hourly
+fi
+
+
+if ! grep -q "tmpfs /var/log" /etc/fstab
+then
+        echo "/var/log not mounted as tmpfs, moving in new fstab"
+        cp ${utilsDir}/etc/fstab /etc/
+fi
+
+
+
+
+echo '0.5' > ${utilsDir}/version
 touch /etc/opt/ninja/.has_updated_system
 sync
+
