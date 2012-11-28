@@ -1,5 +1,4 @@
 #!/bin/bash
-set -e
 # Define directories
 # Setup the environment
 if [ -f /etc/environment.local ]; then
