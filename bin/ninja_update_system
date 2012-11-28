@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-utilsDir = "/opt/utilities"
+utilsDir="/opt/utilities"
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
@@ -37,10 +37,6 @@ then
         cp ${utilsDir}/etc/fstab /etc/
 fi
 
-
-
-
 echo '0.5' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
 sync
-
