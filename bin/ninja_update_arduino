@@ -4,8 +4,6 @@
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
-echo "[System] `date` Arduino Update Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
-echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
@@ -13,6 +11,9 @@ uri="http://s3.amazonaws.com/ninjablocks/code/beagle/arduino"
 # Pull new code from repo
 cd $tmp_dir
 # Robustness hack
+echo "[System] `date` Arduino Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
+echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
+
 sleep 2
 
 # fetch the model
@@ -43,7 +44,7 @@ then
 		url="$uri/${arduino_model}/stable.hex"
 		checksum="$uri/${arduino_model}/stable.checksum"
 	fi
-else 
+else
 	# Handle all the older arduino models not yet reporting version in new method
 	echo "[System] `date` Arduino Update: falling back to V11 stable" >> /var/log/ninjablock.log
 	url="$uri/V11/stable.hex"
@@ -80,9 +81,9 @@ if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$loc
 		echo "[System] `date` Flashing Arduino...Pass $i." >> /var/log/ninjablock.log;
 		sudo echo "1" > /sys/class/gpio/gpio38/value;
 		sleep 1;
-		sudo echo "0" > /sys/class/gpio/gpio38/value; 
+		sudo echo "0" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
-		#sudo echo "1" > /sys/class/gpio/gpio38/value; 
+		#sudo echo "1" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
 		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
 		if [ "$?" = "0" ]; then
