@@ -66,7 +66,7 @@ remote_checksum=$(curl $checksum | awk '{ print $1 }')
 # Calculate the local checksum
 local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
 # If we have a file, have fetched the remote checksum, and it is the same as the local checksum
-if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$local_checksum" ]; then
+if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
 	$util_dir/bin/setgpio;
 	#sleep 1;

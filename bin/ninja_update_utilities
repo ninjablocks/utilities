@@ -15,7 +15,7 @@ echo "[System] `date` Utilities Update Script Started (${NINJA_ENV:-"stable"})" 
 curl --output utilities.tar.gz http://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.tar.gz
 remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum utilities.tar.gz | awk '{ print $1 }')
-if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum"="$local_checksum" ]; then
+if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
 	echo "[System] Updating Utilities" >> /var/log/ninjablock.log
 	tar -zxf utilities.tar.gz
 	cp -Rf utilities/* $util_dir/
