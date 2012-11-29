@@ -13,6 +13,7 @@ echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> 
 cp ${utilsDir}/etc/fstab /etc/
 cp ${utilsDir}/etc/motd.tail /etc/
 cp ${utilsDir}/etc/hostname /etc/
+hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
 
 cp ${utilsDir}/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/
