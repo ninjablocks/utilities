@@ -39,4 +39,4 @@ fi
 
 echo '0.5' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
-sync
+reboot
