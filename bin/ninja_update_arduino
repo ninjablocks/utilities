@@ -23,7 +23,7 @@ arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)
 if [ "$?" != "0" ]
 then
 	echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
-	exit 1;
+	exit 0;
 fi
 
 if [ -n "$arduino_mv" ] && [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
@@ -58,7 +58,7 @@ code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
 if [ "$code" != "200" ]
 then
 	echo "[System] `date` Arduino Update Failed. Could not fetch binary" >> /var/log/ninjablock.log
-	exit 1;
+	exit 0;
 fi
 curl --output arduino.hex $url
 # Fetch the remote checksum
@@ -104,4 +104,4 @@ if [ -e arduino.hex ]; then
 	rm arduino.hex
 fi
 sync
-exit 1
+exit 0
