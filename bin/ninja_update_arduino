@@ -67,6 +67,7 @@ remote_checksum=$(curl $checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
 # If we have a file, have fetched the remote checksum, and it is the same as the local checksum
 if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
+	touch /etc/opt/ninja/.has_updated_arduino
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
 	$util_dir/bin/setgpio;
 	#sleep 1;
@@ -90,7 +91,6 @@ if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$l
 			sudo echo "1" > /sys/class/gpio/gpio38/value;
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
 			rm arduino.hex
-			touch /etc/opt/ninja/.has_updated_arduino
 			sync
 			exit 0
 		fi
