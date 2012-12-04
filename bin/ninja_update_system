@@ -10,20 +10,24 @@ fi
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
+sudo apt-get -qq -y -f -m install ifplugd
+
+
 cp ${utilsDir}/etc/fstab /etc/
 cp ${utilsDir}/etc/motd.tail /etc/
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
+cp ${utilsDir}/etc/network/interfaces /etc/network/
 
 cp ${utilsDir}/etc/rsyslog.d/50-default.conf /etc/rsyslog.d/
 cp ${utilsDir}/etc/logrotate.d/ninjablock /etc/logrotate.d/
 cp ${utilsDir}/etc/logrotate.d/rsyslog /etc/logrotate.d/
 
-
 cp ${utilsDir}/init/dmesg.conf /etc/init/
 cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
+cp ${utilsDir}/etc/default/ifplugd /etc/default/
 
 
 if [ -f /etc/cron.daily/logrotate ]
