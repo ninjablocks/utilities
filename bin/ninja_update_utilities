@@ -31,5 +31,5 @@ else
 	echo "[System] Invalid Utilities Checksum" >> /var/log/ninjablock.log
 	rm utilities.tar.gz
 	sync
-	exit 1
+	exit 0
 fi
