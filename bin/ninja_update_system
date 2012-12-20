@@ -11,7 +11,7 @@ echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
 sudo apt-get -qq -y -f -m install ifplugd
-
+sudo apt-get -qq clean
 
 cp ${utilsDir}/etc/fstab /etc/
 cp ${utilsDir}/etc/motd.tail /etc/

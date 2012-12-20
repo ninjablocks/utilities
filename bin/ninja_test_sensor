@@ -1,0 +1,32 @@
+#!/bin/bash
+
+set -e
+
+if [ ! -f /etc/opt/ninja/token.conf ] 
+then
+	echo "Token not available-- is your ninjablock paired?"
+	exit 1
+fi
+
+if [ ! -f /etc/opt/ninja/serial.conf ]
+then
+    echo "Serial not available. Reboot your ninjablock and try again"
+	exit 1
+fi
+
+if [[ "$#" -eq 1 && "$1" == "-v" ]]
+then
+	VERBOSE="-v"
+else
+	VERBOSE="-s"
+fi
+
+TOKEN=`cat /etc/opt/ninja/token.conf`
+SERIAL=`cat /etc/opt/ninja/serial.conf`
+
+
+curl $VERBOSE -X 'POST' \
+     -H "X-Ninja-Token: $TOKEN" \
+     -H 'Content-Type: application/json' \
+     -d '{"G":0,"V":0,"D":0,"DA":"1"}' \
+     -i https://api.ninja.is/rest/v0/block/$SERIAL/data 
