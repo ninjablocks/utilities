@@ -21,28 +21,27 @@ sudo echo "ntpdate ntp.ubuntu.com" > /etc/cron.daily/ntpdate;
 echo -e "\n→ ${bold}Making ntpdate executable${normal}\n";
 sudo chmod 755 /etc/cron.daily/ntpdate;
 
+
+sudo apt-get install ntpdate
+
 # Update the timedate
 echo -e "\n→ ${bold}Updating the time${normal}\n";
 sudo ntpdate ntp.ubuntu.com pool.ntp.org;
-
-# Stop Ubuntu from saving the Mac Address
-echo -e "\n→ ${bold}Stopping Ubuntu from saving the MAC address information${normal}\n";
-sudo touch /etc/udev/rules.d/75-persistent-net-generator.rules;
-sudo echo 'ENV{MATCHADDR}=="*", GOTO="persistent_net_generator_end"'> /etc/udev/rules.d/75-persistent-net-generator.rules;
 
 # Updating apt-get
 echo -e "\n→ ${bold}Updating apt-get${normal}\n";
 sudo apt-get update;
 
 # Remove the Apache2 default install
+sudo apt-get install ntpdate
 echo -e "\n→ ${bold}Removing Apache2${normal}\n";
 sudo apt-get -f -y --force-yes remove apache2;
 sudo apt-get -f -y --force-yes remove apache2.2-bin apache2.2-common apache2-utils apache2-mpm-worker;
 
 
 # Download and install the Essential packages.
-echo -e "\n→ ${bold}Installing upstart${normal}\n";
-sudo apt-get -f -y --force-yes install upstart;
+#echo -e "\n→ ${bold}Installing upstart${normal}\n";
+#sudo apt-get -f -y --force-yes install upstart;
 echo -e "\n→ ${bold}Installing git${normal}\n";
 sudo apt-get -f -y --force-yes install git; 
 echo -e "\n→ ${bold}Installing g++${normal}\n";
@@ -77,8 +76,8 @@ sudo apt-get -f -y --force-yes install psmisc;
 echo -e "\n→ ${bold}Installing curl${normal}\n"; 
 sudo apt-get -f -y --force-yes install curl;
 
-# Switching to /home/ubuntu
-echo -e "\n→ ${bold}Switching to /home/ubuntu${normal}\n"; 
+# Switching to user dir
+echo -e "\n→ ${bold}Switching to /home/${username}${normal}\n"; 
 cd /home/${username};
 
 # Checking out mjpeg-streamer
@@ -119,9 +118,6 @@ sudo gem install sinatra  --verbose --no-rdoc --no-ri;
 echo -e "\n→ ${bold}Installing the getifaddrs gem${normal}\n"; 
 sudo gem install system-getifaddrs  --verbose --no-rdoc --no-ri;
 
-# Removing the shitty Realtek drivers from /lib/modules/`uname -r`/kernel/drivers/net/wireless/rtlwifi/rtl8*
-echo -e "\n→ ${bold}Removing the shitty Realtek drivers${normal}\n";
-sudo rm -rf /lib/modules/`uname -r`/kernel/drivers/net/wireless/rtlwifi/rtl8*;
 
 # # Copy /opt/utilities/etc/wpa_supplicant.conf to /etc/
 echo -e "\n→ ${bold}Copy /opt/utilities/etc/wpa_supplicant.conf to /etc/${normal}\n";
@@ -143,8 +139,8 @@ sudo echo "post-down killall -q wpa_supplicant" >> /etc/network/interfaces;
 echo -e "\n→ ${bold}Create the Ninja Blocks Utilities Folder${normal}\n"; 
 sudo mkdir -p  /opt/utilities;
 
-# Set ubuntu user as the owner of this directory.
-echo -e "\n→ ${bold}Set ubuntu user as the owner of this directory${normal}\n";
+# Set user as the owner of this directory.
+echo -e "\n→ ${bold}Set ${username} user as the owner of this directory${normal}\n";
 sudo chown ${username} /opt/utilities;
 
 # Clone the Ninja Utilities into /opt/utilities
@@ -152,18 +148,15 @@ echo -e "\n→ ${bold}Fetching the Utilities Repo from Github${normal}\n";
 git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
 
 # Clone the Wifi Setup into /opt/wifi
-#sudo mkdir -p  /opt/wifi;
-#echo -e "\n→ ${bold}Fetching the Wifi Repo from Github${normal}\n";
-#git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
+sudo mkdir -p  /opt/wifi;
+echo -e "\n→ ${bold}Fetching the Wifi Repo from Github${normal}\n";
+git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
 
-# Copy /etc/init scripts into place
-echo -e "\n→ ${bold}Copy /etc/init scripts into place${normal}\n";
-sudo cp /opt/utilities/init/* /etc/init/
 
-# Set the correct owner and permissions on the files
-echo -e "\n→ ${bold}Set the correct owner and permissions on the init files${normal}\n";
-sudo chown root:root /etc/init/*;
-sudo chmod 644 /etc/init/*;
+echo -e "\n→ ${bold}Copying init scripts into place${normal}\n";
+sudo sed -i 's/exit 0/\/opt\/utilities\/bin\/ninja_start\nexit 0/' /etc/rc.local
+
+
 
 # Copy /etc/udev/rules.d/ scripts into place
 echo -e "\n→ ${bold}Copy /etc/udev/rules.d/ scripts into place${normal}\n";
@@ -174,8 +167,8 @@ sudo cp /opt/utilities/udev/* /etc/udev/rules.d/;
 echo -e "\n→ ${bold}Create the Ninja Directory${normal}\n";
 sudo mkdir -p /opt/ninja;
 
-# Set ubuntu users as the owner of this directory.
-echo -e "\n→ ${bold}Set ubuntu users as the owner of this directory${normal}\n";
+# Set user as the owner of this directory.
+echo -e "\n→ ${bold}Set ${username} users as the owner of this directory${normal}\n";
 sudo chown ${username} /opt/ninja;
 
 # Clone the Ninja Client into opt
@@ -191,21 +184,21 @@ npm install;
 echo -e "\n→ ${bold}Adding /etc/opt/ninja${normal}\n";
 sudo mkdir -p /etc/opt/ninja;
 
-# Set owner of this directory to ubuntu
-echo -e "\n→ ${bold}Set owner of this directory to ubuntu${normal}\n";
+# Set owner of this directory to user
+echo -e "\n→ ${bold}Set owner of this directory to ${username}${normal}\n";
 sudo chown ${username} /etc/opt/ninja;
 
 # Add /opt/utilities/bin to root's path
 echo -e "\n→ ${bold}Adding /opt/utilities/bin to root's path${normal}\n";
 echo 'export PATH=/opt/utilities/bin:$PATH' >> /root/.bashrc;
 
-# Add /opt/utilities/bin to ubuntu's path
-echo -e "\n→ ${bold}Adding /opt/utilities/bin to ubuntu's path${normal}\n";
+# Add /opt/utilities/bin to user's path
+echo -e "\n→ ${bold}Adding /opt/utilities/bin to ${username}'s path${normal}\n";
 echo 'export PATH=/opt/utilities/bin:$PATH' >> /home/${username}/.bashrc;
 
 # Set the beagle's environment
 echo -e "\n→ ${bold}Setting the beagle's environment to stable${normal}\n";
-echo 'export NINJA_ENV=stable' >> /home/ubuntu/.bashrc;
+echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 
 # Add ninja_update to the hourly cron
 #echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
