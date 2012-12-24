@@ -11,10 +11,12 @@ echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
 sudo apt-get -qq -y -f -m install ifplugd
+sudo apt-get -qq -y -f -m install avahi-daemon
 sudo apt-get -qq clean
 
 cp ${utilsDir}/etc/fstab /etc/
-cp ${utilsDir}/etc/motd.tail /etc/
+
+cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
@@ -29,6 +31,10 @@ cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
 cp ${utilsDir}/etc/default/ifplugd /etc/default/
 
+if [ -f /etc/motd.tail ]
+then
+	rm /etc/motd.tail
+fi
 
 if [ -f /etc/cron.daily/logrotate ]
 then
