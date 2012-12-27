@@ -2,7 +2,7 @@
 
 # Run this script as root ie:
 # sudo -s
-# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/beagle_setup.sh)
+# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/pi/setup_scripts/rpi_setup.sh)
 
 bold=`tput bold`;
 normal=`tput sgr0`;
@@ -12,6 +12,10 @@ username="pi"
 echo -e "\n→ ${bold}Setting up Sydney as the default timezone.${normal}\n";
 sudo echo "Australia/Sydney" | sudo tee /etc/timezone;
 sudo dpkg-reconfigure --frontend noninteractive tzdata;
+
+# Updating apt-get
+echo -e "\n→ ${bold}Updating apt-get${normal}\n";
+sudo apt-get update;
 
 # Add NTP Update as a daily cron job
 echo -e "\n→ ${bold}Create the ntpdate file${normal}\n";
@@ -28,9 +32,6 @@ sudo apt-get install ntpdate
 echo -e "\n→ ${bold}Updating the time${normal}\n";
 sudo ntpdate ntp.ubuntu.com pool.ntp.org;
 
-# Updating apt-get
-echo -e "\n→ ${bold}Updating apt-get${normal}\n";
-sudo apt-get update;
 
 # Remove the Apache2 default install
 sudo apt-get install ntpdate
