@@ -146,6 +146,8 @@ sudo chown ${username} /opt/utilities;
 # Clone the Ninja Utilities into /opt/utilities
 echo -e "\n→ ${bold}Fetching the Utilities Repo from Github${normal}\n";
 git clone https://github.com/ninjablocks/utilities.git /opt/utilities;
+cd /opt/utilities
+git checkout pi
 
 # Clone the Wifi Setup into /opt/wifi
 sudo mkdir -p  /opt/wifi;
@@ -155,7 +157,6 @@ git clone https://github.com/ninjablocks/wifi.git /opt/wifi;
 
 echo -e "\n→ ${bold}Copying init scripts into place${normal}\n";
 sudo sed -i 's/exit 0/\/opt\/utilities\/bin\/ninja_start\nexit 0/' /etc/rc.local
-
 
 
 # Copy /etc/udev/rules.d/ scripts into place
@@ -174,6 +175,8 @@ sudo chown ${username} /opt/ninja;
 # Clone the Ninja Client into opt
 echo -e "\n→ ${bold}Clone the Ninja Client into opt${normal}\n";
 git clone https://github.com/ninjablocks/client.git /opt/ninja;
+cd /opt/ninja
+git checkout pi
 
 # Install the node packages
 echo -e "\n→ ${bold}Install the node packages${normal}\n";
@@ -208,10 +211,6 @@ echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 echo -e "\n→ ${bold}Running setserial${normal}\n";
 sudo /opt/utilities/bin/setserial;
 
-#Start Ninja on boot
-echo "#!/bin/sh -e" > /etc/rc.local
-echo "sudo initctl start ninjablock" >> /etc/rc.local
-echo "exit 0" >> /etc/rc.local
 
 
 
