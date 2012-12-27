@@ -208,17 +208,6 @@ echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 echo -e "\n→ ${bold}Running setserial${normal}\n";
 sudo /opt/utilities/bin/setserial;
 
-# Run the setgpio command so we can flash the Arduino later
-echo -e "\n→ ${bold}Running setgpio${normal}\n";
-sudo /opt/utilities/bin/setgpio;
-
-# Remove old Arduino hex files;
-sudo rm /opt/utilities/tmp/*;
-
-# Run Arduino Update
-echo -e "\n→ ${bold}Updating the Arduino${normal}\n";
-sudo /opt/utilities/bin/ninja_update_arduino;
-
 #Start Ninja on boot
 echo "#!/bin/sh -e" > /etc/rc.local
 echo "sudo initctl start ninjablock" >> /etc/rc.local
