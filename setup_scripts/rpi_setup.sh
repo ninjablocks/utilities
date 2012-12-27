@@ -212,7 +212,8 @@ echo -e "\n→ ${bold}Running setserial${normal}\n";
 sudo /opt/utilities/bin/setserial;
 
 
-
+echo -e "Running system update script"
+sudo /opt/utilities/bin/ninja_update_system;
 
 echo -e "\n→ ${bold}Guess what? We're done!!!${normal}\n";
 
