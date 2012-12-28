@@ -44,7 +44,7 @@ sudo apt-get -qq -y -f -m  install git;
 echo -e "\n→ ${bold}Installing g++${normal}\n";
 sudo apt-get -qq -y -f -m  install g++;
 echo -e "\n→ ${bold}Installing node${normal}\n";
-sudo apt-get -qq -y -f -m  install node;
+sudo apt-get -qq -y -f -m  install nodejs;
 echo -e "\n→ ${bold}Installing npm${normal}\n"; 
 sudo apt-get -qq -y -f -m  install npm;
 echo -e "\n→ ${bold}Installing ruby1.9.1-dev${normal}\n"; 
