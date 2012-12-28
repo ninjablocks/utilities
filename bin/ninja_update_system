@@ -14,8 +14,6 @@ sudo apt-get -qq -y -f -m install ifplugd
 sudo apt-get -qq -y -f -m install avahi-daemon
 sudo apt-get -qq clean
 
-cp ${utilsDir}/etc/fstab /etc/
-
 cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
