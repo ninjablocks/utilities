@@ -18,7 +18,7 @@ echo -e "\n→ ${bold}Updating apt-get${normal}\n";
 sudo apt-get update;
 
 echo -e "\n→ ${bold}Installing ntpdate${normal}\n";
-sudo apt-get install ntpdate
+sudo apt-get -qq -y -f -m install ntpdate
 
 # Add NTP Update as a daily cron job
 echo -e "\n→ ${bold}Create the ntpdate file${normal}\n";
