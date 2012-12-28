@@ -17,6 +17,9 @@ sudo dpkg-reconfigure --frontend noninteractive tzdata;
 echo -e "\n→ ${bold}Updating apt-get${normal}\n";
 sudo apt-get update;
 
+echo -e "\n→ ${bold}Installing ntpdate${normal}\n";
+sudo apt-get install ntpdate
+
 # Add NTP Update as a daily cron job
 echo -e "\n→ ${bold}Create the ntpdate file${normal}\n";
 sudo touch /etc/cron.daily/ntpdate;
@@ -26,56 +29,49 @@ echo -e "\n→ ${bold}Making ntpdate executable${normal}\n";
 sudo chmod 755 /etc/cron.daily/ntpdate;
 
 
-sudo apt-get install ntpdate
-
 # Update the timedate
 echo -e "\n→ ${bold}Updating the time${normal}\n";
 sudo ntpdate ntp.ubuntu.com pool.ntp.org;
 
-
-# Remove the Apache2 default install
-sudo apt-get install ntpdate
 echo -e "\n→ ${bold}Removing Apache2${normal}\n";
-sudo apt-get -f -y --force-yes remove apache2;
-sudo apt-get -f -y --force-yes remove apache2.2-bin apache2.2-common apache2-utils apache2-mpm-worker;
+sudo apt-get -qq -y -f -m  remove apache2;
+sudo apt-get -qq -y -f -m  remove apache2.2-bin apache2.2-common apache2-utils apache2-mpm-worker;
 
 
 # Download and install the Essential packages.
-#echo -e "\n→ ${bold}Installing upstart${normal}\n";
-#sudo apt-get -f -y --force-yes install upstart;
 echo -e "\n→ ${bold}Installing git${normal}\n";
-sudo apt-get -f -y --force-yes install git; 
+sudo apt-get -qq -y -f -m  install git; 
 echo -e "\n→ ${bold}Installing g++${normal}\n";
-sudo apt-get -f -y --force-yes install g++;
+sudo apt-get -qq -y -f -m  install g++;
 echo -e "\n→ ${bold}Installing node${normal}\n";
-sudo apt-get -f -y --force-yes install node;
+sudo apt-get -qq -y -f -m  install node;
 echo -e "\n→ ${bold}Installing npm${normal}\n"; 
-sudo apt-get -f -y --force-yes install npm;
+sudo apt-get -qq -y -f -m  install npm;
 echo -e "\n→ ${bold}Installing ruby1.9.1-dev${normal}\n"; 
-sudo apt-get -f -y --force-yes install ruby1.9.1-dev;
+sudo apt-get -qq -y -f -m  install ruby1.9.1-dev;
 echo -e "\n→ ${bold}Installing make${normal}\n"; 
-sudo apt-get -f -y --force-yes install make;
+sudo apt-get -qq -y -f -m  install make;
 echo -e "\n→ ${bold}Installing build-essential${normal}\n"; 
-sudo apt-get -f -y --force-yes install build-essential;
+sudo apt-get -qq -y -f -m  install build-essential;
 echo -e "\n→ ${bold}Installing avrdude${normal}\n"; 
-sudo apt-get -f -y --force-yes install avrdude;
+sudo apt-get -qq -y -f -m  install avrdude;
 echo -e "\n→ ${bold}Installing libgd2-xpm-dev${normal}\n"; 
-sudo apt-get -f -y --force-yes install libgd2-xpm-dev;
+sudo apt-get -qq -y -f -m  install libgd2-xpm-dev;
 echo -e "\n→ ${bold}Installing libv4l-dev${normal}\n"; 
-sudo apt-get -f -y --force-yes install libv4l-dev;
+sudo apt-get -qq -y -f -m  install libv4l-dev;
 
 echo -e "\n→ ${bold}Installing subversion${normal}\n"; 
-sudo apt-get -f -y --force-yes install subversion;
+sudo apt-get -qq -y -f -m  install subversion;
 echo -e "\n→ ${bold}Installing libjpeg8-dev${normal}\n"; 
-sudo apt-get -f -y --force-yes install libjpeg8-dev;
+sudo apt-get -qq -y -f -m  install libjpeg8-dev;
 echo -e "\n→ ${bold}Installing imagemagick${normal}\n"; 
-sudo apt-get -f -y --force-yes install imagemagick;
+sudo apt-get -qq -y -f -m  install imagemagick;
 
 echo -e "\n→ ${bold}Installing psmisc${normal}\n"; 
-sudo apt-get -f -y --force-yes install psmisc;
+sudo apt-get -qq -y -f -m  install psmisc;
 
 echo -e "\n→ ${bold}Installing curl${normal}\n"; 
-sudo apt-get -f -y --force-yes install curl;
+sudo apt-get -qq -y -f -m  install curl;
 
 # Switching to user dir
 echo -e "\n→ ${bold}Switching to /home/${username}${normal}\n"; 
@@ -107,9 +103,9 @@ sudo cp /home/${username}/mjpg-streamer/mjpg-streamer/mjpg_streamer /usr/local/b
 
 # Not essential packages
 echo -e "\n→ ${bold}Installing aptitude${normal}\n"; 
-sudo apt-get -f -y --force-yes install aptitude;
+sudo apt-get -qq -y -f -m  install aptitude;
 echo -e "\n→ ${bold}Installing vim${normal}\n"; 
-sudo apt-get -f -y --force-yes install vim;
+sudo apt-get -qq -y -f -m  install vim;
 
 # Install Sinatra
 echo -e "\n→ ${bold}Installing the sinatra gem${normal}\n"; 
@@ -209,9 +205,8 @@ echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 #ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
 
 # Run the setserial command so we can flash the Arduino later
-echo -e "\n→ ${bold}Running setserial${normal}\n";
-sudo /opt/utilities/bin/setserial;
-
+echo -e "\n→ ${bold}Getting serial number from system${normal}\n";
+sudo /opt/utilities/bin/serialnumber;
 
 echo -e "Running system update script"
 sudo /opt/utilities/bin/ninja_update_system;
