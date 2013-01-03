@@ -33,11 +33,6 @@ sudo chmod 755 /etc/cron.daily/ntpdate;
 echo -e "\n→ ${bold}Updating the time${normal}\n";
 sudo ntpdate ntp.ubuntu.com pool.ntp.org;
 
-echo -e "\n→ ${bold}Removing Apache2${normal}\n";
-sudo apt-get -qq -y -f -m  remove apache2;
-sudo apt-get -qq -y -f -m  remove apache2.2-bin apache2.2-common apache2-utils apache2-mpm-worker;
-
-
 # Download and install the Essential packages.
 echo -e "\n→ ${bold}Installing git${normal}\n";
 sudo apt-get -qq -y -f -m  install git; 
