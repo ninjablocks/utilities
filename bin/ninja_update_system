@@ -51,8 +51,11 @@ then
     mv /etc/cron.daily/logrotate /etc/cron.hourly
 fi
 
-
-mv ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/
+if [[ shasum /lib/modules/`uname -r`/kernel/drivers/net/wireless/8192cu.ko != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
+then
+	echo "need to upgrade module"
+	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
+fi
 
 
 echo '0.5' > ${utilsDir}/sys_version
