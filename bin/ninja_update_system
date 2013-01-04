@@ -4,6 +4,8 @@ set -e
 #todo check to see if rsyslog/logrotate is installed before moving over config files
 
 utilsDir="/opt/utilities"
+wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
+
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
@@ -11,8 +13,14 @@ fi
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
+
+echo "Updating apt-get"
+sudo apt-get update
+echo "Installing ifplugd"
 sudo apt-get -qq -y -f -m install ifplugd
+echo "Installing avahi"
 sudo apt-get -qq -y -f -m install avahi-daemon
+echo "Cleaning apt-get"
 sudo apt-get -qq clean
 
 
@@ -51,9 +59,11 @@ then
     mv /etc/cron.daily/logrotate /etc/cron.hourly
 fi
 
-if [[ shasum /lib/modules/`uname -r`/kernel/drivers/net/wireless/8192cu.ko != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
+
+
+if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
 then
-	echo "need to upgrade module"
+	echo "Need to upgrade wifi module"
 	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
 fi
 
