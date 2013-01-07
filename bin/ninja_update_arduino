@@ -77,7 +77,7 @@ if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$l
 	#sleep 1;
 	echo "out" > /sys/class/gpio/gpio38/direction;
 	#sleep 1;
-	for i in 1 2 3
+	for i in 1 2 3 4
 	do
 		echo "[System] `date` Flashing Arduino...Pass $i." >> /var/log/ninjablock.log;
 		sudo echo "1" > /sys/class/gpio/gpio38/value;
