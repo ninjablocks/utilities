@@ -14,16 +14,6 @@ fi
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
 
-echo "Updating apt-get" >> /var/log/ninjablock.log
-sudo apt-get update
-echo "Installing ifplugd" >> /var/log/ninjablock.log
-sudo apt-get -qq -y -f -m install ifplugd
-echo "Installing avahi" >> /var/log/ninjablock.log
-sudo apt-get -qq -y -f -m install avahi-daemon
-echo "Cleaning apt-get" >> /var/log/ninjablock.log
-sudo apt-get -qq clean
-
-
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
@@ -40,10 +30,6 @@ if [ -d /etc/update-motd.d/ ]
 then
 	cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 	cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
-	if [ -f /etc/motd.tail ]
-	then
-		rm /etc/motd.tail
-	fi
 fi
 
 cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
@@ -54,7 +40,7 @@ then
 	rm /etc/motd.tail
 fi
 
-if [ -f /etc/cron.daily/logrotate ]
+if [ -d /etc/cron.daily ]
 then
     mv /etc/cron.daily/logrotate /etc/cron.hourly
 fi
@@ -67,6 +53,17 @@ then
 	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
 fi
 
+if [[ -f /etc/opt/ninja/.has_updated_software ]]
+then
+	rm /etc/opt/ninja/.has_updated_software
+fi
+
+grep ninja_install_software /etc/rc.loca1
+
+if [[ $? -ne 0 ]]
+then
+        sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software\nexit 0:' /etc/rc.local
+fi
 
 echo '0.6' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
