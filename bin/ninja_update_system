@@ -60,11 +60,12 @@ then
 	rm /etc/opt/ninja/.has_updated_software
 fi
 
+# /opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>&1 &
 
 
 if [[ $check_rc -ne 1 ]]
 then
-        sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software\nexit 0:' /etc/rc.local
+        sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local
 fi
 
 echo '0.6' > ${utilsDir}/sys_version
