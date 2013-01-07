@@ -5,7 +5,7 @@ set -e
 
 utilsDir="/opt/utilities"
 wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
-
+software_update_chk=`grep ninja_install_software /etc/rc.local`
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
@@ -49,7 +49,7 @@ fi
 
 if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
 then
-	echo "Upgrade wifi module" >> /var/log/ninjablock.log
+	echo "Upgrading wifi module" >> /var/log/ninjablock.log
 	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
 fi
 
@@ -58,9 +58,9 @@ then
 	rm /etc/opt/ninja/.has_updated_software
 fi
 
-grep ninja_install_software /etc/rc.local
+check_rc=grep ninja_install_software /etc/rc.local
 
-if [[ $? -ne 0 ]]
+if [[ $check_rc != "/opt/utilities/bin/ninja_install_software" ]]
 then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software\nexit 0:' /etc/rc.local
 fi
