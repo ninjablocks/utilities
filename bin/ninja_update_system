@@ -1,7 +1,6 @@
 #!/bin/bash
 set -e
 
-#todo check to see if rsyslog/logrotate is installed before moving over config files
 
 utilsDir="/opt/utilities"
 wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
@@ -13,12 +12,10 @@ fi
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
-echo "hi"
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
 cp ${utilsDir}/etc/network/interfaces /etc/network/
-
 
 
 if [ -d /etc/init ]
@@ -59,8 +56,6 @@ if [[ -f /etc/opt/ninja/.has_updated_software ]]
 then
 	rm /etc/opt/ninja/.has_updated_software
 fi
-
-# /opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>&1 &
 
 
 if [[ $check_rc -ne 1 ]]
