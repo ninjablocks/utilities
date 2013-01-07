@@ -5,7 +5,7 @@ set -e
 
 utilsDir="/opt/utilities"
 wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
-software_update_chk=`grep ninja_install_software /etc/rc.local`
+check_rc=`grep ninja_install_software /etc/rc.local|wc -l`
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
@@ -13,7 +13,7 @@ fi
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
-
+echo "hi"
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
@@ -40,9 +40,11 @@ then
 	rm /etc/motd.tail
 fi
 
-if [ -d /etc/cron.daily ]
+
+
+if [ -d /etc/logrotate.d ]
 then
-    mv /etc/cron.daily/logrotate /etc/cron.hourly
+    cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 fi
 
 
@@ -58,9 +60,9 @@ then
 	rm /etc/opt/ninja/.has_updated_software
 fi
 
-check_rc=grep ninja_install_software /etc/rc.local
 
-if [[ $check_rc != "/opt/utilities/bin/ninja_install_software" ]]
+
+if [[ $check_rc -ne 1 ]]
 then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software\nexit 0:' /etc/rc.local
 fi
