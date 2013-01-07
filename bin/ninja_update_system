@@ -58,7 +58,7 @@ then
 	rm /etc/opt/ninja/.has_updated_software
 fi
 
-grep ninja_install_software /etc/rc.loca1
+grep ninja_install_software /etc/rc.local
 
 if [[ $? -ne 0 ]]
 then
