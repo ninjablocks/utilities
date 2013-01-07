@@ -3,6 +3,7 @@
 
 if [[ ! -f /etc/opt/ninja/.has_updated_software ]]
 then
+	sleep 10
 	echo "Updating apt-get" >> /var/log/ninjablock.log
 	sudo apt-get update 
 	echo "Installing ifplugd" >> /var/log/ninjablock.log
