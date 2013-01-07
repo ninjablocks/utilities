@@ -58,6 +58,7 @@ code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
 if [ "$code" != "200" ]
 then
 	echo "[System] `date` Arduino Update Failed. Could not fetch binary" >> /var/log/ninjablock.log
+	echo "url is $url"
 	exit 0;
 fi
 curl --output arduino.hex $url

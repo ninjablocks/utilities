@@ -10,6 +10,8 @@ then
 	sudo apt-get -qq -y -f -m install ifplugd 
 	echo "Installing avahi" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install avahi-daemon 
+	echo "Restarting network" >> /var/log/ninjablock.log
+	sudo service networking restart
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
 	sudo apt-get -qq clean 
 fi
