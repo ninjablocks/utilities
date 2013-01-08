@@ -30,7 +30,7 @@ then
 fi
 
 cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
-cp ${utilsDir}/etc/default/ifplugd /etc/default/
+# cp ${utilsDir}/etc/default/ifplugd /etc/default/
 
 if [ -f /etc/motd.tail ]
 then
