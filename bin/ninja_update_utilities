@@ -26,7 +26,7 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	rm -rf utilities
 	touch /etc/opt/ninja/.has_updated_utilities
 	reboot
-	exit 0
+	exit 1
 else
 	echo "[System] Invalid Utilities Checksum" >> /var/log/ninjablock.log
 	rm utilities.tar.gz
