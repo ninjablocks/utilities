@@ -19,16 +19,11 @@ local_checksum=$(sha1sum utilities.tar.gz | awk '{ print $1 }')
 if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
 	echo "[System] Updating Utilities" >> /var/log/ninjablock.log
 	tar -zxf utilities.tar.gz
-	echo "hi1"
 	cp -Rf utilities/* $util_dir/
 	cp -Rf $util_dir/init/* /etc/init/
 	chown ubuntu:ubuntu $util_dir/bin/ninja_update_node
 	rm utilities.tar.gz
 	rm -rf utilities
-	echo "hi2"
-	echo "Installing ifplugd" >> /var/log/ninjablock.log
-	sudo apt-get -qq -y -f -m install ifplugd
-	cp ${util_dir}/etc/default/ifplugd /etc/default/
 	touch /etc/opt/ninja/.has_updated_utilities
 	reboot
 	exit 0

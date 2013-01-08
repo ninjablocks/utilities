@@ -6,8 +6,8 @@ then
 	sleep 10
 	echo "Updating apt-get" >> /var/log/ninjablock.log
 	sudo apt-get update 
-	# echo "Installing ifplugd" >> /var/log/ninjablock.log
-	# sudo apt-get -qq -y -f -m install ifplugd 
+	echo "Installing ifplugd" >> /var/log/ninjablock.log
+	sudo apt-get -qq -y -f -m install ifplugd 
 	echo "Installing avahi" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install avahi-daemon 
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
