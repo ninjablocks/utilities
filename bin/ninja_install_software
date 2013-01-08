@@ -8,7 +8,7 @@ then
 	sudo apt-get update 
 	echo "Installing ifplugd" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install ifplugd 
-	sudo cp /opt/utilities/etc/default/ifplugd /etc/
+	sudo cp /opt/utilities/etc/default/ifplugd /etc/default/
 	echo "Installing avahi" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install avahi-daemon 
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
