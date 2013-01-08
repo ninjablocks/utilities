@@ -2,7 +2,7 @@ auto lo
 iface lo inet loopback
 
 # The primary network interface
-auth eth0
+#auth eth0
 iface eth0 inet dhcp
 # Example to keep MAC address between reboots
 #hwaddress ether DE:AD:BE:EF:CA:FE
@@ -12,7 +12,7 @@ iface eth0 inet dhcp
 #iface wlan0 inet dhcp
 #    wpa-ssid "essid"
 #    wpa-psk  "password"
-auto wlan0
+#auto wlan0
 iface wlan0 inet dhcp
 pre-up wpa_supplicant -B -D wext -i wlan0 -c /etc/wpa_supplicant.conf
 post-down killall -q wpa_supplicant

@@ -24,6 +24,8 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	chown ubuntu:ubuntu $util_dir/bin/ninja_update_node
 	rm utilities.tar.gz
 	rm -rf utilities
+	echo "Installing ifplugd" >> /var/log/ninjablock.log
+	sudo apt-get -qq -y -f -m install ifplugd
 	touch /etc/opt/ninja/.has_updated_utilities
 	reboot
 	exit 0
