@@ -29,14 +29,11 @@ then
 	cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 fi
 
-cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
-cp ${utilsDir}/etc/default/ifplugd /etc/default/
 
 if [ -f /etc/motd.tail ]
 then
 	rm /etc/motd.tail
 fi
-
 
 
 if [ -d /etc/logrotate.d ]
@@ -50,6 +47,7 @@ if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]]
 then
 	echo "Upgrading wifi module" >> /var/log/ninjablock.log
 	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
+	cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
 fi
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]
