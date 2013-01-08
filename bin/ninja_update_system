@@ -16,7 +16,7 @@ cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
 cp ${utilsDir}/etc/network/interfaces /etc/network/
-cp ${utilsDir}/etc/fstab /etc/
+# cp ${utilsDir}/etc/fstab /etc/
 
 if [ -d /etc/init ]
 then
