@@ -41,32 +41,19 @@ sudo /etc/init.d/ntp start
 # Download and install the Essential packages.
 echo -e "\n→ ${bold}Installing git${normal}\n";
 sudo apt-get -qq -y -f -m  install git > /dev/null; 
-# echo -e "\n→ ${bold}Installing g++${normal}\n";
-# sudo apt-get -qq -y -f -m  install g++;
+
 echo -e "\n→ ${bold}Installing node${normal}\n";
 sudo apt-get -qq -y -f -m  install nodejs > /dev/null;
 sudo ln -s /usr/bin/nodejs /usr/bin/node 
+
 echo -e "\n→ ${bold}Installing npm${normal}\n"; 
 sudo apt-get -qq -y -f -m  install npm > /dev/null;
+
 echo -e "\n→ ${bold}Installing ruby1.9.1-dev${normal}\n"; 
 sudo apt-get -qq -y -f -m  install ruby1.9.1-dev > /dev/null;
-# echo -e "\n→ ${bold}Installing make${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install make;
-# echo -e "\n→ ${bold}Installing build-essential${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install build-essential;
+
 echo -e "\n→ ${bold}Installing avrdude${normal}\n"; 
 sudo apt-get -qq -y -f -m  install avrdude > /dev/null;
-# echo -e "\n→ ${bold}Installing libgd2-xpm-dev${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install libgd2-xpm-dev;
-# echo -e "\n→ ${bold}Installing libv4l-dev${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install libv4l-dev;
-
-# echo -e "\n→ ${bold}Installing subversion${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install subversion;
-# echo -e "\n→ ${bold}Installing libjpeg8-dev${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install libjpeg8-dev;
-# echo -e "\n→ ${bold}Installing imagemagick${normal}\n"; 
-# sudo apt-get -qq -y -f -m  install imagemagick;
 
 echo -e "\n→ ${bold}Installing psmisc${normal}\n"; 
 sudo apt-get -qq -y -f -m  install psmisc > /dev/null;
@@ -116,6 +103,7 @@ git clone https://github.com/ninjablocks/client.git /opt/ninja > /dev/null;
 cd /opt/ninja;
 git checkout master;
 sudo sed -i 's/ttyO1/null/' beagle.js
+sudo sed -i 's/beagle/pi/' beagle.js
 
 
 echo -e "${bold}Pulling down RPI binaries${normal}";
@@ -126,10 +114,6 @@ echo -e "${bold}Deploying RPI binaries${normal}";
 rm rpi-binaries.tgz;
 sudo ln -s /opt/ninja/node_modules/forever/bin/forever /usr/bin/forever
 
-# # Install the node packages
-# echo -e "\n→ ${bold}Install the node packages${normal}\n";
-# cd /opt/ninja;
-# npm install;
 
 # Create directory /etc/opt/ninja
 echo -e "\n→ ${bold}Adding /etc/opt/ninja${normal}\n";
@@ -149,7 +133,7 @@ echo -e "\n→ ${bold}Adding /opt/utilities/bin to ${username}'s path${normal}\n
 echo 'export PATH=/opt/utilities/bin:$PATH' >> /home/${username}/.bashrc;
 
 # Set the beagle's environment
-echo -e "\n→ ${bold}Setting the beagle's environment to stable${normal}\n";
+echo -e "\n→ ${bold}Setting the pi's environment to stable${normal}\n";
 echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 
 # Add ninja_update to the hourly cron
