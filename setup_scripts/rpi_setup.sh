@@ -2,7 +2,7 @@
 
 # Run this script as root ie:
 # sudo -s
-# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/pi/setup_scripts/rpi_setup.sh)
+# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/beagle_setup.sh)
 
 set -e
 
@@ -43,7 +43,7 @@ echo -e "\n→ ${bold}Installing git${normal}\n";
 sudo apt-get -qq -y -f -m  install git > /dev/null; 
 
 echo -e "\n→ ${bold}Installing node${normal}\n";
-sudo apt-get -qq -y -f -m  install nodejs > /dev/null;
+sudo apt-get -qq -y -f -m  install nodejs > /dev/null;  #potentially pull down binairies here?
 sudo ln -s /usr/bin/nodejs /usr/bin/node 
 
 echo -e "\n→ ${bold}Installing npm${normal}\n"; 
