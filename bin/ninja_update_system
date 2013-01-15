@@ -3,20 +3,29 @@ set -e
 
 
 utilsDir="/opt/utilities"
-wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
 check_rc=`grep ninja_install_software /etc/rc.local|wc -l`
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
 
+if [ -z "$client" ]
+then
+	client="beagle"
+fi
+
+
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
-cp ${utilsDir}/etc/network/interfaces /etc/network/
-cp ${utilsDir}/etc/fstab /etc/
+
+if [[ "$client" != "pi" ]]
+then
+	cp ${utilsDir}/etc/network/interfaces /etc/network/
+	cp ${utilsDir}/etc/fstab /etc/
+fi
 
 if [ -d /etc/init ]
 then
@@ -41,14 +50,19 @@ then
     cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 fi
 
-
-
-if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
+if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]
 then
-	echo "Upgrading wifi module" >> /var/log/ninjablock.log
-	cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
-	cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
+	wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
+
+	if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
+	then
+		echo "Upgrading wifi module" >> /var/log/ninjablock.log
+		cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
+		cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
+	fi
+	
 fi
+
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]
 then

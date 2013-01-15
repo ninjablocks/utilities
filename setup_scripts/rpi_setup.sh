@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run this script as root ie:
-# sudo wget -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/rpi_setup.sh | sudo bash
+# wget -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/rpi_setup.sh | sudo bash
 
 set -e
 
@@ -117,8 +117,8 @@ sudo sed -i 's/beagle/pi/' beagle.js  #change client to "pi"
 echo -e "${bold}Pulling down RPI binaries${normal}";
 cd /tmp;
 wget https://s3.amazonaws.com/ninjablocks/binaries/pi/rpi-binaries.tgz > /dev/null;
-tar -C / -xzf rpi-binaries.tgz > /dev/null;
 echo -e "${bold}Deploying RPI binaries${normal}";
+tar -C / -xzf rpi-binaries.tgz > /dev/null;
 rm rpi-binaries.tgz;
 sudo ln -s /opt/ninja/node_modules/forever/bin/forever /usr/bin/forever
 
@@ -151,7 +151,7 @@ ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
 echo -e "\n→ ${bold}Getting serial number from system${normal}\n";
 sudo /opt/utilities/bin/ninjapi_get_serial;
 
-
+echo "client=\"pi\"" >> /etc/environment.local
 
 echo -e "\n→ ${bold}Guess what? We're done! ${normal}\n";
 
