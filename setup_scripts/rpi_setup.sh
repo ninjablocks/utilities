@@ -2,18 +2,27 @@
 
 # Run this script as root ie:
 # sudo -s
-# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/beagle_setup.sh)
+# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/rpi_setup.sh)
 
 set -e
 
 bold=`tput bold`;
 normal=`tput sgr0`;
 username="pi"
+space_left=`df | grep rootfs | awk '{print $3}'`
 
-# Setup the timezone
-echo -e "\n→ ${bold}Setting up Sydney as the default timezone.${normal}\n";
-sudo echo "Australia/Sydney" | sudo tee /etc/timezone;
-sudo dpkg-reconfigure --frontend noninteractive tzdata;
+
+if [[ $EUID -ne 0 ]]; then
+   echo "This script must be run as root" 1>&2
+   exit 1
+fi
+
+if [[ $space_left -lt 100000 ]]
+then
+	echo "${bold} In order to install the ninjablock software, you must have at least 100 megs of free space. Try running raspi-config and using the \"expand_rootfs\" option ${normal}"
+	exit 1
+fi
+
 
 # Updating apt-get
 echo -e "\n→ ${bold}Updating apt-get${normal}\n";
@@ -87,7 +96,7 @@ echo -e "\n→ ${bold}Copying init scripts into place${normal}\n";
 sudo sed -i 's/exit 0$/\/opt\/utilities\/bin\/ninjapi_start\nexit 0/' /etc/rc.local
 
 
-# Copy /etc/udev/rules.d/ scripts into place
+# Copy /etc/udev/rules.d/ scripts into place (for web cams)
 echo -e "\n→ ${bold}Copy /etc/udev/rules.d/ scripts into place${normal}\n";
 sudo cp /opt/utilities/udev/* /etc/udev/rules.d/;
 
