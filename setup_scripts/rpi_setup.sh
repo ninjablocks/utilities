@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Run this script as root ie:
-# sudo -s
-# bash <(wget -q -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/rpi_setup.sh)
+# sudo wget -O - https://raw.github.com/ninjablocks/utilities/master/setup_scripts/rpi_setup.sh | sudo bash
 
 set -e
 
@@ -19,7 +18,7 @@ fi
 
 if [[ $space_left -lt 100000 ]]
 then
-	echo "${bold} In order to install the ninjablock software, you must have at least 100 megs of free space. Try running raspi-config and using the \"expand_rootfs\" option ${normal}"
+	echo "${bold} In order to install the ninjablock software, you must have at least 100 megs of free space. Try running raspi-config and using the \"expand_rootfs\" option to free up some space ${normal}"
 	exit 1
 fi
 
@@ -93,7 +92,7 @@ git checkout master; #this will change once release is finished
 
 
 echo -e "\n→ ${bold}Copying init scripts into place${normal}\n";
-sudo sed -i 's/exit 0$/\/opt\/utilities\/bin\/ninjapi_start\nexit 0/' /etc/rc.local
+sudo sed -i 's/exit 0$/\/opt\/utilities\/bin\/ninjapi_get_serial\n\/opt\/utilities\/bin\/ninjapi_start\nexit 0/' /etc/rc.local
 
 
 # Copy /etc/udev/rules.d/ scripts into place (for web cams)
@@ -149,14 +148,12 @@ echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
 ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
 
-# Run the setserial command so we can flash the Arduino later
 echo -e "\n→ ${bold}Getting serial number from system${normal}\n";
 sudo /opt/utilities/bin/ninjapi_get_serial;
 
-echo -e "Running system update script"
-sudo /opt/utilities/bin/ninja_update_system;
 
-echo -e "\n→ ${bold}Guess what? We're done!!!${normal}\n";
+
+echo -e "\n→ ${bold}Guess what? We're done! ${normal}\n";
 
 echo -e "Before you reboot, write down this serial-- this is what you will need to activate your new Pi!"
 
@@ -166,4 +163,11 @@ echo -e "|           Your NinjaPi Serial is: `cat /etc/opt/ninja/serial.conf`   
 echo -e "|                                                            |"
 echo -e "--------------------------------------------------------------"
 
+read -p " When you are ready, please hit the [Enter] key" nothing
 
+if [[ ! -d /etc/update-motd.d ]]
+then
+	sudo mkdir /etc/update-motd.d
+fi
+
+sudo /opt/utilities/bin/ninja_update_system;
