@@ -111,8 +111,8 @@ echo -e "\n→ ${bold}Clone the Ninja Client into opt${normal}\n";
 git clone https://github.com/ninjablocks/client.git /opt/ninja > /dev/null;
 cd /opt/ninja;
 git checkout master;
-sudo sed -i 's/ttyO1/null/' beagle.js
-sudo sed -i 's/beagle/pi/' beagle.js
+sudo sed -i 's/ttyO1/null/' beagle.js #changing serial port to /dev/null until we work out a way to use RPI's
+sudo sed -i 's/beagle/pi/' beagle.js  #change client to "pi"
 
 
 echo -e "${bold}Pulling down RPI binaries${normal}";
