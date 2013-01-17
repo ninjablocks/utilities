@@ -44,7 +44,7 @@
 						<div class="controls">
 
 							<select id="networks" class="input-large" name="network">
-
+							<input id="ssid" class="input-large hidden" type="text" name="ssid" />
 							</select>
 						</div>
 					</div>
@@ -54,7 +54,36 @@
 						<label class="control-label">Password</label>
 						<div class="controls">
 
-							<input id="password" type="text" class="input-large" name="password"></input>
+							<input id="password" type="password" class="input-large" name="password"></input>
+						</div>
+					</div>
+
+					<div class="control-group hidden">
+
+						<label class="control-label">Network Security</label>
+						<div class="controls">
+
+							<select id="security" class="input-large" name="security">
+
+								<option value="null"></option>
+								<option value="NONE">Open (None)</option>
+								<option value="WEP">WEP (Hex)</option>
+								<option value="WPA">WPA Personal</option>
+								<option value="WPA2">WPA2 Personal</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="control-group hidden">
+
+						<div class="controls">
+
+							<label class="checkbox">
+
+								<input id="hidden" type="checkbox"> 
+									Non-Broadcast (Hidden) Network
+								</input>
+							</label>
 						</div>
 					</div>
 

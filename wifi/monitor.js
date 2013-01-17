@@ -15,11 +15,7 @@ var
 		, "init" : function() {
 
 			actions.deviceCheck();
-			actions.ifaceCheck();
-			actions.wifiScan();
 
-			setInterval(actions.deviceCheck, 10000);
-			setInterval(actions.ifaceCheck, 10000);
 		}
 	}
 ;

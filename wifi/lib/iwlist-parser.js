@@ -37,7 +37,7 @@ module.exports = [
 		, handle : function() {
 
 			cell
-				.encryption = this.split(':')[1] || '' == 'on' ? 
+				.encryption = (this.split(':')[1] || '') == 'on' ? 
 					true : false
 			;
 		}

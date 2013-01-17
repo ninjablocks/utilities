@@ -13,9 +13,13 @@
 
 		app.get('/networks', function(req, res, next) {
 
+			app.send('wifiScan', true);
 			console.log("Client requested network list...");
 			console.log(cells);
-			res.json({ 'networks' : cells });
+			setTimeout(function() {
+
+				res.json({ 'networks' : cells });
+			}, 4000);
 		});
 	};
 

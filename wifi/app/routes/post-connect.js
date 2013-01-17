@@ -19,37 +19,83 @@
 
 		app.post('/connect', function(req, res, next) {
 			
-			var
-				conf = {
+			if(!req.body) { return error(res, "Invalid request"); }
 
-					'address' : req.body.network
-					, 'password' : req.body.password
+			var 
+				params = { 
+
+					ssid : req.body.ssid || undefined
+					, network : req.body.network || undefined
+					, password : req.body.password || undefined
+					, security : req.body.security || null
 				}
 			;
 
-			console.log("Client requested connection for cell address %s.", conf.address);
+			if(params.ssid && params.ssid.length > 0) { // non-broadcast
 
-			if(!cells[conf.address]) {
+				console.log("Client submitting non-broadcast network...");
+				if(!params.security) {
 
-				return res.json({ error : "Unknown Network"});
+					return error(res, "Invalid parameters");
+				}
+				if(!params.password && params.security !== "NONE") {
+
+					return error(res, "Invalid password");
+				}
+
+				if(params.password) {
+
+					params.auth = (params.security == "WEP") ? "WEP" : "PSK";
+					params.encType = params.security;
+					params.encryption = true;
+				}
+				else {
+
+					params.auth = null;
+					params.encryption = false;
+				}
+				params.hidden = true;
+			}
+			else if(params.network) { // pre-scanned
+
+				var record = cells[params.network] || undefined;
+
+				console.log("Client submitting pre-scanned network...");
+				if(!record) { return error(res, "Network not found"); }
+
+				if(params.password && record.encryption) {
+
+					params.auth = record.auth;
+					params.encryption = true;
+				}
+				else {
+
+					params.encryption = false;
+					delete params.password;
+				}
+				params.ssid = record.ssid;
+				params.encType = record.encType;
 			}
 
-			cells[conf.address].password = conf.password;
-
-			// request config write-out
-			app.send("writeConfig", cells[conf.address]);
-			process.stdout.write(
+			delete params.network; 
+			
+			console.log(
 
 				util.format(
 
-					"Writing wpa_supplicant.conf for %s (%s)."
-					, cells[conf.address].ssid || "Unknown Network"
-					, cells[conf.address].encType
+					"Requesting wpa_supplicant config for %s (%s)."
+					, params.ssid || "Unknown Network"
+					, params.encType || "OPEN"
 				)
 			);
-			
+			app.send("writeConfig", params);
 			res.json({ 'connected' : true });
 		});
+	};
+
+	function error(res, err) {
+
+		res.json({ "error" : err || "Unknown error" });
 	};
 
 })();

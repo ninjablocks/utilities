@@ -26,27 +26,35 @@ var
 		write.push("network={");
 		write.push(util.format("\tssid=\"%s\"", conf.ssid));
 
-		if(conf.encryption) {
+		if(conf.encryption && conf.auth == "PSK") {
 
-			if(conf.auth == "PSK") {
 
-				write.push("\tkey_mgmt=WPA-PSK");
-				write.push("\tproto=" + (conf.encType == "WPA2" ? 
+			write.push("\tkey_mgmt=WPA-PSK");
+			write.push("\tproto=" + (conf.encType == "WPA2" ? 
 
-					"WPA2" : "WPA"
-				));
-				write.push(util.format("\tpsk=\"%s\"", conf.password));
-			}
+				"WPA2" : "WPA"
+			));
+			write.push(util.format("\tpsk=\"%s\"", conf.password));
+		}
+		else if((conf.auth == "WEP") || (conf.encryption && !conf.auth)) {
+
+			write.push("\tkey_mgmt=NONE");
+			write.push("\twep_tx_keyidx=0");
+			write.push(util.format("\twep_key0=%s", conf.password));
 		}
 		else {
 
-			write.push("key_mgmt=NONE");
+			write.push("\tkey_mgmt=NONE");
 		}
 
+		if(conf.hidden) {
+
+			write.push("\tscan_ssid=1");
+		}
 		write.push("}\n");
 		fd.end(write.join("\n"));
-		console.log("Wrote WiFi configuration.");
-		console.log(write);
+
+		console.log("Finished writing WiFi configuration.");
 		process.send({ 'action' : 'writeConfig', data : true });
 	}
 ;
