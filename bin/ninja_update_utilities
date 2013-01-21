@@ -25,6 +25,13 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	rm utilities.tar.gz
 	rm -rf utilities
 	touch /etc/opt/ninja/.has_updated_utilities
+	if [[ ! -f /opt/utilities/bin/node ]]
+	then
+		cd /tmp
+		wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.17.tgz
+		tar -C $util_dir/bin -xzf node-v0.8.17.tgz
+		rm node-v0.8.17.tgz
+	fi
 	echo "[System] `date` Rebooting after utilities update" >> /var/log/ninjablock.log
 	reboot
 	#exit 1 to prevent further updates happening as system is going down
