@@ -10,13 +10,14 @@
 				, dataType : "JSON"
 				, success : connected
 				, failure : error
+				, cache : false
 			})
 		}
 		, connected = function(dat) {
 
 			if((dat)) {
 
-				if(dat.device) {
+				if(dat.device && dat.iface) {
 
 					/**
 					 * Reload and let the app reroute
