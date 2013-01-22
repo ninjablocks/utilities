@@ -1,6 +1,7 @@
 #!/bin/bash
 # Define directories
 # Setup the environment
+
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
@@ -16,59 +17,16 @@ echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 
 sleep 2
 
-# fetch the model
-arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)
 
-# exit if there is an error
-if [ "$?" != "0" ]
-then
-	echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
-	exit 0;
-fi
 
-if [ -n "$arduino_mv" ] && [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
-then
-	# split the string by "_"
-	arduino_model=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[1]}')
-	arduino_version=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[2]}')
-	echo "[System] `date` Arduino model: $arduino_model | version: $arduino_version will be updated." >> /var/log/ninjablock.log
-	# include the model in the url to pull
-	url="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.hex"
-	checksum="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.checksum"
-	# Do a lookup to ensure the file exists
-	code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
-	if [ "$code" != "200" ]
+function flashArduino {
+
+	if [[ ! -e $1 ]]
 	then
-		# fall back to stable
-		# this is incase they have specified an environment with no arduino hex
-		url="$uri/${arduino_model}/stable.hex"
-		checksum="$uri/${arduino_model}/stable.checksum"
+		echo "$1 does not exist"
+		exit 0
 	fi
-else
-	# Handle all the older arduino models not yet reporting version in new method
-	echo "[System] `date` Arduino Update: falling back to V11 stable" >> /var/log/ninjablock.log
-	url="$uri/V11/stable.hex"
-	checksum="$uri/V11/stable.checksum"
-fi
-echo "[System] `date` Arduino Update Configured. Download starting." >> /var/log/ninjablock.log
 
-# Fetch the arduino hex
-# Do a lookup to ensure the file exists first
-code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
-if [ "$code" != "200" ]
-then
-	echo "[System] `date` Arduino Update Failed. Could not fetch binary" >> /var/log/ninjablock.log
-	echo "url is $url"
-	exit 0;
-fi
-curl --output arduino.hex $url
-# Fetch the remote checksum
-remote_checksum=$(curl $checksum | awk '{ print $1 }')
-# Calculate the local checksum
-local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
-# If we have a file, have fetched the remote checksum, and it is the same as the local checksum
-if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
-	touch /etc/opt/ninja/.has_updated_arduino
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
 	$util_dir/bin/setgpio;
 	#sleep 1;
@@ -87,22 +45,87 @@ if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$l
 		#sleep 1;
 		#sudo echo "1" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
-		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$tmp_dir/arduino.hex:i;
+		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$1:i;
 		if [ "$?" = "0" ]; then
 			sudo echo "1" > /sys/class/gpio/gpio38/value;
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
-			rm arduino.hex
+			# rm arduino.hex
 			sync
 			exit 0
 		fi
 		echo "[System] `date` Flashing Arduino...Pass $i Failed!"
 	done
 	echo "[System] `date` Critical error! Failed flashing Arduino in 3 passes." >> /var/log/ninjablock.log
-else
-	echo "[System] `date` Could not retrieve valid arduino update binary." >> /var/log/ninjablock.log
+}
+
+
+
+
+if [[ $# -eq 1 ]] #flash with filename given in params
+then
+	flashArduino $1
+else 
+
+	# fetch the model
+	arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)
+
+	# exit if there is an error
+	if [ "$?" != "0" ]
+	then
+		echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
+		exit 0;
+	fi
+
+	if [ -n "$arduino_mv" ] && [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
+	then
+		# split the string by "_"
+		arduino_model=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[1]}')
+		arduino_version=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[2]}')
+		echo "[System] `date` Arduino model: $arduino_model | version: $arduino_version will be updated." >> /var/log/ninjablock.log
+		# include the model in the url to pull
+		url="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.hex"
+		checksum="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.checksum"
+		# Do a lookup to ensure the file exists
+		code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
+		if [ "$code" != "200" ]
+		then
+			# fall back to stable
+			# this is incase they have specified an environment with no arduino hex
+			url="$uri/${arduino_model}/stable.hex"
+			checksum="$uri/${arduino_model}/stable.checksum"
+		fi
+	else
+		# Handle all the older arduino models not yet reporting version in new method
+		echo "[System] `date` Arduino Update: falling back to V11 stable" >> /var/log/ninjablock.log
+		url="$uri/V11/stable.hex"
+		checksum="$uri/V11/stable.checksum"
+	fi
+	echo "[System] `date` Arduino Update Configured. Download starting." >> /var/log/ninjablock.log
+
+	# Fetch the arduino hex
+	# Do a lookup to ensure the file exists first
+	code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
+	if [ "$code" != "200" ]
+	then
+		echo "[System] `date` Arduino Update Failed. Could not fetch binary" >> /var/log/ninjablock.log
+		echo "url is $url"
+		exit 0;
+	fi
+	curl --output arduino.hex $url
+	# Fetch the remote checksum
+	remote_checksum=$(curl $checksum | awk '{ print $1 }')
+	# Calculate the local checksum
+	local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
+	# If we have a file, have fetched the remote checksum, and it is the same as the local checksum
+	if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ] 
+	then
+		touch /etc/opt/ninja/.has_updated_arduino
+		flashArduino arduino.hex
+		rm arduino.hex
+	else
+		echo "[System] `date` Could not retrieve valid arduino update binary." >> /var/log/ninjablock.log
+	fi
+	
+	sync
+	exit 0
 fi
-if [ -e arduino.hex ]; then
-	rm arduino.hex
-fi
-sync
-exit 0
