@@ -1,3 +1,0 @@
-#!/bin/bash
-
-sudo grep Serial /proc/cpuinfo | cut -d: -f 2 | tr -d ' ' |  tr '[:lower:]' '[:upper:]' > /etc/opt/ninja/serial.conf 
