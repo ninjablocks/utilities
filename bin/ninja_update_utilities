@@ -25,6 +25,7 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	rm utilities.tar.gz
 	rm -rf utilities
 	touch /etc/opt/ninja/.has_updated_utilities
+	echo '0.85' > ${utilsDir}/version
 	echo "[System] `date` Rebooting after utilities update" >> /var/log/ninjablock.log
 	reboot
 	#exit 1 to prevent further updates happening as system is going down
