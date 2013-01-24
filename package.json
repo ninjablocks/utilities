@@ -3,7 +3,7 @@
   "dependencies": { 
   	"serialport" : "0.7.5",
   	"optimist": "~0.3.4",
-    "express": "~3.0.0rc4",
-    "ejs": "~0.8.3"
+        "express": "~3.0.0rc4",
+        "ejs": "~0.8.3"
   }
 }
