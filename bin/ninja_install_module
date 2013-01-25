@@ -1,43 +1,66 @@
 #!/bin/bash
 
-url=http://s3.amazonaws.com/ninja_modules
 module_dir=/opt/ninja/ninja_modules
 
-if [[ $# -ne 1 ]]; then
-	echo "Usage: `basename $0` <module name>"
+
+if [[ $# -eq 1 ]]; then
+	url=http://s3.amazonaws.com/ninja_modules/$1.tgz
+	checksum_url=http://s3.amazonaws.com/ninja_modules/$1.checksum
+	modname=$1
+elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
+	url=$2/archive/master.zip
+	modname=`echo $2 | cut -d/ -f5`
+else
+	echo "Usage: `basename $0` [ -g <github URL> || <module name>" ]
 	exit 1
 fi
 
-if [[ -d $module_dir/$1 ]]; then
-	echo "$1 module already exists"
+
+if [[ -d $module_dir/$modname ]]; then
+	echo "$modname module already exists"
 	exit 1
 fi
 
-wget -q --spider $url/$1.tgz
+
+wget -q --spider $url
 modAvail=$?
-wget -q --spider $url/$1.checksum
-chkAvail=$?
 
-if [[ $modAvail -ne 0 ]] || [[ $chkAvail -ne 0 ]]
-then
-	echo "The module $1 is not available "
+if [[ $modAvail -ne 0 ]]; then
+	echo "The module $modname is not available "
 	exit 1
 fi
 
-echo "Installing $1 module"
+echo "Installing $modname module"
 cd /tmp
 
-curl -s --output $1.tgz $url/$1.tgz
-remote_checksum=$(curl -s $url/$1.checksum | awk '{ print $1 }')
-local_checksum=$(sha1sum $1.tgz | awk '{ print $1 }')
 
-if [ -e $1.tgz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
-	tar -C $module_dir -xzf $1.tgz
-	rm $1.tgz
-	echo "Done."
+######################################## Install module from s3 ########################################
+if [[ $# -eq 1 ]]; then
+
+	curl -s --output $modname.tgz $url
+	remote_checksum=$(curl -s $checksum_url | awk '{ print $1 }')
+	local_checksum=$(sha1sum $1.tgz | awk '{ print $1 }')
+
+
+	if [ -e $1.tgz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
+		tar -C $module_dir -xzf $1.tgz
+		rm $1.tgz
+		echo "Done."
+	else
+		echo "Local checksum and remote checksum for $modname don't match"
+	fi
+
+
+
+else 
+######################################## Install module from github ########################################
+
+	wget -q $url
+	unzip -qq -d $module_dir master.zip
+	mv $module_dir/$modname-master $module_dir/$modname  
+	rm master.zip
+	echo "Done"
 fi
-
-
 
 
 
