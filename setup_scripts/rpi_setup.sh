@@ -92,7 +92,7 @@ git checkout master; #this will change once release is finished
 
 
 echo -e "\n→ ${bold}Copying init scripts into place${normal}\n";
-sudo sed -i 's/exit 0$/\/opt\/utilities\/bin\/ninjapi_get_serial\n\/opt\/utilities\/bin\/ninjapi_start\nexit 0/' /etc/rc.local
+sudo sed -i 's/exit 0$/\/opt\/utilities\/bin\/ninjapi_get_serial\n\/opt\/utilities\/bin\/ninjapi_start\n\/opt\/utilities\/bin\/ninjapi_start_wifisetup\nexit 0/' /etc/rc.local
 
 
 # Copy /etc/udev/rules.d/ scripts into place (for web cams)

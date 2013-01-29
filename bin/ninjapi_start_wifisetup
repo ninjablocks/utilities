@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [[ $EUID -ne 0 ]]; then
+  echo "You must be a root user" 2>&1
+  exit 1
+fi
+
+echo $$ > /var/run/wifisetup.pid
+echo "[`date -u +%Y-%m-%dT%T.%3NZ`] (system) Starting." >> /var/log/wifi
+exec sudo /usr/bin/env node /opt/utilities/wifi/index.js --port 80 >> /var/log/wifisetup.log 2>&1 &
+
+
