@@ -9,8 +9,7 @@ if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
 
-if [ -z "$client" ]
-then
+if [ -z "$client" ]; then
 	client="beagle"
 fi
 
@@ -21,41 +20,28 @@ cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
 
-if [[ "$client" != "pi" ]]
+if [[ "$client" == "beagle" ]]
 then
 	cp ${utilsDir}/etc/network/interfaces /etc/network/
 	cp ${utilsDir}/etc/fstab /etc/
-fi
-
-if [ -d /etc/init ]
-then
+	cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original  
 	cp ${utilsDir}/init/dmesg.conf /etc/init/
-fi
-
-if [ -d /etc/update-motd.d/ ]
-then
 	cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 	cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
-fi
+	cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
+	if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
+	rm /etc/opt/ninja/.has_updated_software
+	fi
 
-if [ -f /etc/motd.tail ]
-then
-	rm /etc/motd.tail
-fi
+	if [ -f /etc/motd.tail ]; then
+		rm /etc/motd.tail
+	fi
 
-
-if [ -d /etc/logrotate.d ]
-then
-    cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
-fi
-
-if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]
-then
+	if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]; then
 	wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
 
-	if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]] 
-	then
+	if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]]; then
 		echo "Upgrading wifi module" >> /var/log/ninjablock.log
 		cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
 		cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
@@ -63,10 +49,6 @@ then
 	
 fi
 
-
-if [[ -f /etc/opt/ninja/.has_updated_software ]]
-then
-	rm /etc/opt/ninja/.has_updated_software
 fi
 
 
