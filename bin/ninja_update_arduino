@@ -64,7 +64,7 @@ function flashArduino {
 if [[ $# -eq 1 ]] #flash with filename given in params
 then
 	flashArduino $1
-else 
+else              #update normally
 
 	# fetch the model
 	arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)

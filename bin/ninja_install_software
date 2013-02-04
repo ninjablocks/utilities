@@ -4,6 +4,14 @@
 if [[ ! -f /etc/opt/ninja/.has_updated_software ]]
 then
 	sleep 10
+	
+	if [[ -f /etc/opt/ninja/.has_v0.8_npm ]]
+	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/npm-v1.1.64.tgz
+	tar -C / -xvzf npm-v1.1.64.tgz
+	rm npm-v1.1.64.tgz
+	touch /etc/opt/ninja/.has_v0.8_npm
+	fi
+	
 	echo "Updating apt-get" >> /var/log/ninjablock.log
 	sudo apt-get update 
 	echo "Installing ifplugd" >> /var/log/ninjablock.log
@@ -14,5 +22,8 @@ then
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
 	sudo apt-get -qq clean 
 	touch /etc/opt/ninja/.has_updated_software
+
+	
+
 fi
 

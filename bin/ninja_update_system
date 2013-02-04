@@ -4,15 +4,11 @@ set -e
 
 utilsDir="/opt/utilities"
 check_rc=`grep ninja_install_software /etc/rc.local|wc -l`
+node_version=`/usr/bin/node -v`
 
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
 fi
-
-if [ -z "$client" ]; then
-	client="beagle"
-fi
-
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
@@ -20,25 +16,30 @@ cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
 
-if [[ "$client" == "beagle" ]]
-then
-	cp ${utilsDir}/etc/network/interfaces /etc/network/
-	cp ${utilsDir}/etc/fstab /etc/
-	cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original  
-	cp ${utilsDir}/init/dmesg.conf /etc/init/
-	cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
-	cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
-	cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
-	if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
-	rm /etc/opt/ninja/.has_updated_software
-	fi
+cp ${utilsDir}/etc/network/interfaces /etc/network/
+cp ${utilsDir}/etc/fstab /etc/
+cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original  
+cp ${utilsDir}/init/dmesg.conf /etc/init/
+cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
+cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
+cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
-	if [ -f /etc/motd.tail ]; then
-		rm /etc/motd.tail
-	fi
+if [[ $node_version != 'v0.8.17' ]]; then
+	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.17.tgz
+	tar -C / -xvzf node-v0.8.17.tgz
+	rm node-v0.8.17.tgz
+fi
 
-	if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]; then
+if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
+rm /etc/opt/ninja/.has_updated_software
+fi
+
+if [ -f /etc/motd.tail ]; then
+	rm /etc/motd.tail
+fi
+
+if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]; then
 	wifi_module_chk=`shasum /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko | cut -f1 -d' '`
 
 	if [[ "$wifi_module_chk" != "4074aa90269a4cc0ad136a7dc93ef4b3fc65a2d3" ]]; then
@@ -46,12 +47,8 @@ then
 		cp ${utilsDir}/wifi-driver/8192cu.ko /lib/modules/`uname -r`/kernel/drivers/net/wireless/
 		cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
 	fi
+fi
 	
-fi
-
-fi
-
-
 if [[ $check_rc -ne 1 ]]
 then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local
