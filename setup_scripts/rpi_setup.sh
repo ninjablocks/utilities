@@ -144,10 +144,6 @@ echo 'export PATH=/opt/utilities/bin:$PATH' >> /home/${username}/.bashrc;
 echo -e "\n→ ${bold}Setting the pi's environment to stable${normal}\n";
 echo 'export NINJA_ENV=stable' >> /home/${username}/.bashrc;
 
-# Add ninja_update to the hourly cron
-echo -e "\n→ ${bold}Add ninja_update to the hourly cron${normal}\n";
-ln -s /opt/utilities/bin/ninja_update /etc/cron.hourly/ninja_update;
-
 echo -e "\n→ ${bold}Getting serial number from system${normal}\n";
 sudo /opt/utilities/bin/ninjapi_get_serial;
 
