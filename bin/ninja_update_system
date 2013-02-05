@@ -25,7 +25,7 @@ cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
-if [[ $node_version != 'v0.8.17' ]]; then
+if [[ $node_version == 'v0.6.12' ]]; then
 	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.17.tgz
 	tar -C / -xvzf node-v0.8.17.tgz
 	rm node-v0.8.17.tgz
@@ -54,7 +54,7 @@ then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local
 fi
 
-echo '0.6' > ${utilsDir}/sys_version
+echo '1.0.0' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
 reboot
 #exit 1 to prevent further updates happening as system is going down
