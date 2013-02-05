@@ -54,6 +54,8 @@ then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local
 fi
 
+${utilsDir}/bin/ninja_update_node
+
 echo '1.0.0' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
 reboot
