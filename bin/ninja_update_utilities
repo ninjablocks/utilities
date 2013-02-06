@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-client="beagle-armv7l"
+client="beagle"
 # Define directories
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
