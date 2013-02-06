@@ -11,6 +11,9 @@ then
 	rm npm-v1.1.64.tgz
 	touch /etc/opt/ninja/.has_v0.8_npm
 	fi
+
+	echo "Installing node-gyp"
+	sudo npm install -g node-gyp
 	
 	echo "Updating apt-get" >> /var/log/ninjablock.log
 	sudo apt-get update 
