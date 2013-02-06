@@ -15,7 +15,7 @@ cd $tmp_dir
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` Utilities Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
-curl --output utilities.tar.gz http://s3.amazonaws.com/ninjablocks/code/beagle/utilities/${NINJA_ENV:-"stable"}.tar.gz
+curl --output utilities.tar.gz http://s3.amazonaws.com/ninjablocks/code/$client/utilities/${NINJA_ENV:-"stable"}.tar.gz
 remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/$client/utilities/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum utilities.tar.gz | awk '{ print $1 }')
 if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
