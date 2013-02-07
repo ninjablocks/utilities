@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 #    99-footer - write the admin's footer to the MOTD
 #    Copyright (C) 2009-2010 Canonical Ltd.
@@ -29,24 +29,19 @@
 
 # [ -f /etc/motd.tail ] && cat /etc/motd.tail || true
 
-#grep nodeVersion /opt/ninja/beagle.js | sed 's/[ ,]//g' 
-#echo -n "Serial Number: " 
-#cat /etc/opt/ninja/serial.conf
-#echo "\n\n"
 
-node_version=`grep nodeVersion /opt/ninja/beagle.js | sed 's/[ ,]//g' | sed 's/node//g'`
-serial_number=`cat /etc/opt/ninja/serial.conf`
-
+serial_number="Serial: `cat /etc/opt/ninja/serial.conf`"
+node_version="Version: `grep version /opt/ninja/package.json | cut -d: -f 2 | sed 's/[ ",]//g'`"
 
 echo "
-           MMMMMMMMMMMMMMMMMM       -----------------------------------------
-         MMMMMMMMMMMMMMMMMMMMMM     |                                       |
-         MM                  MM     |              $node_version              |
-        MM    MMMM     MMMM    MM   |           Serial:$serial_number         |
-        MM    MMMM     MMMM    MM   |                                       |
-         MM                   MM    |                                       |
-         MMMMMMMMMMMMMMMMMMMMMM     |                HACK ME                |
-         MMMMMMMMMMMMMMMMMMMMMM     -----------------------------------------
+           MMMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMMMMMMMMMMMMM
+         MM                  MM          $node_version
+        MM    MMMM     MMMM    MM        $serial_number
+        MM    MMMM     MMMM    MM
+         MM                   MM 
+         MMMMMMMMMMMMMMMMMMMMMM 
+         MMMMMMMMMMMMMMMMMMMMMM
              MMMMMMMMMMMMMM        
              MMMMMMMMMMMMMM          
          MMMMMMMMMMMMMMMMMMMMMMM        
