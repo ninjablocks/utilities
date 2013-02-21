@@ -24,5 +24,5 @@ username="pi"
     sudo chown $username:$username /etc/opt/ninja
 
 
-exec su $username -c "/usr/bin/forever /opt/ninja/beagle.js >> /var/log/ninjablock.log 2>&1" &
+exec su $username -c "/usr/local/bin/forever /opt/ninja/beagle.js >> /var/log/ninjablock.log 2>&1" &
 echo $$ > /var/run/ninjablock.pid
