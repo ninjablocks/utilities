@@ -4,8 +4,8 @@ module_dir=/opt/ninja/drivers
 
 
 if [[ $# -eq 1 ]]; then
-	url=http://s3.amazonaws.com/ninja_drivers/$1/latest.tgz
-	checksum_url=http://s3.amazonaws.com/ninja_drivers/$1/latest.checksum
+	url=http://s3.amazonaws.com/ninja-drivers/$1/latest.tgz
+	checksum_url=http://s3.amazonaws.com/ninja-drivers/$1/latest.checksum
 	modname=$1
 elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
 	url=$2/archive/master.zip
