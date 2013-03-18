@@ -1,11 +1,11 @@
 #!/bin/bash
 
-module_dir=/opt/ninja/ninja_modules
+module_dir=/opt/ninja/drivers
 
 
 if [[ $# -eq 1 ]]; then
-	url=http://s3.amazonaws.com/ninja_modules/$1.tgz
-	checksum_url=http://s3.amazonaws.com/ninja_modules/$1.checksum
+	url=http://s3.amazonaws.com/ninja-drivers/$1/latest.tgz
+	checksum_url=http://s3.amazonaws.com/ninja-drivers/$1/latest.checksum
 	modname=$1
 elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
 	url=$2/archive/master.zip
@@ -51,12 +51,12 @@ if [[ $# -eq 1 ]]; then
 
 
 
-else 
+else
 ######################################## Install module from github ########################################
 
 	wget -q $url
 	unzip -qq -d $module_dir master.zip
-	mv $module_dir/$modname-master $module_dir/$modname  
+	mv $module_dir/$modname-master $module_dir/$modname
 	rm master.zip
 	
 fi
