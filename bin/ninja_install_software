@@ -4,7 +4,7 @@
 if [[ ! -f /etc/opt/ninja/.has_updated_software ]]
 then
 	sleep 10
-	
+
 	if [[ -f /etc/opt/ninja/.has_v0.8_npm ]]
 	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/npm-v1.1.64.tgz
 	tar -C / -xvzf npm-v1.1.64.tgz
@@ -14,19 +14,23 @@ then
 
 	echo "Installing node-gyp"
 	sudo npm install -g node-gyp
-	
+
 	echo "Updating apt-get" >> /var/log/ninjablock.log
-	sudo apt-get update 
+	sudo apt-get update
 	echo "Installing ifplugd" >> /var/log/ninjablock.log
-	sudo apt-get -qq -y -f -m install ifplugd 
+	sudo apt-get -qq -y -f -m install ifplugd
 	sudo cp /opt/utilities/etc/default/ifplugd /etc/default/
 	echo "Installing avahi" >> /var/log/ninjablock.log
-	sudo apt-get -qq -y -f -m install avahi-daemon 
+	sudo apt-get -qq -y -f -m install avahi-daemon
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
-	sudo apt-get -qq clean 
+	sudo apt-get -qq clean
 	touch /etc/opt/ninja/.has_updated_software
 
-	
+	echo "Installing ZigBee driver"
+	sudo apt-get install libc6-armel-cross
+	sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
+	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
+	./ninja_install ninja-zigbee
 
 fi
 
