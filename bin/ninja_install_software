@@ -31,6 +31,10 @@ then
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
 	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
 
+	echo "Installing Belkin WeMo driver" >> /var/log/ninjablock.log
+	sudo apt-get -qq -y -f -m install libxml2
+	su -c "/opt/utilities/bin/ninja_install ninja-belkin-wemo" ubuntu
+
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
 	sudo apt-get -qq clean
 	touch /etc/opt/ninja/.has_updated_software
