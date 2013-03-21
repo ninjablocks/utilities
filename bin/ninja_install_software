@@ -30,7 +30,6 @@ then
 	sudo apt-get -qq -y -f -m install libc6-armel-cross
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
-	./ninja_install ninja-zigbee
-
+	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
 fi
 
