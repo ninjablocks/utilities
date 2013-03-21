@@ -32,6 +32,7 @@ then
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
 	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
 
+	echo "Background software install complete, restarting process" >> /var/log/ninjablock.log
 	sudo service ninjablock restart
 fi
 
