@@ -31,5 +31,7 @@ then
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
 	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
 	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
+
+	sudo service ninjablock restart
 fi
 
