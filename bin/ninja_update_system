@@ -19,7 +19,7 @@ cp ${utilsDir}/etc/hosts /etc/
 
 cp ${utilsDir}/etc/network/interfaces /etc/network/
 cp ${utilsDir}/etc/fstab /etc/
-cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original  
+cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original
 cp ${utilsDir}/init/dmesg.conf /etc/init/
 cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
@@ -32,7 +32,7 @@ if [[ $node_version == 'v0.6.12' ]]; then
 fi
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
-rm /etc/opt/ninja/.has_updated_software
+	rm /etc/opt/ninja/.has_updated_software
 fi
 
 if [ -f /etc/motd.tail ]; then
@@ -48,7 +48,7 @@ if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]; the
 		cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
 	fi
 fi
-	
+
 if [[ $check_rc -ne 1 ]]
 then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local

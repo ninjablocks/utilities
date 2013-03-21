@@ -43,7 +43,8 @@ if [[ $# -eq 1 ]]; then
 
 
 	if [ -e $1.tgz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
-		tar -C $module_dir -xzf $1.tgz
+		tar -xzf $1.tgz
+		mv package $module_dir/$modname
 		rm $1.tgz
 	else
 		echo "Local checksum and remote checksum for $modname don't match"
@@ -58,11 +59,9 @@ else
 	unzip -qq -d $module_dir master.zip
 	mv $module_dir/$modname-master $module_dir/$modname
 	rm master.zip
-	
+
 fi
 
 cd $module_dir/$1
 npm install
 echo "Done"
-
-
