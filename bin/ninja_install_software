@@ -5,12 +5,12 @@ if [[ ! -f /etc/opt/ninja/.has_updated_software ]]
 then
 	sleep 10
 
-	if [[ -f /etc/opt/ninja/.has_v0.8_npm ]]
+	if [[ -f /etc/opt/ninja/.has_v0.8_npm ]]; then
 		wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/npm-v1.1.64.tgz
 		tar -C / -xvzf npm-v1.1.64.tgz
 		rm npm-v1.1.64.tgz
 		touch /etc/opt/ninja/.has_v0.8_npm
-	fi
+	fi;
 
 	echo "Installing node-gyp"
 	sudo npm install -g node-gyp
@@ -25,14 +25,14 @@ then
 	echo "Installing avahi" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install avahi-daemon
 
-	echo "Installing ZigBee driver" >> /var/log/ninjablock.log
-	sudo apt-get -qq -y -f -m install libc6-armel-cross
-	sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
-	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
-	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
+	#echo "Installing ZigBee driver" >> /var/log/ninjablock.log
+	#sudo apt-get -qq -y -f -m install libc6-armel-cross
+	#sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
+	#sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
+	#su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
 
 	echo "Installing Belkin WeMo driver" >> /var/log/ninjablock.log
-	sudo apt-get -qq -y -f -m install libxml2
+	sudo apt-get -qq -y -f -m install libxml2-dev
 	su -c "/opt/utilities/bin/ninja_install ninja-belkin-wemo" ubuntu
 
 	echo "Cleaning apt-get" >> /var/log/ninjablock.log
@@ -40,6 +40,8 @@ then
 	touch /etc/opt/ninja/.has_updated_software
 
 	echo "Background software install complete, restarting process" >> /var/log/ninjablock.log
+	chown -R ubuntu:ubuntu /home/ubuntu
+	chown -R ubuntu:ubuntu /opt/ninja
 	sudo service ninjablock restart
 fi
 

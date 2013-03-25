@@ -37,6 +37,7 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	cp -Rf utilities/* $util_dir/
 	cp -Rf $util_dir/init/* /etc/init/
 	chown ubuntu:ubuntu $util_dir/bin/ninja_update_node
+	chown -R ubuntu:ubuntu /home/ubuntu
 	rm utilities.tar.gz
 	rm -rf utilities
 	touch /etc/opt/ninja/.has_updated_utilities

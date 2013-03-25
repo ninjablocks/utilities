@@ -4,8 +4,8 @@ module_dir=/opt/ninja/drivers
 
 
 if [[ $# -eq 1 ]]; then
-	url=http://s3.amazonaws.com/ninja-drivers/$1/latest.tgz
-	checksum_url=http://s3.amazonaws.com/ninja-drivers/$1/latest.checksum
+	url=http://s3.amazonaws.com/ninja_drivers/$1/latest.tgz
+	checksum_url=http://s3.amazonaws.com/ninja_drivers/$1/latest.checksum
 	modname=$1
 elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
 	url=$2/archive/master.zip
@@ -43,12 +43,9 @@ if [[ $# -eq 1 ]]; then
 
 
 	if [ -e $1.tgz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
-		tar -xzf $1.tgz
-		mv package $module_dir/$modname
+		tar -C $module_dir -xzf $1.tgz
 		rm $1.tgz
-		if [ -d "package" ]; then
-			rm -rf package
-		fi;
+		echo "Done."
 	else
 		echo "Local checksum and remote checksum for $modname don't match"
 	fi
@@ -62,9 +59,8 @@ else
 	unzip -qq -d $module_dir master.zip
 	mv $module_dir/$modname-master $module_dir/$modname
 	rm master.zip
-
+	echo "Done"
 fi
 
-cd $module_dir/$modname
-npm install
-echo "Done"
+
+
