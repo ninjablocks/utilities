@@ -25,11 +25,11 @@ then
 	echo "Installing avahi" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install avahi-daemon
 
-	#echo "Installing ZigBee driver" >> /var/log/ninjablock.log
-	#sudo apt-get -qq -y -f -m install libc6-armel-cross
-	#sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
-	#sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
-	#su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
+	echo "Installing ZigBee driver" >> /var/log/ninjablock.log
+	sudo apt-get -qq -y -f -m install libc6-armel-cross
+	sudo ln -sf /usr/arm-linux-gnueabi/lib/ld-linux.so.3 /lib/ld-linux.so.3
+	sudo ln -sf /usr/arm-linux-gnueabi/lib/libc.so.6 /lib/libc.so.6
+	su -c "/opt/utilities/bin/ninja_install ninja-zigbee" ubuntu
 
 	echo "Installing Belkin WeMo driver" >> /var/log/ninjablock.log
 	sudo apt-get -qq -y -f -m install libxml2-dev
