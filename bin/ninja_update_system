@@ -27,10 +27,10 @@ cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
 if [[ $node_version == 'v0.6.12' ]]; then
     wget http://nodejs.org/dist/v0.8.22/node-v0.8.22-linux-arm-pi.tar.gz
-	tar xzf node-v0.8.17.tgz
-	sudo cp -R node-v0.8.17/* /usr/
-	rm node-v0.8.17.tgz
-	rm -rf node-v0.8.17
+	tar xzf node-v0.8.22-linux-arm-pi.tar.gz
+	sudo cp -R node-v0.8.22-linux-arm-pi/* /usr/
+	rm node-v0.8.22-linux-arm-pi.tar.gz
+	rm -rf node-v0.8.22-linux-arm-pi/
 fi
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
