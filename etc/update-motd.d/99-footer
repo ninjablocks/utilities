@@ -34,19 +34,19 @@
 #cat /etc/opt/ninja/serial.conf
 #echo "\n\n"
 
-node_version=`grep nodeVersion /opt/ninja/beagle.js | sed 's/[ ,]//g' | sed 's/node//g'`
+node_version=`grep version package.json | cut -d: -f 2 | sed 's/[",]//g'`
 serial_number=`cat /etc/opt/ninja/serial.conf`
 
 
 echo "
-           MMMMMMMMMMMMMMMMMM       -----------------------------------------
-         MMMMMMMMMMMMMMMMMMMMMM     |                                       |
-         MM                  MM     |              $node_version              |
-        MM    MMMM     MMMM    MM   |           Serial:$serial_number         |
-        MM    MMMM     MMMM    MM   |                                       |
-         MM                   MM    |                                       |
-         MMMMMMMMMMMMMMMMMMMMMM     |                HACK ME                |
-         MMMMMMMMMMMMMMMMMMMMMM     -----------------------------------------
+           MMMMMMMMMMMMMMMMMM
+         MMMMMMMMMMMMMMMMMMMMMM
+         MM                  MM                 $node_version
+        MM    MMMM     MMMM    MM               Serial:$serial_number
+        MM    MMMM     MMMM    MM
+         MM                   MM
+         MMMMMMMMMMMMMMMMMMMMMM
+         MMMMMMMMMMMMMMMMMMMMMM
              MMMMMMMMMMMMMM        
              MMMMMMMMMMMMMM          
          MMMMMMMMMMMMMMMMMMMMMMM        
@@ -59,6 +59,9 @@ echo "
              MMMMM    MMMMM            
             MMMMM      MMMMM            
             MMMMM      MMMMM
+            
+                HACK ME
+            
 "
 
 
