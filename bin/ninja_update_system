@@ -6,9 +6,24 @@ utilsDir="/opt/utilities"
 check_rc=`grep ninja_install_software /etc/rc.local|wc -l`
 node_version=`/usr/bin/node -v`
 
+# Define directories
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
+else
+		touch /etc/environment.local
 fi
+
+# Check the environment
+arch=$(uname -a | awk '{ print $11 }')
+if [ "$arch" = "armv7l" ]; then
+	client="beagle-armv7l"
+	check_arch=$(grep $client /etc/environment.local|wc -l)
+	if [[ $check_arch -ne 1 ]]; then
+		echo "export NINJA_CLIENT_NAME=$client" >> /etc/environment.local
+		NINJA_CLIENT_NAME=$client
+	fi
+fi
+#todo expand this for rPis
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 

@@ -8,18 +8,6 @@ else
 		touch /etc/environment.local
 fi
 
-# Check the environment
-arch=$(uname -a | awk '{ print $11 }')
-if [ "$arch" = "armv7l" ]; then
-	client="beagle-armv7l"
-	check_arch=$(grep $client /etc/environment.local|wc -l)
-	if [[ $check_arch -ne 1 ]]; then
-		echo "export NINJA_CLIENT_NAME=$client" >> /etc/environment.local
-		NINJA_CLIENT_NAME=$client
-	fi
-fi
-#todo expand this for rPis
-
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
