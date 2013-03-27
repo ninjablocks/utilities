@@ -42,8 +42,8 @@ cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
 if [[ $node_version == 'v0.6.12' ]]; then
 	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.22.tgz
-	tar -C /usr/bin/ -xvzf node-v0.8.17.tgz
-	rm node-v0.8.17.tgz
+	tar -C /usr/bin/ -xvzf node-v0.8.22.tgz 
+	rm node-v0.8.22.tgz
 fi
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
