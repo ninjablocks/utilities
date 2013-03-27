@@ -1,6 +1,6 @@
 { "name": "utilities-beagle",
   "version": "0.8.1",
-  "dependencies": { 
+  "dependencies": {
   	"serialport" : "0.7.5",
   	"optimist": "~0.3.4",
         "express": "~3.0.0rc4",

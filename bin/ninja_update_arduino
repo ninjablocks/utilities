@@ -8,7 +8,7 @@ fi
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
-uri="http://s3.amazonaws.com/ninjablocks/code/beagle/arduino"
+uri="http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/arduino"
 # Pull new code from repo
 cd $tmp_dir
 # Robustness hack
@@ -117,7 +117,7 @@ else              #update normally
 	# Calculate the local checksum
 	local_checksum=$(sha1sum arduino.hex | awk '{ print $1 }')
 	# If we have a file, have fetched the remote checksum, and it is the same as the local checksum
-	if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ] 
+	if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]
 	then
 		touch /etc/opt/ninja/.has_updated_arduino
 		flashArduino arduino.hex
@@ -125,7 +125,7 @@ else              #update normally
 	else
 		echo "[System] `date` Could not retrieve valid arduino update binary." >> /var/log/ninjablock.log
 	fi
-	
+
 	sync
 	exit 0
 fi
