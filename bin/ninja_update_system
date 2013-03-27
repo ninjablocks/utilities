@@ -41,8 +41,8 @@ cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
 if [[ $node_version == 'v0.6.12' ]]; then
-	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.17.tgz
-	tar -C / -xvzf node-v0.8.17.tgz
+	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.22.tgz
+	tar -C /usr/bin/ -xvzf node-v0.8.17.tgz
 	rm node-v0.8.17.tgz
 fi
 
