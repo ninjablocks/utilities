@@ -34,14 +34,14 @@
 #cat /etc/opt/ninja/serial.conf
 #echo "\n\n"
 
-node_version=`grep version package.json | cut -d: -f 2 | sed 's/[",]//g'`
+node_version=`grep version /opt/ninja/package.json | cut -d: -f 2 | sed 's/[",]//g'`
 serial_number=`cat /etc/opt/ninja/serial.conf`
 
 
 echo "
            MMMMMMMMMMMMMMMMMM
          MMMMMMMMMMMMMMMMMMMMMM
-         MM                  MM                 $node_version
+         MM                  MM                 Version:$node_version
         MM    MMMM     MMMM    MM               Serial:$serial_number
         MM    MMMM     MMMM    MM
          MM                   MM
