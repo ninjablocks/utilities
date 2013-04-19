@@ -1,4 +1,6 @@
 #!/bin/bash
+official_update=false
+
 # Define directories
 # Setup the environment
 
@@ -50,6 +52,10 @@ function flashArduino {
 			sudo echo "1" > /sys/class/gpio/gpio38/value;
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
 			# rm arduino.hex
+			touch /etc/opt/ninja/.has_updated_arduino
+			if $official_update ; then
+				rm arduino.hex
+			fi
 			sync
 			exit 0
 		fi
@@ -119,9 +125,8 @@ else              #update normally
 	# If we have a file, have fetched the remote checksum, and it is the same as the local checksum
 	if [ -e arduino.hex ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]
 	then
-		touch /etc/opt/ninja/.has_updated_arduino
+		official_update=true
 		flashArduino arduino.hex
-		rm arduino.hex
 	else
 		echo "[System] `date` Could not retrieve valid arduino update binary." >> /var/log/ninjablock.log
 	fi
