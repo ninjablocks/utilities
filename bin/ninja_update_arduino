@@ -1,4 +1,27 @@
 #!/bin/bash
+
+script_name=`basename $0`
+
+function printUsage {
+	echo "Usage: "
+	echo "  $script_name"
+	echo "  $script_name <file.hex>"
+	echo "    eg. $script_name arduino.hex"
+	echo "  $script_name -f <version>"
+	echo "    eg. $script_name -f V12"
+}
+
+function exitSuccess {
+        exit 0
+}
+function exitFail {
+        exit 1
+}
+function exitUsage {
+	printUsage
+	exitFail
+}
+
 official_update=false
 
 # Define directories
@@ -19,14 +42,12 @@ echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 
 sleep 2
 
-
-
 function flashArduino {
 
 	if [[ ! -e $1 ]]
 	then
 		echo "$1 does not exist"
-		exit 0
+		exitFail
 	fi
 
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
@@ -47,41 +68,52 @@ function flashArduino {
 		#sleep 1;
 		#sudo echo "1" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
+		
 		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$1:i;
+		
 		if [ "$?" = "0" ]; then
 			sudo echo "1" > /sys/class/gpio/gpio38/value;
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
-			# rm arduino.hex
 			touch /etc/opt/ninja/.has_updated_arduino
 			if $official_update ; then
 				rm arduino.hex
 			fi
 			sync
-			exit 0
+			exitSuccess
 		fi
 		echo "[System] `date` Flashing Arduino...Pass $i Failed!"
 	done
 	echo "[System] `date` Critical error! Failed flashing Arduino in 3 passes." >> /var/log/ninjablock.log
 }
 
-
-
-
-if [[ $# -eq 1 ]] #flash with filename given in params
-then
-	flashArduino $1
-else              #update normally
-
-	# fetch the model
-	arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)
-
-	# exit if there is an error
-	if [ "$?" != "0" ]
-	then
-		echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
-		exit 0;
+if [[ $# -eq 1 ]]
+then  
+	if [[ $1 == -* ]] || [[ $1 == \? ]]; then
+		exitUsage
+	else #flash with filename given in params
+		flashArduino $1
 	fi
-
+else 
+	if [[ $# -ge 2 ]]
+	then
+		if [[ $1 != "-f" ]]
+		then
+			exitUsage
+		else
+			arduino_mv="$2_(unknown)" # force flash of unknown firmward version on specified board
+		fi
+	else
+		# attempt to fetch the model
+		arduino_mv=$(/opt/utilities/bin/fetch_arduino_version)
+		
+		if [ "$?" != "0" ]
+		then
+			echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
+			echo "Arduino Update Failed. Could not retrieve version number."
+			echo "(Can force with:  $script_name -f V12 )"
+			exitFail
+		fi
+	fi
 	if [ -n "$arduino_mv" ] && [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
 	then
 		# split the string by "_"
@@ -113,9 +145,9 @@ else              #update normally
 	code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
 	if [ "$code" != "200" ]
 	then
-		echo "[System] `date` Arduino Update Failed. Could not fetch binary" >> /var/log/ninjablock.log
-		echo "url is $url"
-		exit 0;
+		echo "[System] `date` Arduino Update Failed. Could not fetch binary ($url)" >> /var/log/ninjablock.log
+		echo "Arduino Update Failed. Could not fetch binary ($url)"
+		exitFail
 	fi
 	curl --output arduino.hex $url
 	# Fetch the remote checksum
@@ -132,5 +164,6 @@ else              #update normally
 	fi
 
 	sync
-	exit 0
 fi
+exitFail
+
