@@ -1,3 +1,5 @@
 #!/bin/bash
 
-forever stopall
+echo "Stopping NinjaPi client..."
+sudo forever stopall
+echo "Done"
