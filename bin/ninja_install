@@ -8,10 +8,10 @@ if [[ $# -eq 1 ]]; then
 	checksum_url=http://s3.amazonaws.com/ninja-drivers/$1/latest.checksum
 	modname=$1
 elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
-	url=$2/archive/master.zip
+	url=$2
 	modname=`echo $2 | cut -d/ -f5`
 else
-	echo "Usage: `basename $0` [ -g <github URL> || <module name>" ]
+	echo "Usage: `basename $0` [ -g <git URL> || <module name>" ]
 	exit 1
 fi
 
@@ -58,10 +58,7 @@ if [[ $# -eq 1 ]]; then
 else
 ######################################## Install module from github ########################################
 
-	wget -q $url
-	unzip -qq -d $module_dir master.zip
-	mv $module_dir/$modname-master $module_dir/$modname
-	rm master.zip
+	git clone $url $module_dir/$modname
 
 fi
 
