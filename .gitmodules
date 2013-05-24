@@ -1,3 +1,3 @@
 [submodule "wifi"]
 	path = wifi
-	url = https://github.com/ninjablocks/wifi
+	url = https://github.com/ninjablocks/block-wifi
