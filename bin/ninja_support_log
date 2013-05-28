@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+##
+## Captures command output which enables support staff to assist when things are not working
+##
+
+printf "We are going to capture a number of logs and put them into a support file.\n"
+
+# create a tempfile
+supportfile=$(mktemp)
+supportlog=support-$(date --iso-8601).log
+
+# lsusb
+printf "\ncapturing lusb\n-----\n" | tee --append ${supportfile}
+lsusb &>> $supportfile
+
+# uname 
+printf "capturing uname\n-----\n" | tee --append $supportfile
+uname -a &>> $supportfile
+
+# dmesg
+printf "capturing dmesg\n-----\n" | tee --append $supportfile
+dmesg &>> $supportfile
+
+# TODO versions.json
+
+# get errors from /var/log/syslog
+printf "capturing errors from /var/log/syslog \n-----\n" | tee --append $supportfile
+grep error /var/log/syslog &>> $supportfile
+
+# get errors from /var/log/ninjablock.log 
+printf "capturing errors from /var/log/ninjablock.log\n-----\n" | tee --append $supportfile
+grep error /var/log/ninjablock.log &>> $supportfile
+
+# tell the user where the file is
+echo "Copying support file to your home directory."
+cp -v ${supportfile} ~/${supportlog}
+rm -v ${supportfile}
+
+# TODO provide some instructions on how to upload the file for review
+printf "################\nReview the log file and upload it or post it for review by ninjablocks support team!\nTo upload the file run using ubuntu pastebin site.\n  pastebinit ~/${supportlog}\n################\n"
+
