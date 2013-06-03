@@ -1,10 +1,10 @@
 #!/bin/bash
 
 if [[ $EUID -ne 0 ]]; then
-   echo "Run me as root, mkay" 1>&2
+   echo "Please run as root" 1>&2
    exit 1
 fi
 
 stop ninjablock
-ninja_update_arduino $1
+/opt/utilities/bin/ninja_update_arduino "$@"
 start ninjablock

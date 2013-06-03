@@ -1,10 +1,11 @@
 #!/bin/bash
 set -e
 
-client="beagle-armv7l"
 # Define directories
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
+else
+		touch /etc/environment.local
 fi
 
 code_dir=/opt/ninja
@@ -15,8 +16,8 @@ cd $tmp_dir
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` Utilities Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
-curl --output utilities.tar.gz http://s3.amazonaws.com/ninjablocks/code/$client/utilities/${NINJA_ENV:-"stable"}.tar.gz
-remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/$client/utilities/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
+curl --output utilities.tar.gz http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/utilities/${NINJA_ENV:-"stable"}.tar.gz
+remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/utilities/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
 local_checksum=$(sha1sum utilities.tar.gz | awk '{ print $1 }')
 if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
 	echo "[System] Updating Utilities" >> /var/log/ninjablock.log
@@ -24,6 +25,7 @@ if [ -e utilities.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" 
 	cp -Rf utilities/* $util_dir/
 	cp -Rf $util_dir/init/* /etc/init/
 	chown ubuntu:ubuntu $util_dir/bin/ninja_update_node
+	chown -R ubuntu:ubuntu /home/ubuntu
 	rm utilities.tar.gz
 	rm -rf utilities
 	touch /etc/opt/ninja/.has_updated_utilities
