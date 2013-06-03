@@ -1,0 +1,6 @@
+[submodule "wifi"]
+	path = wifi
+	url = https://github.com/ninjablocks/block-wifi
+[submodule "admin-drivers"]
+	path = admin-drivers
+	url = https://github.com/ninjablocks/block-admin-drivers.git

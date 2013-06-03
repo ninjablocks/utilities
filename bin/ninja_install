@@ -1,0 +1,67 @@
+#!/bin/bash
+
+module_dir=/opt/ninja/drivers
+
+
+if [[ $# -eq 1 ]]; then
+	url=http://s3.amazonaws.com/ninja-drivers/$1/latest.tgz
+	checksum_url=http://s3.amazonaws.com/ninja-drivers/$1/latest.checksum
+	modname=$1
+elif [[ $# -eq 2 ]] && [[ $1 = "-g" ]]; then
+	url=$2
+	modname=`echo $2 | cut -d/ -f5`
+else
+	echo "Usage: `basename $0` [ -g <git URL> || <module name>" ]
+	exit 1
+fi
+
+
+if [[ -d $module_dir/$modname ]]; then
+	echo "$modname module already exists"
+	exit 1
+fi
+
+
+wget -q --spider $url
+modAvail=$?
+
+if [[ $modAvail -ne 0 ]]; then
+	echo "The module $modname is not available "
+	exit 1
+fi
+
+echo "Installing $modname module"
+cd /tmp
+
+
+######################################## Install module from s3 ########################################
+if [[ $# -eq 1 ]]; then
+
+	curl -s --output $modname.tgz $url
+	remote_checksum=$(curl -s $checksum_url | awk '{ print $1 }')
+	local_checksum=$(sha1sum $1.tgz | awk '{ print $1 }')
+
+
+	if [ -e $1.tgz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
+		tar -xzf $1.tgz
+		mv package $module_dir/$modname
+		rm $1.tgz
+		if [ -d "package" ]; then
+			rm -rf package
+		fi;
+	else
+		echo "Local checksum and remote checksum for $modname don't match"
+	fi
+
+
+
+else
+######################################## Install module from github ########################################
+
+	git clone $url $module_dir/$modname
+
+fi
+
+cd $module_dir/$modname
+npm install --color always && echo "Done"
+exit $?

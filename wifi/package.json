@@ -1,0 +1,25 @@
+{
+  "name": "ninja-wifi",
+  "version": "0.0.0",
+  "description": "Ninja Blocks WiFi Utility",
+  "main": "index.js",
+  "scripts": {
+    "test": ""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/ninjablocks/wifi.git"
+  },
+  "keywords": [
+    "ninja",
+    "blocks",
+    "wifi"
+  ],
+  "author": "Emily Rose <emily@ninjablocks.com>",
+  "license": "MIT",
+  "dependencies": {
+    "optimist": "~0.3.4",
+    "express": "~3.0.0rc4",
+    "ejs": "~0.8.3"
+  }
+}
