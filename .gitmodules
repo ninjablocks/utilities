@@ -4,3 +4,6 @@
 [submodule "admin-drivers"]
 	path = admin-drivers
 	url = https://github.com/ninjablocks/block-admin-drivers.git
+[submodule "tunnel-client"]
+	path = tunnel-client
+	url = https://github.com/ninjablocks/block-tunnel-client.git
