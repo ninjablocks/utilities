@@ -212,10 +212,10 @@ copy_rootfs () {
 	echo "#" >> /tmp/rootfs/etc/fstab
 	echo "${root_uuid}  /  ${root_filesystem}  noatime,errors=remount-ro  0  1" >> /tmp/rootfs/etc/fstab
 	echo "${boot_uuid}  /boot/uboot  auto  defaults  0  0" >> /tmp/rootfs/etc/fstab
-  echo "# Avoid unnecessary read&write accesses to your SD-card"  >> /tmp/rootfs/etc/fstab
-  echo "tmpfs    /var/log    tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
-  echo "tmpfs    /tmp        tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
-  echo "tmpfs    /var/tmp    tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
+	echo "# Avoid unnecessary read&write accesses to your SD-card"  >> /tmp/rootfs/etc/fstab
+	echo "tmpfs    /var/log    tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
+	echo "tmpfs    /tmp        tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
+	echo "tmpfs    /var/tmp    tmpfs    defaults    0 0" >> /tmp/rootfs/etc/fstab
 
 	sync
 
