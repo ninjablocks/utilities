@@ -74,10 +74,10 @@ function flashArduino {
 	fi
 
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
-	
+
 	echo "$flashPin" > /sys/class/gpio/export;
 	echo "out" > /sys/class/gpio/gpio$flashPin/direction;
-	
+
 	for i in 1 2 3 4
 	do
 		echo "[System] `date` Flashing Arduino...Pass $i." >> /var/log/ninjablock.log;
@@ -106,13 +106,13 @@ function flashArduino {
 }
 
 if [[ $# -eq 1 ]]
-then  
+then
 	if [[ $1 == -* ]] || [[ $1 == \? ]]; then
 		exitUsage
 	else #flash with filename given in params
 		flashArduino $1
 	fi
-else 
+else
 	if [[ $# -ge 2 ]]
 	then
 		if [[ $1 != "-f" ]]

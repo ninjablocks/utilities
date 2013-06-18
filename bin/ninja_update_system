@@ -6,9 +6,24 @@ utilsDir="/opt/utilities"
 check_rc=`grep ninja_install_software /etc/rc.local|wc -l`
 node_version=`/usr/bin/node -v`
 
+# Define directories
 if [ -f /etc/environment.local ]; then
     . /etc/environment.local
+else
+		touch /etc/environment.local
 fi
+
+# Check the environment
+arch=$(uname -a | awk '{ print $11 }')
+if [ "$arch" = "armv7l" ]; then
+	client="beagle-armv7l"
+	check_arch=$(grep $client /etc/environment.local|wc -l)
+	if [[ $check_arch -ne 1 ]]; then
+		echo "export NINJA_CLIENT_NAME=$client" >> /etc/environment.local
+		. /etc/environment.local
+	fi
+fi
+#todo expand this for rPis
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
@@ -19,22 +34,20 @@ cp ${utilsDir}/etc/hosts /etc/
 
 cp ${utilsDir}/etc/network/interfaces /etc/network/
 cp ${utilsDir}/etc/fstab /etc/
-cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original  
+cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original
 cp ${utilsDir}/init/dmesg.conf /etc/init/
 cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
 cp ${utilsDir}/etc/update-motd.d/99-footer /etc/update-motd.d/
 cp ${utilsDir}/etc/logrotate.d/* /etc/logrotate.d/
 
 if [[ $node_version == 'v0.6.12' ]]; then
-    wget http://nodejs.org/dist/v0.8.22/node-v0.8.22-linux-arm-pi.tar.gz
-	tar xzf node-v0.8.22-linux-arm-pi.tar.gz
-	sudo cp -R node-v0.8.22-linux-arm-pi/* /usr/
-	rm node-v0.8.22-linux-arm-pi.tar.gz
-	rm -rf node-v0.8.22-linux-arm-pi/
+	wget https://s3.amazonaws.com/ninjablocks/binaries/beagle/node-v0.8.22.tgz
+	tar -C /usr/bin/ -xvzf node-v0.8.22.tgz
+	rm node-v0.8.22.tgz
 fi
 
 if [[ -f /etc/opt/ninja/.has_updated_software ]]; then
-rm /etc/opt/ninja/.has_updated_software
+	rm /etc/opt/ninja/.has_updated_software
 fi
 
 if [ -f /etc/motd.tail ]; then
@@ -50,14 +63,15 @@ if [[ -f /lib/modules/3.2.18-psp14/kernel/drivers/net/wireless/8192cu.ko ]]; the
 		cp ${utilsDir}/etc/modprobe.d/8192cu.conf /etc/modprobe.d/
 	fi
 fi
-	
+
 if [[ $check_rc -ne 1 ]]
 then
         sed -i 's:^exit 0$:/opt/utilities/bin/ninja_install_software > /var/log/ninja_software_update.log 2>\&1 \& \nexit 0:' /etc/rc.local
 fi
 
 ${utilsDir}/bin/ninja_update_node
-
+chown -R ubuntu:ubuntu /home/ubuntu
+chown -R ubuntu:ubuntu /opt/ninja
 echo '1.0.0' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
 reboot

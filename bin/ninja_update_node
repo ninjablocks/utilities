@@ -14,13 +14,14 @@ fi
 echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
 echo "[System] `date` Node Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
-curl --output node.tar.gz http://s3.amazonaws.com/ninjablocks/code/$client/node/${NINJA_ENV:-"stable"}.tar.gz
-remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/$client/node/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
+curl --output node.tar.gz http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/node/${NINJA_ENV:-"stable"}.tar.gz
+remote_checksum=$(curl http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/node/${NINJA_ENV:-"stable"}.checksum | awk '{ print $1 }')
+
 local_checksum=$(sha1sum node.tar.gz | awk '{ print $1 }')
 if [ -e node.tar.gz ] && [ -n "$remote_checksum" ] && [ "$remote_checksum" = "$local_checksum" ]; then
 	echo "[System] Updating Node (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 	tar -zxf node.tar.gz
-	cp -R ninja/* /opt/ninja
+	rsync -axrl ninja/ /opt/ninja/
 	rm -rf ninja
 	rm node.tar.gz
 	sync
