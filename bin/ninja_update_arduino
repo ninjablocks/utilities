@@ -25,12 +25,18 @@ function exitUsage {
 function setPins {
     if [[ ${NINJA_CLIENT_NAME} = "beaglebone-black" ]]; then
     	flashPin=44
+    	uart=ttyO1
     elif [[ ${NINJA_CLIENT_NAME} = "beagle" || ${NINJA_CLIENT_NAME} = "beagle-armv7l"  ]]; then
     	flashPin=38
+    	uart=ttyO1
     	$util_dir/bin/setgpio;
     	$util_dir/bin/setserial;
+	elif [[ ${NINJA_CLIENT_NAME} = "pi" ]]; then
+		flashPin=23
+		uart=ttyAMA0
     else
     	flashPin=38  #default to beagle
+    	uart=ttyO1
     	$util_dir/bin/setgpio;
     	$util_dir/bin/setserial;
     fi
@@ -55,7 +61,7 @@ setPins
 cd $tmp_dir
 # Robustness hack
 echo "[System] `date` Arduino Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
-echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/ttyO1
+echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/$uart
 
 sleep 2
 
@@ -82,7 +88,7 @@ function flashArduino {
 		#sudo echo "1" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
 
-		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/ttyO1 -b 57600 -D -U flash:w:$1:i;
+		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/$uart -b 57600 -D -U flash:w:$1:i;
 
 		if [ "$?" = "0" ]; then
 			sudo echo "1" > /sys/class/gpio/gpio$flashPin/value;
