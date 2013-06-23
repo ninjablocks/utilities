@@ -1,6 +1,45 @@
-#!/usr/bin/python
+#!/bin/bash
+if [ -f /etc/environment.local ]; then
+        . /etc/environment.local
+fi
+if [[ -z $NINJA_HARDWARE_TYPE ]]; then
+        . /opt/utilities/bin/detect-hw-os
+        . /etc/environment.local
+fi
+if [[ -n $NINJA_HARDWARE_TYPE ]]; then
+        if [ "$NINJA_HARDWARE_TYPE" == "BBW" ]; then
+                #sudo /opt/utilities/bin/setgpioBBW
+                echo -e "\x07" > /sys/kernel/debug/omap_mux/gpmc_ad6
+        fi
+        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+                sudo echo "$NINJA_CAPE_DETECT_GPIO" > /sys/class/gpio/export;
+                if [[ -n $NINJA_CAPE_V11V12_RESETGPIO ]]; then
+                        sudo echo "$NINJA_CAPE_V11V12_RESETGPIO" > /sys/class/gpio/export;
+                fi
+                if [[ -n $NINJA_CAPE_V121_RESETGPIO ]]; then
+                        sudo echo "$NINJA_CAPE_V121_RESETGPIO" > /sys/class/gpio/export;
+                fi
+        elif [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
+                if [[ -n $NINJA_CRUST_V10_RESETGPIO ]]; then
+                        sudo echo "$NINJA_CRUST_V10_RESETGPIO" > /sys/class/gpio/export;
+                fi
+        fi
+        sleep 1;
+        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+                sudo echo "in" > /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/direction;
+                if [[ -n $NINJA_CAPE_V11V12_RESETGPIO ]]; then
+                        sudo echo "out" > /sys/class/gpio/gpio$NINJA_CAPE_V11V12_RESETGPIO/direction;
+                        sudo chown -R ubuntu /sys/class/gpio/gpio$NINJA_CAPE_V11V12_RESETGPIO/value
+                fi
+                if [[ -n $NINJA_CAPE_V121_RESETGPIO ]]; then
+                        sudo echo "out" > /sys/class/gpio/gpio$NINJA_CAPE_V121_RESETGPIO/direction;
+                        sudo chown -R ubuntu /sys/class/gpio/gpio$NINJA_CAPE_V121_RESETGPIO/value
+                fi
+        elif [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
+                if [[ -n $NINJA_CRUST_V10_RESETGPIO ]]; then
+                        sudo echo "out" > /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO/direction;
+                        sudo chown -R ubuntu /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO/value
+                fi
+        fi
+fi
 
-import time
- 
-# put Port 8 Pin 3 into mode 7 (GPIO)
-open('/sys/kernel/debug/omap_mux/gpmc_ad6', 'wb').write("%X" % 7)
