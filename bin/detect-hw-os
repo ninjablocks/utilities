@@ -1,0 +1,28 @@
+#!/bin/bash
+echo "start detect"
+echo "start detect" >> /var/log/ninjablock.log
+
+# Define directories
+if [ -f /etc/environment.local ]; then
+    . /etc/environment.local
+else
+    touch /etc/environment.local
+fi
+
+#TODO: detect osX, ...
+
+if [[ ${NINJA_CLIENT_NAME} = "pi" ]]; then
+	echo "export NINJA_HARDWARE_TYPE=RPI" >> /etc/environment.local
+	echo "export NINJA_CRUST_V10_RESETGPIO=23" >> /etc/environment.local
+else # beaglebone
+	echo "export NINJA_CAPE_V121_RESETGPIO=44" >> /etc/environment.local
+	echo "export NINJA_CAPE_DETECT_GPIO=60" >> /etc/environment.local
+	dmesg | grep -q "Bone-Black-HDMI"
+	if [ "$?" == 0 ]; then
+		echo "export NINJA_HARDWARE_TYPE=BBB" >> /etc/environment.local
+	else
+		echo "export NINJA_HARDWARE_TYPE=BBW" >> /etc/environment.local
+		echo "export NINJA_CAPE_V11V12_RESETGPIO=38" >> /etc/environment.local
+	fi
+fi
+
