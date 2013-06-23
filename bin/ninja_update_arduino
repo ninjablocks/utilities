@@ -22,40 +22,47 @@ function exitUsage {
 	exitFail
 }
 
-function setPins {
-    if [[ ${NINJA_CLIENT_NAME} = "beaglebone-black" ]]; then
-    	flashPin=44
-    	uart=ttyO1
-    elif [[ ${NINJA_CLIENT_NAME} = "beagle" || ${NINJA_CLIENT_NAME} = "beagle-armv7l"  ]]; then
-    	flashPin=38
-    	uart=ttyO1
-    	$util_dir/bin/setgpio;
-    	$util_dir/bin/setserial;
-	elif [[ ${NINJA_CLIENT_NAME} = "pi" ]]; then
-		flashPin=23
-		uart=ttyAMA0
-    else
-    	flashPin=38  #default to beagle
-    	uart=ttyO1
-    	$util_dir/bin/setgpio;
-    	$util_dir/bin/setserial;
-    fi
+function detectNinjaBeagleCape()
+{
+	cat /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/value >> /var/log/ninjablock.log
+	local detectValue=`cat /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/value`
+	echo "Detected Value: $detectValue" >> /var/log/ninjablock.log
+    local result='V11V12'
+	if [[ $detectValue == 0 ]]; then #V12 cape grounded
+		result='V121'
+	fi
+    echo "$result"
+}
+
+function setResetPin {
+	if [[ -n $NINJA_HARDWARE_TYPE ]]; then
+		if [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
+			uart=ttyAMA0
+			flashPin=$NINJA_CRUST_V10_RESETGPIO
+		elif [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+	    		uart=ttyO1
+			ninjaBeagleCape=$(detectNinjaBeagleCape)
+			flashPin=$NINJA_CAPE_V11V12_RESETGPIO
+			if [ $ninjaBeagleCape == 'V121' ]; then
+				flashPin=$NINJA_CAPE_V121_RESETGPIO
+			fi
+		fi
+	fi
 }
 
 official_update=false
 
 # Define directories
 # Setup the environment
-
 if [ -f /etc/environment.local ]; then
-    . /etc/environment.local
+	. /etc/environment.local
 fi
+setResetPin
+
 code_dir=/opt/ninja
 util_dir=/opt/utilities
 tmp_dir=$util_dir/tmp
 uri="http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/arduino"
-
-setPins
 
 # Pull new code from repo
 cd $tmp_dir
@@ -70,6 +77,10 @@ function flashArduino {
 	if [[ ! -e $1 ]]
 	then
 		echo "$1 does not exist"
+		exitFail
+	fi
+	if [[ -z $flashPin ]]; then
+		echo "Cannot flash this board"
 		exitFail
 	fi
 
