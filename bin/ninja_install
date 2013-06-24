@@ -63,5 +63,7 @@ else
 fi
 
 cd $module_dir/$modname
-npm install --color always && echo "Done"
-exit $?
+npm install --color always
+npmResult=$?
+echo "Done"
+exit $npmResult
