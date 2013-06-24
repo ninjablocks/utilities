@@ -114,6 +114,10 @@ sudo gem install sinatra  --verbose --no-rdoc --no-ri;
 echo -e "\n→ ${bold}Installing the getifaddrs gem${normal}\n"; 
 sudo gem install system-getifaddrs  --verbose --no-rdoc --no-ri;
 
+# Install puppet
+echo -e "\n→ ${bold}Installing the puppet gem${normal}\n"; 
+sudo gem install puppet  --verbose --no-rdoc --no-ri;
+
 # Create the rtl8192cu folder
 echo -e "\n→ ${bold}Create the rtl8192cu Folder${normal}\n";
 sudo mkdir -p /opt/rtl8192cu;

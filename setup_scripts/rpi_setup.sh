@@ -78,6 +78,9 @@ sudo gem install sinatra  --verbose --no-rdoc --no-ri > /dev/null;
 echo -e "\n→ ${bold}Installing the getifaddrs gem${normal}\n"; 
 sudo gem install system-getifaddrs  --verbose --no-rdoc --no-ri > /dev/null;
 
+# Install puppet
+echo -e "\n→ ${bold}Installing the puppet gem${normal}\n"; 
+sudo gem install puppet  --verbose --no-rdoc --no-ri;
 
 # Create the Ninja Blocks utilities folder
 echo -e "\n→ ${bold}Create the Ninja Blocks Utilities Folder${normal}\n"; 
