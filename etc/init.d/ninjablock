@@ -13,7 +13,7 @@
 # Description:       Controls Ninjablock service. The Internet of Things begins now!
 ### END INIT INFO
 
-NAME="Ninjablocks"
+NAME=Ninjablocks
 NODE_BIN_DIR=/usr/local/bin
 NODE_PATH=/usr/local/lib/node_modules
 APPLICATION_DIRECTORY=/opt/ninja
@@ -27,21 +27,19 @@ PATH=$NODE_BIN_DIR:$PATH
 export NODE_PATH=$NODE_PATH
  
 start() {
-	ps aux | grep -v grep | grep client.js > /dev/null
+    ps aux | grep -v grep | grep "$APPLICATION_START" > /dev/null
 
     if [ "$?" -eq 0 ]; then
-		echo "Ninjablocks service already running"
-		RETVAL=1
-	else
+        echo "Ninjablocks service already running"
+        RETVAL=1
+    else
         echo "Starting $NAME" 
-		test -f $ENV && . $ENV 
-   		sudo chown -R $USER:$USER /opt/
-        sudo chown $USER:$USER $LOGFILE 
-		su $USER -c "forever --sourceDir $APPLICATION_DIRECTORY \
-        	-a  -l $LOGFILE --minUptime 5000 --spinSleepTime 2000 \
-        	start $APPLICATION_START 2>&1 >/dev/null & "
+        test -f $ENV && . $ENV 
+        su $USER -c "forever --sourceDir $APPLICATION_DIRECTORY \
+            -a  -l $LOGFILE --minUptime 5000 --spinSleepTime 2000 \
+            start $APPLICATION_START 2>&1 >/dev/null & "
         RETVAL=$?
-	fi
+    fi
 }
  
 stop() {
@@ -67,13 +65,13 @@ restart() {
 status() {
     echo -n "Status for $NAME: "
     
-	ps aux | grep -v grep | grep client.js > /dev/null
+    ps aux | grep -v grep | grep client.js > /dev/null
 
-	if [ "$?" -eq 0 ]; then
-		echo "RUNNING"
-	else
-		echo "NOT RUNNING"
-	fi
+    if [ "$?" -eq 0 ]; then
+        echo "RUNNING"
+    else
+        echo "NOT RUNNING"
+    fi
     RETVAL=$?
 }
  
