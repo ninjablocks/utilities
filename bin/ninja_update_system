@@ -14,26 +14,21 @@ else
 fi
 
 # Check the environment
-arch=$(uname -a | awk '{ print $11 }')
-if [ "$arch" = "armv7l" ]; then
-	client="beagle-armv7l"
-	check_arch=$(grep $client /etc/environment.local|wc -l)
-	if [[ $check_arch -ne 1 ]]; then
-		echo "export NINJA_CLIENT_NAME=$client" >> /etc/environment.local
-		. /etc/environment.local
-	fi
-fi
+
 #todo expand this for rPis
 
 echo "[System] `date` System Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
 
+if [[ "$NINJA_HARDWARE_TYPE" == "BBW" ]]; then
+	cp ${utilsDir}/etc/fstab /etc/
+fi	
+
+
 cp ${utilsDir}/etc/hostname /etc/
 hostname ninjablock
 cp ${utilsDir}/etc/hosts /etc/
-
-
 cp ${utilsDir}/etc/network/interfaces /etc/network/
-cp ${utilsDir}/etc/fstab /etc/
+
 cp ${utilsDir}/etc/resolvconf/resolv.conf.d/original /etc/resolvconf/resolv.conf.d/original
 cp ${utilsDir}/init/dmesg.conf /etc/init/
 cp ${utilsDir}/etc/update-motd.d/10-help-text /etc/update-motd.d/
