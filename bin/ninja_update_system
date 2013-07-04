@@ -67,7 +67,7 @@ fi
 ${utilsDir}/bin/ninja_update_node
 chown -R ubuntu:ubuntu /home/ubuntu
 chown -R ubuntu:ubuntu /opt/ninja
-echo '1.0.0' > ${utilsDir}/sys_version
+echo '1.1.0' > ${utilsDir}/sys_version
 touch /etc/opt/ninja/.has_updated_system
 reboot
 #exit 1 to prevent further updates happening as system is going down
