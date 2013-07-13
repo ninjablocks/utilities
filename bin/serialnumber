@@ -1,7 +1,7 @@
 #!/bin/bash
 _getSerBBW()
 {
-   local serial=`sudo xxd -g 2 -a -l 16 -seek 16 /sys/bus/i2c//devices/1-0050/e$
+   local serial=`sudo xxd -g 2 -a -l 16 -seek 16 /sys/bus/i2c//devices/1-0050/eeprom | sed 's/^.* //' | sed -e 's/[.]//g'`
    echo $serial > /etc/opt/ninja/serial.conf
 }
 if [ -f /etc/environment.local ]; then
