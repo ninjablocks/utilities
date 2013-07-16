@@ -11,7 +11,7 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
                 #sudo /opt/utilities/bin/setgpioBBW
                 echo -e "\x07" > /sys/kernel/debug/omap_mux/gpmc_ad6
         fi
-        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" == "BBW" ]; then
                 sudo echo "$NINJA_CAPE_DETECT_GPIO" > /sys/class/gpio/export;
                 if [[ -n $NINJA_CAPE_V11V12_RESETGPIO ]]; then
                         sudo echo "$NINJA_CAPE_V11V12_RESETGPIO" > /sys/class/gpio/export;
@@ -25,7 +25,7 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
                 fi
         fi
         sleep 1;
-        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+        if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" == "BBW" ]; then
                 sudo echo "in" > /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/direction;
                 if [[ -n $NINJA_CAPE_V11V12_RESETGPIO ]]; then
                         sudo echo "out" > /sys/class/gpio/gpio$NINJA_CAPE_V11V12_RESETGPIO/direction;
