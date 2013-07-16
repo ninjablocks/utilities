@@ -39,7 +39,7 @@ function setResetPin {
 		if [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
 			uart=ttyAMA0
 			flashPin=$NINJA_CRUST_V10_RESETGPIO
-		elif [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" === "BBW" ]; then
+		elif [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" == "BBW" ]; then
 	    		uart=ttyO1
 			ninjaBeagleCape=$(detectNinjaBeagleCape)
 			flashPin=$NINJA_CAPE_V11V12_RESETGPIO
