@@ -26,14 +26,17 @@ function exitUsage {
 
 function detectNinjaBeagleCape()
 {
-	cat /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/value >> /var/log/ninjablock.log
-	local detectValue=`cat /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/value`
-	echo "Detected Value: $detectValue" >> /var/log/ninjablock.log
-    local result='V11V12'
-	if [[ $detectValue == 0 ]]; then #V12 cape grounded
-		result='V121'
+	local result='V11V12' #default to V11 V12 board
+	local detectFile="/sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO/value"
+	if [ -e $detectFile ]
+	then
+		local detectValue=`cat $detectFile` >> /var/log/ninjablock.log
+		if [[ $detectValue == 0 ]]; then #V12 cape grounded
+			result='V121'
+		fi
 	fi
-    echo "$result"
+	echo "Arduino Cape: $result" >> /var/log/ninjablock.log
+	echo "$result"
 }
 
 function setResetPin {
