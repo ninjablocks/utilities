@@ -23,6 +23,11 @@ function exitUsage {
 	printUsage
 	exitFail
 }
+function exitCustom {
+	# dont override custom hex
+	echo "[System] `date` Arduino Update: custom hex detected, letting it be. Arduino NOT flashed." >> /var/log/ninjablock.log
+	exitSuccess # so that upstart script can continue
+}
 
 function detectNinjaBeagleCape()
 {
@@ -73,9 +78,6 @@ uri="http://s3.amazonaws.com/ninjablocks/code/${NINJA_CLIENT_NAME:-"beagle"}/ard
 cd $tmp_dir
 # Robustness hack
 echo "[System] `date` Arduino Update Script Started (${NINJA_ENV:-"stable"})" >> /var/log/ninjablock.log
-echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/$uart
-
-sleep 2
 
 function flashArduino {
 
@@ -88,6 +90,9 @@ function flashArduino {
 		echo "Cannot flash this board"
 		exitFail
 	fi
+
+	echo '{"DEVICE":[{"G":"0","V":0,"D":999,"DA":"FFFFFF"}]}' > /dev/$uart
+	sleep 2
 
 	echo "[System] `date` Arduino Flashing Started" >> /var/log/ninjablock.log
 
@@ -135,7 +140,7 @@ else
 			arduino_mv="$2_(unknown)"
                 elif [[ $1 == "-u" ]]
 		then
-			arduino_mv="(userdefined)_(unknown)"
+			arduino_mv="(userdefined)_(custom)"
 			url="$2"
 			hex_name=$(basename $url)
 		else
@@ -149,36 +154,49 @@ else
 		then
 			echo "[System] `date` Arduino Update Failed. Could not retrieve version number." >> /var/log/ninjablock.log
 			echo "Arduino Update Failed. Could not retrieve version number."
-			echo "(Can force with:  $script_name -f V12 )"
-			exitFail
+			echo "(perhaps try to force flash)" 
+			exitUsage
 		fi
 	fi
-	if [ -n "$arduino_mv" ] && [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
+	if [[ $url == "" ]]
+        then
+		is_auto_url="1"
+	fi
+	if [ -n "$arduino_mv" ]
 	then
-		# split the string by "_"
-		arduino_model=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[1]}')
-		arduino_version=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[2]}')
-		echo "[System] `date` Arduino model: $arduino_model | version: $arduino_version will be updated." >> /var/log/ninjablock.log
-		# include the model in the url to pull
-		if [[ $url == "" ]]
-                then
-		    is_auto_url="1"
-		    url="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.hex"
-		    checksum="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.checksum"
-		fi
-                # Do a lookup to ensure the file exists
-		code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
-		if [ "$code" != "200" ]
+		if [[ "$arduino_mv" == *_* ]] # if the response is not null, and is in the form model_version
 		then
-			if [[ $is_auto_url == "1" ]]
-			then
-				# fall back to stable
-				# this is incase they have specified an environment with no arduino hex
-				url="$uri/${arduino_model}/stable.hex"
-				checksum="$uri/${arduino_model}/stable.checksum"
+			# split the string by "_"
+			arduino_model=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[1]}')
+			arduino_version=$(echo $arduino_mv | awk '{split($0, arduino, "_") } END{print arduino[2]}')
+			if [[ $is_auto_url == "1" ]] && ! [[ "$arduino_version" =~ ^[0-9]+([.][0-9]+)?$ ]]
+			then # auto-updating board which gave a non number version
+				exitCustom
+			else
+				echo "[System] `date` Arduino model: $arduino_model | version: $arduino_version will be updated." >> /var/log/ninjablock.log
+				# include the model in the url to pull
+				if [[ $is_auto_url == "1" ]]
+	                	then
+				    url="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.hex"
+				    checksum="$uri/${arduino_model}/${NINJA_ENV:-"stable"}.checksum"
+				fi
+	                	# Do a lookup to ensure the file exists
+				code=$(curl -s -o /dev/null -I -w "%{http_code}" $url)
+				if [ "$code" != "200" ]
+				then
+					if [[ $is_auto_url == "1" ]]
+					then
+						# fall back to stable
+						# this is incase they have specified an environment with no arduino hex
+						url="$uri/${arduino_model}/stable.hex"
+						checksum="$uri/${arduino_model}/stable.checksum"
+					fi
+				fi
 			fi
+		else # responds to arduino version, but not expected NB response
+			exitCustom
 		fi
-	else
+	else # no response to arduino version
 		# Handle all the older arduino models not yet reporting version in new method
 		echo "[System] `date` Arduino Update: falling back to V12 stable" >> /var/log/ninjablock.log
 		url="$uri/V12/stable.hex"
