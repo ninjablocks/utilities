@@ -99,9 +99,9 @@ function flashArduino {
 	for i in 1 2 3 4
 	do
 		echo "[System] `date` Flashing Arduino...Pass $i." >> /var/log/ninjablock.log;
-		sudo echo "1" > /sys/class/gpio/gpio$flashPin/value;
+		echo "1" > /sys/class/gpio/gpio$flashPin/value;
 		sleep 1;
-		sudo echo "0" > /sys/class/gpio/gpio$flashPin/value;
+		echo "0" > /sys/class/gpio/gpio$flashPin/value;
 		#sleep 1;
 		#sudo echo "1" > /sys/class/gpio/gpio38/value;
 		#sleep 1;
@@ -109,9 +109,9 @@ function flashArduino {
 		avrdude -C $util_dir/etc/avrdude.conf  -p atmega328p -c arduino -P /dev/$uart -b 57600 -D -U flash:w:$1:i;
 
 		if [ "$?" = "0" ]; then
-			sudo echo "1" > /sys/class/gpio/gpio$flashPin/value;
+			echo "1" > /sys/class/gpio/gpio$flashPin/value;
 			echo "[System] `date` Successfully flashed Arduino in pass $i." >> /var/log/ninjablock.log;
-			sudo touch /etc/opt/ninja/.has_updated_arduino
+			#sudo touch /etc/opt/ninja/.has_updated_arduino
 			if $official_update ; then
 				rm arduino.hex
 			fi
@@ -137,7 +137,7 @@ else
 	then
 		if [[ $1 == "-f" ]]
 		then
-			arduino_mv="$2_(unknown)"
+			arduino_mv="$2_0.00"
                 elif [[ $1 == "-u" ]]
 		then
 			arduino_mv="(userdefined)_(custom)"
