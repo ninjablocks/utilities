@@ -38,7 +38,7 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
         elif [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
                 if [[ -n $NINJA_CRUST_V10_RESETGPIO ]]; then
                         sudo echo "out" > /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO/direction;
-                        sudo chown -R ubuntu /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO/value
+                        sudo chown -R pi /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO/value
                 fi
         fi
 fi
