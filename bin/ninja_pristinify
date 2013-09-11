@@ -12,6 +12,9 @@ then
   rm /etc/opt/ninja/serial.conf
   rm /etc/opt/ninja/token.conf
   rm -rf /opt/ninja/config/*
+  rm /etc/ssh/ssh_host_*
+  sed -i '/NAME="wlan/d' /etc/udev/rules.d/70-persistent-net.rules
+  sed -i '/USB device/d' /etc/udev/rules.d/70-persistent-net.rules
   
   # clear out stale apt cache
   apt-get clean all
