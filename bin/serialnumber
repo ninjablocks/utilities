@@ -14,3 +14,6 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
                 cat /sys/devices/bone_capemgr.9/baseboard/serial-number > /etc/opt/ninja/serial.conf
         fi
 fi
+if [ -f /etc/opt/ninja/serial.override.conf ]; then
+	cat /etc/opt/ninja/serial.override.conf > /etc/opt/ninja/serial.conf
+fi
