@@ -1,4 +1,3 @@
-
 if (process.argv.length < 3) {
   process.exit(1);
 }
@@ -29,11 +28,12 @@ tty.on('data',function(data){
     }
 });
 
-setInterval(function() {
-    tty.write('{"DEVICE":[{"G":"0","V":0,"D":1003,"DA":"VNO"}]}');
-},500);
-
-tty.write('{"DEVICE":[{"G":"0","V":0,"D":1003,"DA":"VNO"}]}');
+tty.on('open',function () {
+	setInterval(function() {
+   	 tty.write('{"DEVICE":[{"G":"0","V":0,"D":1003,"DA":"VNO"}]}');
+	},500);
+	tty.write('{"DEVICE":[{"G":"0","V":0,"D":1003,"DA":"VNO"}]}');
+});
 
 setTimeout(function() {
     process.exit(1);
