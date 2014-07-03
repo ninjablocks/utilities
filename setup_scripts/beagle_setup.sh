@@ -48,6 +48,8 @@ echo -e "\n→ ${bold}Installing npm${normal}\n";
 sudo apt-get -f -y --force-yes install npm;
 echo -e "\n→ ${bold}Installing ruby1.9.1-dev${normal}\n"; 
 sudo apt-get -f -y --force-yes install ruby1.9.1-dev;
+echo -e "\n→ ${bold}Installing ruby1.9.1${normal}\n"; 
+sudo apt-get -f -y --force-yes install ruby1.9.1;
 echo -e "\n→ ${bold}Installing make${normal}\n"; 
 sudo apt-get -f -y --force-yes install make;
 echo -e "\n→ ${bold}Installing build-essential${normal}\n"; 
