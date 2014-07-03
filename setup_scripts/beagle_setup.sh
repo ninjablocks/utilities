@@ -106,6 +106,11 @@ sudo apt-get -f -y --force-yes install aptitude;
 echo -e "\n→ ${bold}Installing vim${normal}\n"; 
 sudo apt-get -f -y --force-yes install vim;
 
+# Install Gem
+echo -e "\n→ ${bold}Installing gem${normal}\n"; 
+sudo apt-get -f -y --force-yes  install rubygems
+
+
 # Install Sinatra
 echo -e "\n→ ${bold}Installing the sinatra gem${normal}\n"; 
 sudo gem install sinatra  --verbose --no-rdoc --no-ri;
