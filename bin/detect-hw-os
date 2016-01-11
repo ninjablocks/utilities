@@ -17,7 +17,7 @@ if [[ ${NINJA_CLIENT_NAME} = "pi" ]]; then
 else # beaglebone
 	echo "export NINJA_CAPE_V121_RESETGPIO=44" >> /etc/environment.local
 	echo "export NINJA_CAPE_DETECT_GPIO=60" >> /etc/environment.local
-	dmesg | grep -q "Bone-Black-HDMI"
+	dmesg | grep -q -i "beaglebone-black"
 	if [ "$?" == 0 ]; then
 		echo "export NINJA_HARDWARE_TYPE=BBB" >> /etc/environment.local
 	else
