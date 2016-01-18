@@ -1,0 +1,41 @@
+#!/bin/bash
+
+# Enable the UART used for communicating with the Arduino board. On stock
+# images and newer kernels, this may not be enabled by default. One way to
+# enable it is through the boot command line (in /boot/uboot/uEnv.txt), but
+# it can be easily enough enabled at runtime as well.
+#
+# Author: Hilmar Lapp <hlapp@drycafe.net>
+
+if [[ $EUID -ne 0 ]]; then
+    echo "You must run this as root" 2>&1
+    exit 1
+fi
+
+if [ -f /etc/environment.local ]; then
+    . /etc/environment.local
+fi
+if [ -z "$NINJA_HARDWARE_TYPE" ]; then
+    . /opt/utilities/bin/detect-hw-os
+    . /etc/environment.local
+fi
+
+# We allow the number of the ttyO device to be set in the environment file.
+# It should nearly universally be ttyO1, though.
+if [ -z "$ARDUINO_UART" ] ; then
+    ARDUINO_UART=1
+fi
+
+# attempt to enable the ttyON device if it doesn't exist yet
+if [ ! -c /dev/ttyO$ARDUINO_UART ] ; then
+    capemgr=/sys/devices/bone_capemgr.9
+    if [ ! -d $capemgr ] ; then
+        capemgr=/sys/devices/platform/bone_capemgr
+    fi
+    echo BB-UART$ARDUINO_UART > $capemgr/slots
+    result=$?
+    if [ $result -ne 0 ] ; then
+        echo "unable to enable UART$ARDUINO_UART as device /dev/ttyO$ARDUINO_UART"
+        exit $result
+    fi
+fi
