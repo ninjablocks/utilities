@@ -11,7 +11,11 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
 		        serial=`sudo xxd -g 2 -a -l 16 -seek 16 /sys/bus/i2c//devices/1-0050/eeprom | sed 's/^.* //' | sed -e 's/[.]//g'`
 		        echo $serial > /etc/opt/ninja/serial.conf
         elif [ "$NINJA_HARDWARE_TYPE" == "BBB" ]; then
-                cat /sys/devices/bone_capemgr.9/baseboard/serial-number > /etc/opt/ninja/serial.conf
+                capemgr=/sys/devices/bone_capemgr.9
+                if [ ! -d $capemgr ] ; then
+                        capemgr=/sys/devices/platform/bone_capemgr
+                fi
+                cat $capemgr/baseboard/serial-number > /etc/opt/ninja/serial.conf
         fi
 fi
 if [ -f /etc/opt/ninja/serial.override.conf ]; then

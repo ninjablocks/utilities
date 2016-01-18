@@ -78,11 +78,11 @@ cd /home/ubuntu/;
 
 # Checking out mjpeg-streamer
 echo -e "\n→ ${bold}Checking out mjpeg-streamer${normal}\n"; 
-svn co https://mjpg-streamer.svn.sourceforge.net/svnroot/mjpg-streamer mjpg-streamer;
+svn co https://svn.code.sf.net/p/mjpg-streamer/code/mjpg-streamer mjpg-streamer;
 
 # Entering the mjpeg-streamer dir
 echo -e "\n→ ${bold}Entering the mjpeg-streamer dir${normal}\n"; 
-cd /home/ubuntu/mjpg-streamer/mjpg-streamer/;
+cd /home/ubuntu/mjpg-streamer/;
 
 # Making mjpeg-streamer
 echo -e "\n→ ${bold}Making mjpeg-streamer${normal}\n"; 
@@ -90,15 +90,15 @@ sudo make;
 
 # Copying input_uvc.so into place
 echo -e "\n→ ${bold}Copying input_uvc.so into place${normal}\n"; 
-sudo cp /home/ubuntu/mjpg-streamer/mjpg-streamer/input_uvc.so /usr/local/lib/;
+sudo cp /home/ubuntu/mjpg-streamer/input_uvc.so /usr/local/lib/;
 
 # Copying output_http.so into place
 echo -e "\n→ ${bold}Copying output_http.so into place${normal}\n"; 
-sudo cp /home/ubuntu/mjpg-streamer/mjpg-streamer/output_http.so /usr/local/lib/;
+sudo cp /home/ubuntu/mjpg-streamer/output_http.so /usr/local/lib/;
 
 # Copying the mjpg-streamer binary into /usr/bin
 echo -e "\n→ ${bold}Copying the mjpg-streamer binary into /usr/bin${normal}\n"; 
-sudo cp /home/ubuntu/mjpg-streamer/mjpg-streamer/mjpg_streamer /usr/local/bin;
+sudo cp /home/ubuntu/mjpg-streamer/mjpg_streamer /usr/local/bin;
 
 # Not essential packages
 echo -e "\n→ ${bold}Installing aptitude${normal}\n"; 
