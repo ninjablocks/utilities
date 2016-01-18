@@ -12,15 +12,17 @@ if [[ -n $NINJA_HARDWARE_TYPE ]]; then
                 echo -e "\x07" > /sys/kernel/debug/omap_mux/gpmc_ad6
         fi
         if [ "$NINJA_HARDWARE_TYPE" == "BBB" ] || [ "$NINJA_HARDWARE_TYPE" == "BBW" ]; then
-                echo "$NINJA_CAPE_DETECT_GPIO" > /sys/class/gpio/export;
-                if [[ -n $NINJA_CAPE_V11V12_RESETGPIO ]]; then
+                if [ ! -d /sys/class/gpio/gpio$NINJA_CAPE_DETECT_GPIO ] ; then
+                         echo "$NINJA_CAPE_DETECT_GPIO" > /sys/class/gpio/export;
+                fi
+                if [ -n "$NINJA_CAPE_V11V12_RESETGPIO" ] && [ ! -d /sys/class/gpio/gpio$NINJA_CAPE_V11V12_RESETGPIO ] ; then
                         echo "$NINJA_CAPE_V11V12_RESETGPIO" > /sys/class/gpio/export;
                 fi
-                if [[ -n $NINJA_CAPE_V121_RESETGPIO ]]; then
+                if [ -n "$NINJA_CAPE_V121_RESETGPIO" ] && [ ! -d /sys/class/gpio/gpio$NINJA_CAPE_V121_RESETGPIO ] ; then
                         echo "$NINJA_CAPE_V121_RESETGPIO" > /sys/class/gpio/export;
                 fi
         elif [ "$NINJA_HARDWARE_TYPE" == "RPI" ]; then
-                if [[ -n $NINJA_CRUST_V10_RESETGPIO ]]; then
+                if [ -n "$NINJA_CRUST_V10_RESETGPIO" ] && [ ! -d /sys/class/gpio/gpio$NINJA_CRUST_V10_RESETGPIO ] ; then
                         echo "$NINJA_CRUST_V10_RESETGPIO" > /sys/class/gpio/export;
                 fi
         fi
